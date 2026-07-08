@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chapter 1 — The Window Seat</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #090909;
+      --bg-soft: #111111;
+      --panel: rgba(255,255,255,0.04);
+      --panel-strong: rgba(255,255,255,0.05);
+      --border: rgba(255,255,255,0.08);
+      --text: #f3efe7;
+      --muted: #b7afa1;
+      --accent: #d4b483;
+      --accent-soft: #8e7350;
+      --shadow: 0 18px 50px rgba(0,0,0,0.45);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top, rgba(120, 95, 55, 0.14), transparent 25%),
+        linear-gradient(180deg, #060606 0%, #0b0b0b 45%, #080808 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    .bg-overlay {
+      position: fixed;
+      inset: 0;
+      background:
+        linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+      background-size: 34px 34px;
+      opacity: 0.3;
+      z-index: -4;
+    }
+
+    .grain {
+      position: fixed;
+      inset: 0;
+      background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 4px 4px;
+      opacity: 0.06;
+      pointer-events: none;
+      z-index: -3;
+    }
+
+    /* Floating snowdrops */
+    .snowdrop {
+      position: fixed;
+      top: -30px;
+      color: rgba(255,255,255,0.65);
+      font-size: 14px;
+      pointer-events: none;
+      z-index: 0;
+      animation: snowFall linear forwards;
+      text-shadow: 0 0 8px rgba(255,255,255,0.18);
+      user-select: none;
+    }
+
+    @keyframes snowFall {
+      0% {
+        transform: translateY(-20px) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.7;
+      }
+      100% {
+        transform: translateY(110vh) translateX(40px) rotate(180deg);
+        opacity: 0;
+      }
+    }
+
+    /* NAV */
+    .topbar {
+      width: 100%;
+      padding: 22px 7%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      z-index: 5;
+    }
+
+    .back-link {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 0.96rem;
+      transition: 0.25s ease;
+    }
+
+    .back-link:hover {
+      color: var(--accent);
+    }
+
+    .chapter-label {
+      color: var(--muted);
+      letter-spacing: 2px;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+    }
+
+    /* HERO */
+    .chapter-hero {
+      width: min(1400px, 94%);
+      margin: 10px auto 40px;
+      padding: 40px 0 20px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+
+    .hero-kicker {
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      font-size: 0.82rem;
+      margin-bottom: 18px;
+    }
+
+    .chapter-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3.8rem, 8vw, 7rem);
+      line-height: 0.95;
+      font-weight: 700;
+      margin-bottom: 20px;
+      letter-spacing: -1px;
+    }
+
+    .chapter-title span {
+      color: var(--accent);
+      font-style: italic;
+    }
+
+    .chapter-line {
+      width: 100%;
+      max-width: 860px;
+      height: 1px;
+      background: linear-gradient(90deg, var(--accent), rgba(212,180,131,0.15), transparent);
+      position: relative;
+      margin: 18px 0 28px;
+    }
+
+    .chapter-line::before,
+    .chapter-line::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 10px rgba(212,180,131,0.45);
+    }
+
+    .chapter-line::before {
+      left: 8%;
+    }
+
+    .chapter-line::after {
+      left: 0;
+    }
+
+    .chapter-quote {
+      max-width: 1000px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.5rem, 2.5vw, 2.3rem);
+      line-height: 1.65;
+      color: #f5efe3;
+      font-style: italic;
+      margin-bottom: 28px;
+    }
+
+    .chapter-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .chapter-meta p {
+      color: #f2ede4;
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+
+    .chapter-meta span {
+      color: var(--accent);
+      margin-right: 10px;
+      font-size: 1.05rem;
+    }
+
+    /* STORY SECTION */
+    .story-section {
+      width: min(1450px, 95%);
+      margin: 0 auto 90px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .story-box {
+      width: 100%;
+      padding: 42px 48px;
+      border-radius: 30px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(3px);
+    }
+
+    .story-box::before {
+      content: "";
+      position: absolute;
+      inset: 18px;
+      border-radius: 24px;
+      border: 1px solid rgba(255,255,255,0.05);
+      pointer-events: none;
+    }
+
+    .story-part {
+      margin-bottom: 38px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .part-number {
+      font-family: 'Cormorant Garamond', serif;
+      color: #efe6d6;
+      font-size: 2.2rem;
+      margin-bottom: 10px;
+      opacity: 0.95;
+    }
+
+    .story-text {
+      color: #f3efe7;
+      font-size: 1.18rem;
+      line-height: 2.08;
+      max-width: 100%;
+    }
+
+    .story-text p {
+      margin-bottom: 22px;
+      color: #efe9dc;
+    }
+
+    .story-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    .story-text p:first-child::first-letter {
+      float: left;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 5.2rem;
+      line-height: 0.85;
+      padding-right: 12px;
+      padding-top: 6px;
+      color: #f5e8d3;
+      font-weight: 700;
+    }
+
+    /* STAY TUNED */
+    .ending-box {
+      margin-top: 12px;
+      padding-top: 22px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      text-align: center;
+    }
+
+    .ending-box h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.1rem;
+      color: var(--accent);
+      margin-bottom: 8px;
+      letter-spacing: 1px;
+    }
+
+    .ending-box p {
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.8;
+    }
+
+    /* FOOTER */
+    .chapter-footer {
+      width: 100%;
+      padding: 28px 7% 40px;
+      text-align: center;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      position: relative;
+      z-index: 2;
+    }
+
+    .chapter-footer p {
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: 0.95rem;
+    }
+
+    /* Reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .chapter-hero {
+        width: min(96%, 96%);
+      }
+
+      .story-section {
+        width: min(96%, 96%);
+      }
+
+      .story-box {
+        padding: 34px 28px;
+      }
+
+      .chapter-quote {
+        font-size: 1.5rem;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .topbar {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+      }
+
+      .chapter-title {
+        font-size: 3rem;
+      }
+
+      .chapter-quote {
+        font-size: 1.28rem;
+        line-height: 1.7;
+      }
+
+      .story-box {
+        padding: 26px 18px;
+        border-radius: 22px;
+      }
+
+      .story-box::before {
+        inset: 10px;
+        border-radius: 16px;
+      }
+
+      .story-text {
+        font-size: 1.03rem;
+        line-height: 1.95;
+      }
+
+      .story-text p:first-child::first-letter {
+        font-size: 4.2rem;
+        padding-right: 10px;
+      }
+
+      .part-number {
+        font-size: 1.8rem;
+      }
+
+      .chapter-meta p {
+        font-size: 0.98rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-overlay"></div>
+  <div class="grain"></div>
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <a href="index.html" class="back-link">← Back to Home</a>
+    <div class="chapter-label">Chapter 1 — The Window Seat</div>
+  </header>
+
+  <!-- HERO -->
+  <section class="chapter-hero reveal">
+    <div class="hero-inner">
+      <p class="hero-kicker">Chapter One</p>
+
+      <h1 class="chapter-title">
+        The <span>Window Seat</span>
+      </h1>
+
+      <div class="chapter-line"></div>
+
+      <p class="chapter-quote">
+        “Some stories begin in silence — with a boy near a window, and a professor who notices him too late.”
+      </p>
+
+      <div class="chapter-meta">
+        <p><span>✦</span>1988 / Madrid</p>
+        <p><span>✦</span>Psychological Fiction</p>
+        <p><span>✦</span>Observation / Secrets / Obsession</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- STORY -->
+  <main class="story-section reveal">
+    <div class="story-box">
+
+      <section class="story-part">
+        <div class="part-number">I</div>
+        <div class="story-text">
+          <p>
+            The winter of 1988 had arrived in Madrid with a hard, bitter cold that made even the streetlights look lonely.
+            That night, the city glowed beneath a pale haze of frost, and the literary world had gathered for the launch of
+            a new novel by Pedro — a writer already famous, already admired, already spoken of with that strange mixture of
+            reverence and envy that follows successful men.
+          </p>
+
+          <p>
+            Among the crowd stood Professor Jenn, younger then, carrying in his chest the restlessness of a man who wanted
+            to become more than he was. He too wrote stories, though his pages remained hidden, unfinished, and uncertain.
+            Pedro, to Jenn, was not merely a novelist — he was proof that stories could become power, that words could bend
+            reality itself.
+          </p>
+
+          <p>
+            When the launch ended and people began to scatter into the freezing night, Jenn gathered enough courage to stop him.
+            He asked the question that had lived in him for years:
+            <em>How do I become a better writer?</em>
+          </p>
+
+          <p>
+            Pedro barely slowed. He lit a cigarette, the orange glow briefly cutting through the dark, and exhaled with visible impatience.
+            “Think about your own story,” he said, almost casually, as if brushing dust from his sleeve.
+            “I’m in a hurry. I have dinner with Mister Kang.”
+          </p>
+
+          <p>
+            And then he walked away — smoke trailing behind him, his figure disappearing into the cold Madrid night —
+            leaving Jenn with nothing but the sting of dismissal and the echo of a sentence that would stay with him far longer
+            than either of them could have imagined.
+          </p>
+        </div>
+      </section>
+
+      <section class="story-part">
+        <div class="part-number">II</div>
+        <div class="story-text">
+          <p>
+            Ninteen Years later, Jenn had become a literature professor at Madrid High School.
+            His classroom was orderly, quiet, and ruled by his belief that stories revealed more about a person than any confession ever could.
+            He gave his students a simple but relentless assignment: write every day, write honestly, and above all — do not cheat.
+          </p>
+
+          <p>
+            One afternoon, while the winter light leaned weakly through the classroom windows, a phone suddenly rang in the middle of class.
+            The sharp sound split the silence. Jenn stopped mid-sentence and fixed his gaze on the student responsible.
+            The boy rose awkwardly, already embarrassed, but Jenn did not let him off so easily.
+          </p>
+
+          <p>
+            Instead, he began questioning him about <em>One Hundred Years of Solitude</em>.
+            The student stumbled. He gave the writer’s name incorrectly, then failed to explain the novel itself.
+            Jenn’s expression hardened. He told him to stand outside the classroom.
+          </p>
+
+          <p>
+            Near the window sat Floyy — quiet, detached, almost invisible in the back row. He had listened to everything.
+            And just as the silence settled, he spoke.
+          </p>
+
+          <p>
+            Calmly, almost too calmly, Floyy corrected Jenn himself.
+            He gave the right writer’s name and pointed out that the professor had said it wrong.
+            The room froze.
+          </p>
+
+          <p>
+            Jenn stared at him, shocked less by the correction than by the audacity of it.
+            “How dare you speak to a professor like that?” he snapped.
+            But before the tension could grow any sharper, the bell rang. The class broke apart at once, chairs scraping,
+            bags lifted, voices returning.
+          </p>
+
+          <p>
+            Outside the classroom, the boy whose phone had rung approached Floyy with visible relief.
+            “Thanks,” he said. “You saved me today.”
+            Then, with the easy confidence of someone who had never learned to hide his feelings, he added,
+            “Lunch is on me. Tell me what you want.”
+          </p>
+
+          <p>
+            His name was Peter.
+          </p>
+        </div>
+      </section>
+
+      <section class="story-part">
+        <div class="part-number">III</div>
+        <div class="story-text">
+          <p>
+            The next day, Peter chose not to sit in his usual place.
+            Instead, he dropped into the seat beside Floyy near the window, as though the decision had already been made somewhere
+            long before either of them arrived in class.
+          </p>
+
+          <p>
+            Floyy, though quiet, had a reputation for being unusually talented with computers.
+            He was part of the college coding club, and Peter noticed the worn tote bag lying near his chair.
+            That was enough to start a conversation.
+          </p>
+
+          <p>
+            “You know coding?” Peter asked.
+            “I joined the coding club too. Can you teach me?”
+          </p>
+
+          <p>
+            Floyy didn’t even look up properly.
+            He said he had no time — that he worked part-time and couldn’t waste hours teaching someone else.
+            Peter, however, was persistent in the warm, almost reckless way only certain people are.
+            He bargained with him, smiling, insisting that three days a week would be enough.
+          </p>
+
+          <p>
+            Somehow, after enough pressure and enough silence, Floyy agreed.
+          </p>
+
+          <p>
+            That evening, Peter took him home.
+            The house itself was larger than anything Floyy was used to — polished floors, expensive quiet, and the kind of comfort
+            that seemed to belong to another world entirely.
+          </p>
+
+          <p>
+            Peter’s mother was in the garden room, tending to flowers with the care of someone who had learned to pour feeling
+            into things that did not argue back.
+            “You’re back from college,” she said when she saw him, her voice soft and effortless.
+          </p>
+
+          <p>
+            Peter introduced Floyy.
+          </p>
+
+          <p>
+            And in that single moment, something shifted.
+          </p>
+
+          <p>
+            Floyy looked at Merissa — really looked at her — and for a second the world around him seemed to blur.
+            He became strangely still, almost spellbound, as if he had just stumbled into the beginning of a story far more dangerous
+            than the one he thought he was living in.
+          </p>
+
+          <p>
+            Peter noticed nothing.
+            Merissa only smiled politely.
+            But somewhere behind Floyy’s quiet face, the machinery of observation had already begun to turn.
+          </p>
+        </div>
+      </section>
+
+      <div class="ending-box">
+        <h3>Stay Tuned</h3>
+        <p>
+          The story has only just begun.  
+          Some doors open quietly — and some obsessions begin with a single look.
+        </p>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="chapter-footer">
+    <p>The Boy from Last — Chapter 1 Archive</p>
+    <p>Next chapter coming soon.</p>
+  </footer>
+
+  <script>
+    // Reveal animation
+    document.addEventListener("DOMContentLoaded", () => {
+      const revealEls = document.querySelectorAll(".reveal");
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+          }
+        });
+      }, { threshold: 0.12 });
+
+      revealEls.forEach((el) => observer.observe(el));
+    });
+
+    // Snowdrop effect
+    function createSnowdrop() {
+      const drop = document.createElement("span");
+      drop.className = "snowdrop";
+      drop.textContent = "❄";
+
+      drop.style.left = Math.random() * window.innerWidth + "px";
+      drop.style.fontSize = (12 + Math.random() * 12) + "px";
+      drop.style.animationDuration = (7 + Math.random() * 6) + "s";
+      drop.style.opacity = (0.25 + Math.random() * 0.35).toFixed(2);
+
+      document.body.appendChild(drop);
+
+      setTimeout(() => {
+        drop.remove();
+      }, 14000);
+    }
+
+    setInterval(createSnowdrop, 900);
+  </script>
+</body>
+</html>
