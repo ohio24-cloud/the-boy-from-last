@@ -92,15 +92,29 @@
       }
     }
 
-    /* NAV */
+    /* NAV — back link, chapter label, AND music player all live here
+       as normal flex children, never floating over page content */
     .topbar {
       width: 100%;
-      padding: 22px 7%;
+      padding: 18px 7%;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
       position: relative;
       z-index: 5;
+      background: rgba(9,9,9,0.5);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .topbar-left {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      order: 1;
     }
 
     .back-link {
@@ -309,6 +323,39 @@
       line-height: 1.8;
     }
 
+    /* NEXT CHAPTER BUTTON */
+    .next-chapter-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 26px;
+      padding: 14px 30px;
+      border-radius: 999px;
+      border: 1px solid rgba(212,180,131,0.35);
+      background: linear-gradient(180deg, rgba(212,180,131,0.14), rgba(212,180,131,0.04));
+      color: var(--accent);
+      text-decoration: none;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.25rem;
+      letter-spacing: 0.5px;
+      transition: 0.3s ease;
+    }
+
+    .next-chapter-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(212,180,131,0.18);
+      border-color: rgba(212,180,131,0.6);
+      background: linear-gradient(180deg, rgba(212,180,131,0.22), rgba(212,180,131,0.06));
+    }
+
+    .next-chapter-link .arrow {
+      transition: transform 0.3s ease;
+    }
+
+    .next-chapter-link:hover .arrow {
+      transform: translateX(4px);
+    }
+
     /* FOOTER */
     .chapter-footer {
       width: 100%;
@@ -325,16 +372,135 @@
       font-size: 0.95rem;
     }
 
-    /* Reveal */
+    .footer-next-link {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(212,180,131,0.3);
+      transition: 0.25s ease;
+    }
+
+    .footer-next-link:hover {
+      border-color: var(--accent);
+    }
+
+    /* Reveal — visible by default so content never depends on JS firing;
+       only fades in from js-hidden if the observer explicitly adds it */
     .reveal {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .reveal.js-hidden {
       opacity: 0;
       transform: translateY(28px);
-      transition: opacity 0.8s ease, transform 0.8s ease;
     }
 
     .reveal.visible {
       opacity: 1;
       transform: translateY(0);
+    }
+
+    /* CHAPTER MUSIC PLAYER — flex child inside .topbar, not fixed,
+       so it never overlaps or hides page text on desktop or mobile */
+    .music-player {
+      order: 2;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 16px;
+
+      border-radius: 999px;
+      background: rgba(10, 10, 10, 0.78);
+      border: 1px solid rgba(255,255,255,0.10);
+      box-shadow: 0 12px 35px rgba(0,0,0,0.35);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+
+      max-width: 100%;
+    }
+
+    .music-btn {
+      flex-shrink: 0;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: radial-gradient(circle at top, rgba(212,180,131,0.25), rgba(255,255,255,0.04));
+      color: #f3efe7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: 0.3s ease;
+      font-size: 1rem;
+      box-shadow: 0 0 0 rgba(212,180,131,0);
+    }
+
+    .music-btn:hover {
+      transform: translateY(-2px) scale(1.03);
+      border-color: rgba(212,180,131,0.35);
+      box-shadow: 0 0 18px rgba(212,180,131,0.18);
+    }
+
+    .music-btn.playing {
+      box-shadow: 0 0 22px rgba(212,180,131,0.22);
+      border-color: rgba(212,180,131,0.4);
+    }
+
+    .music-meta {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+      min-width: 120px;
+    }
+
+    .music-label {
+      font-size: 0.7rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .music-track {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      color: var(--text);
+      white-space: nowrap;
+    }
+
+    .music-wave {
+      display: flex;
+      align-items: flex-end;
+      gap: 3px;
+      height: 18px;
+      margin-left: 4px;
+      flex-shrink: 0;
+    }
+
+    .music-wave span {
+      display: block;
+      width: 3px;
+      border-radius: 999px;
+      background: var(--accent);
+      opacity: 0.35;
+      height: 6px;
+      transform-origin: bottom;
+    }
+
+    .music-player.playing .music-wave span {
+      animation: waveDance 1s ease-in-out infinite;
+      opacity: 0.9;
+    }
+
+    .music-player.playing .music-wave span:nth-child(2) { animation-delay: 0.12s; }
+    .music-player.playing .music-wave span:nth-child(3) { animation-delay: 0.24s; }
+    .music-player.playing .music-wave span:nth-child(4) { animation-delay: 0.36s; }
+
+    @keyframes waveDance {
+      0%, 100% { height: 6px; }
+      50% { height: 18px; }
     }
 
     /* Responsive */
@@ -359,8 +525,12 @@
     @media (max-width: 640px) {
       .topbar {
         flex-direction: column;
-        gap: 10px;
+        gap: 12px;
         align-items: flex-start;
+      }
+
+      .music-player {
+        width: 100%;
       }
 
       .chapter-title {
@@ -399,6 +569,17 @@
       .chapter-meta p {
         font-size: 0.98rem;
       }
+
+      .next-chapter-link {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .music-meta {
+        display: none;
+      }
     }
   </style>
 </head>
@@ -409,8 +590,33 @@
 
   <!-- TOP BAR -->
   <header class="topbar">
-    <a href="index.html" class="back-link">← Back to Home</a>
-    <div class="chapter-label">Chapter 1 — The Window Seat</div>
+    <div class="topbar-left">
+      <a href="index.html" class="back-link">← Back to Home</a>
+      <div class="chapter-label">Chapter 1 — The Window Seat</div>
+    </div>
+
+    <!-- CHAPTER 1 MUSIC PLAYER: normal flex item, not fixed/floating -->
+    <div class="music-player" id="musicPlayer">
+      <button class="music-btn" id="musicToggle" aria-label="Play chapter music">
+        <span id="musicIcon">▶</span>
+      </button>
+
+      <div class="music-meta">
+        <span class="music-label">Chapter Theme</span>
+        <span class="music-track">The Window Seat</span>
+      </div>
+
+      <div class="music-wave" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+
+    <audio id="chapterMusic" loop preload="auto">
+      <source src="music/chapter1-theme.mp3" type="audio/mpeg">
+    </audio>
   </header>
 
   <!-- HERO -->
@@ -425,7 +631,7 @@
       <div class="chapter-line"></div>
 
       <p class="chapter-quote">
-        “Some stories begin in silence — with a boy near a window, and a professor who notices him too late.”
+        "Some stories begin in silence — with a boy near a window, and a professor who notices him too late."
       </p>
 
       <div class="chapter-meta">
@@ -465,8 +671,8 @@
 
           <p>
             Pedro barely slowed. He lit a cigarette, the orange glow briefly cutting through the dark, and exhaled with visible impatience.
-            “Think about your own story,” he said, almost casually, as if brushing dust from his sleeve.
-            “I’m in a hurry. I have dinner with Mister Kang.”
+            "Think about your own story," he said, almost casually, as if brushing dust from his sleeve.
+            "I'm in a hurry. I have dinner with Mister Kang."
           </p>
 
           <p>
@@ -494,8 +700,8 @@
 
           <p>
             Instead, he began questioning him about <em>One Hundred Years of Solitude</em>.
-            The student stumbled. He gave the writer’s name incorrectly, then failed to explain the novel itself.
-            Jenn’s expression hardened. He told him to stand outside the classroom.
+            The student stumbled. He gave the writer's name incorrectly, then failed to explain the novel itself.
+            Jenn's expression hardened. He told him to stand outside the classroom.
           </p>
 
           <p>
@@ -505,22 +711,22 @@
 
           <p>
             Calmly, almost too calmly, Floyy corrected Jenn himself.
-            He gave the right writer’s name and pointed out that the professor had said it wrong.
+            He gave the right writer's name and pointed out that the professor had said it wrong.
             The room froze.
           </p>
 
           <p>
             Jenn stared at him, shocked less by the correction than by the audacity of it.
-            “How dare you speak to a professor like that?” he snapped.
+            "How dare you speak to a professor like that?" he snapped.
             But before the tension could grow any sharper, the bell rang. The class broke apart at once, chairs scraping,
             bags lifted, voices returning.
           </p>
 
           <p>
             Outside the classroom, the boy whose phone had rung approached Floyy with visible relief.
-            “Thanks,” he said. “You saved me today.”
+            "Thanks," he said. "You saved me today."
             Then, with the easy confidence of someone who had never learned to hide his feelings, he added,
-            “Lunch is on me. Tell me what you want.”
+            "Lunch is on me. Tell me what you want."
           </p>
 
           <p>
@@ -545,13 +751,13 @@
           </p>
 
           <p>
-            “You know coding?” Peter asked.
-            “I joined the coding club too. Can you teach me?”
+            "You know coding?" Peter asked.
+            "I joined the coding club too. Can you teach me?"
           </p>
 
           <p>
-            Floyy didn’t even look up properly.
-            He said he had no time — that he worked part-time and couldn’t waste hours teaching someone else.
+            Floyy didn't even look up properly.
+            He said he had no time — that he worked part-time and couldn't waste hours teaching someone else.
             Peter, however, was persistent in the warm, almost reckless way only certain people are.
             He bargained with him, smiling, insisting that three days a week would be enough.
           </p>
@@ -567,9 +773,9 @@
           </p>
 
           <p>
-            Peter’s mother was in the garden room, tending to flowers with the care of someone who had learned to pour feeling
+            Peter's mother was in the garden room, tending to flowers with the care of someone who had learned to pour feeling
             into things that did not argue back.
-            “You’re back from college,” she said when she saw him, her voice soft and effortless.
+            "You're back from college," she said when she saw him, her voice soft and effortless.
           </p>
 
           <p>
@@ -589,17 +795,21 @@
           <p>
             Peter noticed nothing.
             Merissa only smiled politely.
-            But somewhere behind Floyy’s quiet face, the machinery of observation had already begun to turn.
+            But somewhere behind Floyy's quiet face, the machinery of observation had already begun to turn.
           </p>
         </div>
       </section>
 
       <div class="ending-box">
-        <h3>Stay Tuned</h3>
+        <h3>End ! Nahh....</h3>
         <p>
-          The story has only just begun.  
+          The story has only just begun.<br>
           Some doors open quietly — and some obsessions begin with a single look.
         </p>
+
+        <a href="chapter2.html" class="next-chapter-link">
+          Continue to Chapter Two <span class="arrow">→</span>
+        </a>
       </div>
 
     </div>
@@ -607,7 +817,7 @@
 
   <footer class="chapter-footer">
     <p>The Boy from Last — Chapter 1 Archive</p>
-    <p>Next chapter coming soon.</p>
+    <p><a href="chapter2.html" class="footer-next-link">Next: Chapter 2 — The Scent in Her Room →</a></p>
   </footer>
 
   <script>
@@ -645,6 +855,57 @@
     }
 
     setInterval(createSnowdrop, 900);
+
+    // ===== MUSIC PLAYER =====
+    const chapterMusic = document.getElementById("chapterMusic");
+    const musicToggle = document.getElementById("musicToggle");
+    const musicIcon = document.getElementById("musicIcon");
+    const musicPlayer = document.getElementById("musicPlayer");
+
+    if (chapterMusic) {
+      chapterMusic.volume = 0.22; // soft background volume
+    }
+
+    function updateMusicUI(isPlaying) {
+      if (isPlaying) {
+        musicIcon.textContent = "❚❚";
+        musicToggle.classList.add("playing");
+        musicPlayer.classList.add("playing");
+        musicToggle.setAttribute("aria-label", "Pause chapter music");
+      } else {
+        musicIcon.textContent = "▶";
+        musicToggle.classList.remove("playing");
+        musicPlayer.classList.remove("playing");
+        musicToggle.setAttribute("aria-label", "Play chapter music");
+      }
+    }
+
+    musicToggle.addEventListener("click", async () => {
+      try {
+        if (chapterMusic.paused) {
+          await chapterMusic.play();
+          updateMusicUI(true);
+        } else {
+          chapterMusic.pause();
+          updateMusicUI(false);
+        }
+      } catch (err) {
+        console.log("Music play blocked:", err);
+      }
+    });
+
+    chapterMusic.addEventListener("pause", () => updateMusicUI(false));
+    chapterMusic.addEventListener("play", () => updateMusicUI(true));
+
+    // Show a visible error if the mp3 fails to load, instead of failing silently
+    chapterMusic.addEventListener("error", () => {
+      const trackEl = document.querySelector(".music-track");
+      if (trackEl) {
+        trackEl.textContent = "Track not found — check music/ folder";
+        trackEl.style.color = "#e08585";
+      }
+      console.error("chapterMusic failed to load. Check that music/chapter1-theme.mp3 exists next to this HTML file.");
+    });
   </script>
 </body>
 </html>
