@@ -817,7 +817,7 @@
 
   <footer class="chapter-footer">
     <p>The Boy from Last — Chapter 1 Archive</p>
-    <p><a href="chapter2.html" class="footer-next-link"></a></p>
+    <p><a href="chapter2.html" class="footer-next-link">Next: Chapter 2 — The Scent in Her Room →</a></p>
   </footer>
 
   <script>
@@ -905,6 +905,38 @@
         trackEl.style.color = "#e08585";
       }
       console.error("chapterMusic failed to load. Check that music/chapter1-theme.mp3 exists next to this HTML file.");
+    });
+
+    // ===== AUTOPLAY ON LOAD (with fallback) =====
+    // Browsers block audio-with-sound autoplay until the user has interacted
+    // with the page at least once. We try immediately; if blocked, we start
+    // playback on the very first click/tap/keypress anywhere on the page,
+    // so it starts as close to "automatically" as browsers allow.
+    let autoplayHandled = false;
+
+    async function tryAutoplay() {
+      if (autoplayHandled) return;
+      try {
+        await chapterMusic.play();
+        autoplayHandled = true;
+        updateMusicUI(true);
+      } catch (err) {
+        // Autoplay was blocked — wait for first user interaction instead
+        console.log("Autoplay blocked by browser, will start on first interaction.");
+      }
+    }
+
+    function startOnFirstInteraction() {
+      if (autoplayHandled) return;
+      chapterMusic.play().then(() => {
+        autoplayHandled = true;
+        updateMusicUI(true);
+      }).catch(() => {});
+    }
+
+    window.addEventListener("load", tryAutoplay);
+    ["click", "touchstart", "keydown", "scroll"].forEach((evt) => {
+      window.addEventListener(evt, startOnFirstInteraction, { once: true, passive: true });
     });
   </script>
 </body>
