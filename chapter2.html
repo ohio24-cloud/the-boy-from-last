@@ -297,6 +297,38 @@
     }
 
     .ending-box p { color: var(--muted); font-size: 1rem; line-height: 1.8; }
+    /* NEXT CHAPTER BUTTON */
+    .next-chapter-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 26px;
+      padding: 14px 30px;
+      border-radius: 999px;
+      border: 1px solid rgba(212,180,131,0.35);
+      background: linear-gradient(180deg, rgba(212,180,131,0.14), rgba(212,180,131,0.04));
+      color: var(--accent);
+      text-decoration: none;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.25rem;
+      letter-spacing: 0.5px;
+      transition: 0.3s ease;
+    }
+
+    .next-chapter-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(212,180,131,0.18);
+      border-color: rgba(212,180,131,0.6);
+      background: linear-gradient(180deg, rgba(212,180,131,0.22), rgba(212,180,131,0.06));
+    }
+
+    .next-chapter-link .arrow {
+      transition: transform 0.3s ease;
+    }
+
+    .next-chapter-link:hover .arrow {
+      transform: translateX(4px);
+    }
 
     .chapter-footer {
       width: 100%;
@@ -608,6 +640,9 @@
         <p>
           Some names should never surface twice.<br>
         </p>
+        <a href="chapter3.html" class="next-chapter-link">
+          Continue to Chapter Three <span class="arrow">→</span>
+        </a>
       </div>
 
     </div>
@@ -615,7 +650,6 @@
 
   <footer class="chapter-footer">
     <p>The Boy from Last — Chapter 2 Archive</p>
-    <p>Next chapter coming soon.</p>
   </footer>
 
   <script>
