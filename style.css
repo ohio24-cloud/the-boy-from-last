@@ -297,7 +297,7 @@ body {
 .chapter-card {
   .locked-card{
     opacity:0.75;
-    pointer-events:auto;
+    pointer-events:pointer;
 }
 
 .locked-card:hover{
