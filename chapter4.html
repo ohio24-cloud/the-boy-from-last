@@ -1,0 +1,1477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chapter 4 — The Theft of Questions</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #090909;
+      --bg-soft: #111111;
+      --panel: rgba(255,255,255,0.04);
+      --panel-strong: rgba(255,255,255,0.05);
+      --border: rgba(255,255,255,0.08);
+      --text: #f3efe7;
+      --muted: #b7afa1;
+      --accent: #d4b483;
+      --accent-soft: #8e7350;
+      --shadow: 0 18px 50px rgba(0,0,0,0.45);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top, rgba(120, 95, 55, 0.14), transparent 25%),
+        linear-gradient(180deg, #060606 0%, #0b0b0b 45%, #080808 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    .bg-overlay {
+      position: fixed;
+      inset: 0;
+      background:
+        linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+      background-size: 34px 34px;
+      opacity: 0.3;
+      z-index: -4;
+    }
+
+    .grain {
+      position: fixed;
+      inset: 0;
+      background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 4px 4px;
+      opacity: 0.06;
+      pointer-events: none;
+      z-index: -3;
+    }
+
+    .snowdrop {
+      position: fixed;
+      top: -30px;
+      color: rgba(255,255,255,0.65);
+      font-size: 14px;
+      pointer-events: none;
+      z-index: 0;
+      animation: snowFall linear forwards;
+      text-shadow: 0 0 8px rgba(255,255,255,0.18);
+      user-select: none;
+    }
+
+    @keyframes snowFall {
+      0% {
+        transform: translateY(-20px) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.7;
+      }
+      100% {
+        transform: translateY(110vh) translateX(40px) rotate(180deg);
+        opacity: 0;
+      }
+    }
+
+    .topbar {
+      width: 100%;
+      padding: 18px 7%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+      position: relative;
+      z-index: 5;
+      background: rgba(9,9,9,0.5);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .topbar-left {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      order: 1;
+    }
+
+    .back-link {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 0.96rem;
+      transition: 0.25s ease;
+    }
+
+    .back-link:hover {
+      color: var(--accent);
+    }
+
+    .chapter-label {
+      color: var(--muted);
+      letter-spacing: 2px;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+    }
+
+    .chapter-hero {
+      width: min(1400px, 94%);
+      margin: 10px auto 40px;
+      padding: 40px 0 20px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+
+    .hero-kicker {
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      font-size: 0.82rem;
+      margin-bottom: 18px;
+    }
+
+    .chapter-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3.8rem, 8vw, 7rem);
+      line-height: 0.95;
+      font-weight: 700;
+      margin-bottom: 20px;
+      letter-spacing: -1px;
+    }
+
+    .chapter-title span {
+      color: var(--accent);
+      font-style: italic;
+    }
+
+    .chapter-line {
+      width: 100%;
+      max-width: 860px;
+      height: 1px;
+      background: linear-gradient(90deg, var(--accent), rgba(212,180,131,0.15), transparent);
+      position: relative;
+      margin: 18px 0 28px;
+    }
+
+    .chapter-line::before,
+    .chapter-line::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 10px rgba(212,180,131,0.45);
+    }
+
+    .chapter-line::before {
+      left: 8%;
+    }
+
+    .chapter-line::after {
+      left: 0;
+    }
+
+    .chapter-quote {
+      max-width: 1000px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.5rem, 2.5vw, 2.3rem);
+      line-height: 1.65;
+      color: #f5efe3;
+      font-style: italic;
+      margin-bottom: 28px;
+    }
+
+    .chapter-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .chapter-meta p {
+      color: #f2ede4;
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+
+    .chapter-meta span {
+      color: var(--accent);
+      margin-right: 10px;
+      font-size: 1.05rem;
+    }
+
+    .story-section {
+      width: min(1450px, 95%);
+      margin: 0 auto 90px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .story-box {
+      width: 100%;
+      padding: 42px 48px;
+      border-radius: 30px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(3px);
+    }
+
+    .story-box::before {
+      content: "";
+      position: absolute;
+      inset: 18px;
+      border-radius: 24px;
+      border: 1px solid rgba(255,255,255,0.05);
+      pointer-events: none;
+    }
+
+    .story-part {
+      margin-bottom: 38px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .part-number {
+      font-family: 'Cormorant Garamond', serif;
+      color: #efe6d6;
+      font-size: 2.2rem;
+      margin-bottom: 10px;
+      opacity: 0.95;
+    }
+
+    .story-text {
+      color: #f3efe7;
+      font-size: 1.18rem;
+      line-height: 2.08;
+      max-width: 100%;
+    }
+
+    .story-text p {
+      margin-bottom: 22px;
+      color: #efe9dc;
+    }
+
+    .story-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    .story-text p:first-child::first-letter {
+      float: left;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 5.2rem;
+      line-height: 0.85;
+      padding-right: 12px;
+      padding-top: 6px;
+      color: #f5e8d3;
+      font-weight: 700;
+    }
+
+    .ending-box {
+      margin-top: 12px;
+      padding-top: 22px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      text-align: center;
+    }
+
+    .ending-box h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.1rem;
+      color: var(--accent);
+      margin-bottom: 8px;
+      letter-spacing: 1px;
+    }
+
+    .ending-box p {
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.8;
+    }
+
+    .next-chapter-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 26px;
+      padding: 14px 30px;
+      border-radius: 999px;
+      border: 1px solid rgba(212,180,131,0.35);
+      background: linear-gradient(180deg, rgba(212,180,131,0.14), rgba(212,180,131,0.04));
+      color: var(--accent);
+      text-decoration: none;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.25rem;
+      letter-spacing: 0.5px;
+      transition: 0.3s ease;
+    }
+
+    .next-chapter-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(212,180,131,0.18);
+      border-color: rgba(212,180,131,0.6);
+      background: linear-gradient(180deg, rgba(212,180,131,0.22), rgba(212,180,131,0.06));
+    }
+
+    .next-chapter-link .arrow {
+      transition: transform 0.3s ease;
+    }
+
+    .next-chapter-link:hover .arrow {
+      transform: translateX(4px);
+    }
+
+    .chapter-footer {
+      width: 100%;
+      padding: 28px 7% 40px;
+      text-align: center;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      position: relative;
+      z-index: 2;
+    }
+
+    .chapter-footer p {
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: 0.95rem;
+    }
+
+    .footer-next-link {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(212,180,131,0.3);
+      transition: 0.25s ease;
+    }
+
+    .footer-next-link:hover {
+      border-color: var(--accent);
+    }
+
+    .reveal {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .reveal.js-hidden {
+      opacity: 0;
+      transform: translateY(28px);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .music-player {
+      order: 2;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 16px;
+
+      border-radius: 999px;
+      background: rgba(10, 10, 10, 0.78);
+      border: 1px solid rgba(255,255,255,0.10);
+      box-shadow: 0 12px 35px rgba(0,0,0,0.35);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+
+      max-width: 100%;
+    }
+
+    .music-btn {
+      flex-shrink: 0;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: radial-gradient(circle at top, rgba(212,180,131,0.25), rgba(255,255,255,0.04));
+      color: #f3efe7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: 0.3s ease;
+      font-size: 1rem;
+      box-shadow: 0 0 0 rgba(212,180,131,0);
+    }
+
+    .music-btn:hover {
+      transform: translateY(-2px) scale(1.03);
+      border-color: rgba(212,180,131,0.35);
+      box-shadow: 0 0 18px rgba(212,180,131,0.18);
+    }
+
+    .music-btn.playing {
+      box-shadow: 0 0 22px rgba(212,180,131,0.22);
+      border-color: rgba(212,180,131,0.4);
+    }
+
+    .music-meta {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+      min-width: 120px;
+    }
+
+    .music-label {
+      font-size: 0.7rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .music-track {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      color: var(--text);
+      white-space: nowrap;
+    }
+
+    .music-wave {
+      display: flex;
+      align-items: flex-end;
+      gap: 3px;
+      height: 18px;
+      margin-left: 4px;
+      flex-shrink: 0;
+    }
+
+    .music-wave span {
+      display: block;
+      width: 3px;
+      border-radius: 999px;
+      background: var(--accent);
+      opacity: 0.35;
+      height: 6px;
+      transform-origin: bottom;
+    }
+
+    .music-player.playing .music-wave span {
+      animation: waveDance 1s ease-in-out infinite;
+      opacity: 0.9;
+    }
+
+    .music-player.playing .music-wave span:nth-child(2) { animation-delay: 0.12s; }
+    .music-player.playing .music-wave span:nth-child(3) { animation-delay: 0.24s; }
+    .music-player.playing .music-wave span:nth-child(4) { animation-delay: 0.36s; }
+
+    @keyframes waveDance {
+      0%, 100% { height: 6px; }
+      50% { height: 18px; }
+    }
+
+    @media (max-width: 900px) {
+      .chapter-hero {
+        width: min(96%, 96%);
+      }
+
+      .story-section {
+        width: min(96%, 96%);
+      }
+
+      .story-box {
+        padding: 34px 28px;
+      }
+
+      .chapter-quote {
+        font-size: 1.5rem;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .topbar {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+      }
+
+      .music-player {
+        width: 100%;
+      }
+
+      .chapter-title {
+        font-size: 3rem;
+      }
+
+      .chapter-quote {
+        font-size: 1.28rem;
+        line-height: 1.7;
+      }
+
+      .story-box {
+        padding: 26px 18px;
+        border-radius: 22px;
+      }
+
+      .story-box::before {
+        inset: 10px;
+        border-radius: 16px;
+      }
+
+      .story-text {
+        font-size: 1.03rem;
+        line-height: 1.95;
+      }
+
+      .story-text p:first-child::first-letter {
+        font-size: 4.2rem;
+        padding-right: 10px;
+      }
+
+      .part-number {
+        font-size: 1.8rem;
+      }
+
+      .chapter-meta p {
+        font-size: 0.98rem;
+      }
+
+      .next-chapter-link {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .music-meta {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-overlay"></div>
+  <div class="grain"></div>
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <a href="chapter3.html" class="back-link">← Back to chapter 3</a>
+      <div class="chapter-label">Chapter 4 — The Theft of Questions</div>
+    </div>
+
+    <!-- CHAPTER 4 MUSIC PLAYER: normal flex item, not fixed/floating -->
+    <div class="music-player" id="musicPlayer">
+      <button class="music-btn" id="musicToggle" aria-label="Play chapter music">
+        <span id="musicIcon">▶</span>
+      </button>
+
+      <div class="music-meta">
+        <span class="music-label">Chapter Theme</span>
+        <span class="music-track">The Theft</span>
+      </div>
+
+      <div class="music-wave" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+
+    <audio id="chapterMusic" loop preload="auto">
+      <source src="music/chapter4-theme.mp3" type="audio/mpeg">
+    </audio>
+  </header>
+
+  <!-- HERO -->
+  <section class="chapter-hero reveal">
+    <div class="hero-inner">
+      <p class="hero-kicker">Chapter Four</p>
+
+      <h1 class="chapter-title">
+        The <span>Theft</span> of Questions
+      </h1>
+
+      <div class="chapter-line"></div>
+
+      <p class="chapter-quote">
+        "Once you have stolen for someone, you stop belonging entirely to yourself. The debt becomes the only thing you have in common."
+      </p>
+
+      <div class="chapter-meta">
+        <p><span>✦</span>Psychological Fiction</p>
+        <p><span>✦</span>Betrayal / Moral Collapse / The Point of No Return</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- STORY -->
+  <main class="story-section reveal">
+    <div class="story-box">
+
+      <section class="story-part">
+        <div class="part-number">I</div>
+        <div class="story-text">
+          <p>
+            Floyy did not answer immediately.
+          </p>
+
+          <p>
+            Jenn was still standing near the desk, furious, almost shaking, his face tight with disbelief.
+          </p>
+
+          <p>
+            "Coding questions?" he repeated, his voice sharp with outrage. "You want me to steal coding questions? Have you lost your mind?"
+          </p>
+
+          <p>
+            Floyy stood near the doorway with his hands in his pockets, calm in the way only people without shame could afford to be.
+          </p>
+
+          <p>
+            "It's a small thing," he said. "Not money. Not jewelry. Just the competition questions."
+          </p>
+
+          <p>
+            Jenn let out a bitter laugh. "And you think a professor is going to steal them for you?"
+          </p>
+
+          <p>
+            Floyy tilted his head slightly, as if the answer were obvious.
+          </p>
+
+          <p>
+            "I thought you wanted the story to continue."
+          </p>
+
+          <p>
+            Jenn's expression hardened. "Get out."
+          </p>
+
+          <p>
+            Floyy did not move at once.
+          </p>
+
+          <p>
+            For a second, he simply watched him, as though measuring something invisible behind his anger. Then he gave the smallest shrug.
+          </p>
+
+          <p>
+            "Fine," he said. "Then forget you ever saw potential in me."
+          </p>
+
+          <p>
+            He turned and walked out.
+          </p>
+
+          <p>
+            The door shut softly behind him.
+          </p>
+
+          <p>
+            That night Jenn did not sleep.
+          </p>
+
+          <p>
+            He lay awake alone in his room, staring at the ceiling while the house around him sank deeper and deeper into silence. Every time he closed his eyes, Floyy's voice returned to him — cold, patient, impossible to ignore.
+          </p>
+
+          <p>
+            <em>Then forget you ever saw potential in me.</em>
+          </p>
+
+          <p>
+            He turned onto one side. Then the other. He sat up. Lay down again. The sheets twisted around his legs until he threw them aside in irritation. The room was cold, the kind of cold that made the silence feel larger. Somewhere beyond the walls of the house, Selen was in her own room, asleep or pretending to be. Jenn did not know which possibility he disliked more.
+          </p>
+
+          <p>
+            The unfinished story. Merissa. The wardrobe. The carved name. Floyy's writing. His own unwritten book.
+          </p>
+
+          <p>
+            And beneath it all, the humiliating certainty that the story had begun to move without him.
+          </p>
+
+          <p>
+            By morning he had not rested at all.
+          </p>
+        </div>
+      </section>
+
+      <section class="story-part">
+        <div class="part-number">II</div>
+        <div class="story-text">
+          <p>
+            The next day, Madrid High School smelled of damp coats, printer ink, and stale coffee. Jenn entered the classroom with a stack of notes beneath his arm and the tired stiffness of a man who had spent the night wrestling with his own conscience.
+          </p>
+
+          <p>
+            As always, he began with attendance.
+          </p>
+
+          <p>
+            He called each name one by one, his voice flat and automatic.
+          </p>
+
+          <p>
+            When he reached Floyy's name, there was no answer.
+          </p>
+
+          <p>
+            Jenn paused.
+          </p>
+
+          <p>
+            He glanced toward the window seat.
+          </p>
+
+          <p>
+            Empty.
+          </p>
+
+          <p>
+            For a moment, something inside him tightened. He moved on quickly, pretending nothing had happened, but the rest of the lecture slipped strangely out of rhythm. He lost his place twice while discussing symbolism, repeated a point he had already made, and caught himself staring at the empty chair more than once.
+          </p>
+
+          <p>
+            By the time class ended, his patience had worn thin.
+          </p>
+
+          <p>
+            The room emptied. Chairs scraped. Students disappeared into the corridor. As soon as the last one was gone, Jenn took out his phone and called Floyy.
+          </p>
+
+          <p>
+            The line rang twice before it connected.
+          </p>
+
+          <p>
+            "Why weren't you in class?" Jenn asked without greeting.
+          </p>
+
+          <p>
+            Floyy's voice came back quiet and indifferent. "Why would I come?"
+          </p>
+
+          <p>
+            Jenn frowned. "What kind of question is that?"
+          </p>
+
+          <p>
+            "If there's no story left," Floyy said, "there's no point in class."
+          </p>
+
+          <p>
+            Jenn said nothing.
+          </p>
+
+          <p>
+            The silence on the line stretched long enough for him to hear his own breathing.
+          </p>
+
+          <p>
+            "Come this evening," he said at last. "We need to talk."
+          </p>
+
+          <p>
+            Floyy did not answer for a second.
+          </p>
+
+          <p>
+            Then he said, "Fine."
+          </p>
+        </div>
+      </section>
+
+      <section class="story-part">
+        <div class="part-number">III</div>
+        <div class="story-text">
+          <p>
+            When Floyy arrived that evening, Jenn was already waiting in the study.
+          </p>
+
+          <p>
+            The lamp on the desk was on, though the rest of the room remained in shadow. Books lined the walls, and the air smelled faintly of paper, dust, and cold coffee. Jenn stood near the desk with both hands resting against the wood, as though holding himself upright through force alone.
+          </p>
+
+          <p>
+            Floyy stepped inside and closed the door behind him.
+          </p>
+
+          <p>
+            Neither of them sat down.
+          </p>
+
+          <p>
+            Jenn looked at him for a long moment before speaking.
+          </p>
+
+          <p>
+            "Where are the answers?"
+          </p>
+
+          <p>
+            Floyy's face did not change, but something faint passed through his eyes — not surprise, exactly, but the quiet satisfaction of a prediction fulfilled.
+          </p>
+
+          <p>
+            "I thought you'd changed your mind," he said.
+          </p>
+
+          <p>
+            Jenn ignored that. "Where?"
+          </p>
+
+          <p>
+            Floyy slipped his hands into the pockets of his jacket and spoke as if he were explaining something harmless.
+          </p>
+
+          <p>
+            "Profeesor Steve is in charge of the coding competition. The file should be on his system."
+          </p>
+
+          <p>
+            Jenn's jaw tightened.
+          </p>
+
+          <p>
+            "His office computer?"
+          </p>
+
+          <p>
+            Floyy nodded.
+          </p>
+
+          <p>
+            Jenn turned away, running a hand across his face. For a second he seemed on the verge of speaking, then thought better of it. He stared at the bookshelves instead, as though one of them might offer him absolution.
+          </p>
+
+          <p>
+            When he finally looked back, his expression had changed. The hesitation was still there, but something colder had settled over it.
+          </p>
+
+          <p>
+            "I'll do it," he said.
+          </p>
+
+          <p>
+            Floyy blinked once.
+          </p>
+
+          <p>
+            "Really?"
+          </p>
+
+          <p>
+            Jenn gave him a sharp look. "Don't sound so surprised. You're the one who suggested it."
+          </p>
+
+          <p>
+            A faint smile touched Floyy's mouth.
+          </p>
+
+          <p>
+            "I just didn't think you would."
+          </p>
+
+          <p>
+            Jenn straightened, almost offended by the remark.
+          </p>
+
+          <p>
+            "I'm doing it because I need this to continue," he said. "And because I need material for my book. Don't misunderstand my reasons."
+          </p>
+
+          <p>
+            Floyy's smile deepened by the smallest degree.
+          </p>
+
+          <p>
+            "Of course," he said.
+          </p>
+        </div>
+      </section>
+
+      <section class="story-part">
+        <div class="part-number">IV</div>
+        <div class="story-text">
+          <p>
+            The opportunity came sooner than Jenn expected.
+          </p>
+
+          <p>
+            The following afternoon, he found Steve in the school canteen, standing beside the coffee machine with a paper cup in one hand and a stack of printed schedules in the other. Steve was cheerful as always, with the loose ease of a man who had never learned to take institutions as seriously as the people working inside them.
+          </p>
+
+          <p>
+            Jenn approached him with unusual warmth.
+          </p>
+
+          <p>
+            "Steve."
+          </p>
+
+          <p>
+            Steve looked up. "Professor Jenn."
+          </p>
+
+          <p>
+            Jenn's mouth tightened. "At school, perhaps you could avoid calling me <em>Professor</em> every other sentence. It makes me sound older than I already am."
+          </p>
+
+          <p>
+            Steve laughed. "Then what should I call you?"
+          </p>
+
+          <p>
+            Jenn hesitated, as though the answer embarrassed him. "Jenn will do."
+          </p>
+
+          <p>
+            Steve raised an eyebrow, amused by the sudden intimacy.
+          </p>
+
+          <p>
+            "Well then, Jenn," he said, drawing the name out deliberately, "what can I do for you?"
+          </p>
+
+          <p>
+            Jenn lowered his voice as though asking a favor he would rather not admit to.
+          </p>
+
+          <p>
+            "A few days ago you mentioned online attendance software."
+          </p>
+
+          <p>
+            Steve blinked. "I did?"
+          </p>
+
+          <p>
+            "Yes. You said I was living in the nineteenth century with my register." Jenn gave a strained smile. "You may have had a point."
+          </p>
+
+          <p>
+            Steve looked genuinely startled.
+          </p>
+
+          <p>
+            "You want to switch to the digital system?"
+          </p>
+
+          <p>
+            "I want to understand how it works."
+          </p>
+
+          <p>
+            Steve stared at him for a second, then laughed again, this time in disbelief.
+          </p>
+
+          <p>
+            "Now <em>this</em> I have to see."
+          </p>
+
+          <p>
+            Before Steve could say anything else, Jenn caught him lightly by the arm and began steering him toward the corridor.
+          </p>
+
+          <p>
+            "Show me," he said. "Now, if you can."
+          </p>
+
+          <p>
+            Steve, still half-laughing, let himself be dragged along.
+          </p>
+
+          <p>
+            "All right, all right. My office."
+          </p>
+        </div>
+      </section>
+
+      <section class="story-part">
+        <div class="part-number">V</div>
+        <div class="story-text">
+          <p>
+            Steve's cabin was on the fourth floor, tucked near the competition administration rooms. It was small but cluttered — two monitors, stacks of forms, extension cords, competition banners rolled into a corner, and a whiteboard covered in half-erased dates.
+          </p>
+
+          <p>
+            Steve set down his coffee, dropped into his chair, and began logging into the system.
+          </p>
+
+          <p>
+            Jenn stood beside the desk, watching the screen too carefully.
+          </p>
+
+          <p>
+            "There," Steve said. "Attendance platform. Student portal. Competition dashboard. Everything's here."
+          </p>
+
+          <p>
+            He clicked through windows while explaining the basics. Jenn nodded at all the right moments, though he barely heard a word. His eyes had already begun scanning folder names, icons, tabs, possibilities.
+          </p>
+
+          <p>
+            Steve was in the middle of explaining how the attendance reports synced with the school database when Jenn suddenly made a strangled sound.
+          </p>
+
+          <p>
+            He pressed a hand to his chest.
+          </p>
+
+          <p>
+            "Steve—"
+          </p>
+
+          <p>
+            Steve turned.
+          </p>
+
+          <p>
+            Jenn's face had gone pale. He staggered back a step, one hand gripping the desk for support, the other still clutching his chest.
+          </p>
+
+          <p>
+            "What happened?" Steve said, instantly on his feet.
+          </p>
+
+          <p>
+            "My medication," Jenn gasped. "Car… in my car… black case… under the seat—"
+          </p>
+
+          <p>
+            "Sit down," Steve said, panic already breaking through his voice.
+          </p>
+
+          <p>
+            "I can't breathe."
+          </p>
+
+          <p>
+            That was enough.
+          </p>
+
+          <p>
+            Steve did not question anything. He rushed for the door at once, nearly knocking over his own chair in the process.
+          </p>
+
+          <p>
+            "I'll get it!"
+          </p>
+
+          <p>
+            The door slammed behind him.
+          </p>
+
+          <p>
+            For half a second, Jenn remained bent over, listening to Steve's footsteps disappear into the corridor.
+          </p>
+
+          <p>
+            Then he straightened.
+          </p>
+
+          <p>
+            The pain vanished from his face as if someone had wiped it away.
+          </p>
+
+          <p>
+            He moved instantly.
+          </p>
+
+          <p>
+            Jenn dropped into Steve's chair and pulled the keyboard toward him. His hands trembled — not from weakness, but from adrenaline. The competition dashboard was still open. He clicked through folders, searching faster than he thought possible.
+          </p>
+
+          <p>
+            Schedules. Registrations. Teams. Submission forms.
+          </p>
+
+          <p>
+            Not that.
+          </p>
+
+          <p>
+            Not that either.
+          </p>
+
+          <p>
+            His pulse pounded harder with every second. He imagined Steve already halfway down the stairs, imagined the lift delayed, imagined the cabin door opening before he found anything.
+          </p>
+
+          <p>
+            Then he saw it.
+          </p>
+
+          <p>
+            <strong>Coding_Competition_Final_Questions</strong>
+          </p>
+
+          <p>
+            Jenn froze for the briefest instant.
+          </p>
+
+          <p>
+            Then he opened it.
+          </p>
+
+          <p>
+            A set of encrypted documents, solution files, timing sheets. He grabbed a flash drive from his coat pocket — already there, already waiting, a detail he had not allowed himself to think too carefully about — and plugged it into the system.
+          </p>
+
+          <p>
+            Copy.
+          </p>
+
+          <p>
+            The progress bar appeared.
+          </p>
+
+          <p>
+            Too slow.
+          </p>
+
+          <p>
+            Far too slow.
+          </p>
+
+          <p>
+            Jenn stared at it as if hatred alone could make it move faster. Thirty-two percent. Forty-one. Fifty-six.
+          </p>
+
+          <p>
+            From somewhere in the corridor came the distant echo of footsteps, and his throat tightened. He almost pulled the drive out and run. Instead he stayed, fingers digging into the edge of the desk hard enough to hurt.
+          </p>
+
+          <p>
+            Seventy-four.
+          </p>
+
+          <p>
+            Eighty-eight.
+          </p>
+
+          <p>
+            Ninety-five.
+          </p>
+
+          <p>
+            The final second felt endless.
+          </p>
+
+          <p>
+            Then the transfer completed.
+          </p>
+
+          <p>
+            Jenn yanked the drive free, closed the folder, minimized the windows, and leaned back just as the footsteps returned — closer now, rushing toward the cabin.
+          </p>
+
+          <p>
+            He had barely managed to rearrange his expression into exhaustion when the door flew open.
+          </p>
+
+          <p>
+            Steve stumbled inside, breathless.
+          </p>
+
+          <p>
+            "I found it," he said, holding up the black case. "Are you all right?"
+          </p>
+
+          <p>
+            Jenn sat slumped in the chair, one hand still pressed weakly against his chest.
+          </p>
+
+          <p>
+            "Yes," he said after a beat, voice faint but steady. "It's passing."
+          </p>
+
+          <p>
+            Steve hurried toward him. "Take the medicine."
+          </p>
+
+          <p>
+            Jenn accepted the case, opened it, and after enough fumbling to seem believable, pretended to swallow one of the pills. He closed his eyes, breathing slowly until the panic in Steve's face began to soften.
+          </p>
+
+          <p>
+            "You scared the hell out of me," Steve muttered.
+          </p>
+
+          <p>
+            Jenn managed a tired smile.
+          </p>
+
+          <p>
+            "I'm sorry."
+          </p>
+
+          <p>
+            Steve dragged a chair closer. "Forget the attendance system. You should go home."
+          </p>
+
+          <p>
+            Jenn looked at the computer screen, then back at Steve, and gave a weak shrug.
+          </p>
+
+          <p>
+            "You know," he said, "perhaps the old register isn't so terrible after all."
+          </p>
+
+          <p>
+            Steve stared at him.
+          </p>
+
+          <p>
+            Jenn rose carefully from the chair, smoothing the front of his coat as though embarrassed by the whole incident.
+          </p>
+
+          <p>
+            "I think I prefer my old-fashioned methods."
+          </p>
+
+          <p>
+            Steve laughed once in disbelief, still shaken. "You nearly died for nothing?"
+          </p>
+
+          <p>
+            Jenn gave him a look of polite offense. "I did not nearly die."
+          </p>
+
+          <p>
+            "You absolutely did."
+          </p>
+
+          <p>
+            Jenn handed the medicine case back.
+          </p>
+
+          <p>
+            "Thank you," he said. "For the trouble."
+          </p>
+
+          <p>
+            Then, before Steve could ask another question, Jenn picked up his bag and walked out.
+          </p>
+        </div>
+      </section>
+
+      <section class="story-part">
+        <div class="part-number">VI</div>
+        <div class="story-text">
+          <p>
+            He did not stop until he reached the parking lot.
+          </p>
+
+          <p>
+            The cold evening air hit his face, sharp and metallic, but he barely felt it. He crossed the lot faster than he had moved in years, unlocked his car, and dropped into the driver's seat with the flash drive still clenched in his hand.
+          </p>
+
+          <p>
+            For a few seconds he simply sat there, breathing hard.
+          </p>
+
+          <p>
+            His heart was hammering so violently that it almost hurt. His hands trembled. A pulse of disbelief moved through him, followed almost instantly by something warmer, darker, and infinitely more dangerous.
+          </p>
+
+          <p>
+            Joy.
+          </p>
+
+          <p>
+            Not relief.
+          </p>
+
+          <p>
+            Not guilt.
+          </p>
+
+          <p>
+            Joy.
+          </p>
+
+          <p>
+            He looked down at the drive in his palm and laughed once under his breath, unable to stop himself.
+          </p>
+
+          <p>
+            As he drove away from the school, Jenn could not stop smiling.
+          </p>
+
+          <p>
+            It felt less like theft — and more like the first truly original thing he had done in years.
+          </p>
+        </div>
+      </section>
+
+      <div class="ending-box">
+        <h3>Stay Tuned</h3>
+        <p>
+          The line had been crossed.
+          <br>
+          Jenn was no longer a teacher, a husband, or a writer.
+          <br>
+          <br>
+          He was a criminal now.
+          <br>
+          And strangely, this was the first thing that had made him feel alive.
+        </p>
+
+        <a href="chapter5.html" class="next-chapter-link">
+          Continue to Chapter Five <span class="arrow">→</span>
+        </a>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="chapter-footer">
+    <p>The Boy from Last — Chapter 4 Archive .</p>
+
+  <script>
+    // Reveal animation
+    document.addEventListener("DOMContentLoaded", () => {
+      const revealEls = document.querySelectorAll(".reveal");
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+          }
+        });
+      }, { threshold: 0.12 });
+
+      revealEls.forEach((el) => observer.observe(el));
+    });
+
+    // Snowdrop effect
+    function createSnowdrop() {
+      const drop = document.createElement("span");
+      drop.className = "snowdrop";
+      drop.textContent = "❄";
+
+      drop.style.left = Math.random() * window.innerWidth + "px";
+      drop.style.fontSize = (12 + Math.random() * 12) + "px";
+      drop.style.animationDuration = (7 + Math.random() * 6) + "s";
+      drop.style.opacity = (0.25 + Math.random() * 0.35).toFixed(2);
+
+      document.body.appendChild(drop);
+
+      setTimeout(() => {
+        drop.remove();
+      }, 14000);
+    }
+
+    setInterval(createSnowdrop, 900);
+
+    // ===== MUSIC PLAYER =====
+    const chapterMusic = document.getElementById("chapterMusic");
+    const musicToggle = document.getElementById("musicToggle");
+    const musicIcon = document.getElementById("musicIcon");
+    const musicPlayer = document.getElementById("musicPlayer");
+
+    if (chapterMusic) {
+      chapterMusic.volume = 0.22; // soft background volume
+    }
+
+    function updateMusicUI(isPlaying) {
+      if (isPlaying) {
+        musicIcon.textContent = "❚❚";
+        musicToggle.classList.add("playing");
+        musicPlayer.classList.add("playing");
+        musicToggle.setAttribute("aria-label", "Pause chapter music");
+      } else {
+        musicIcon.textContent = "▶";
+        musicToggle.classList.remove("playing");
+        musicPlayer.classList.remove("playing");
+        musicToggle.setAttribute("aria-label", "Play chapter music");
+      }
+    }
+
+    musicToggle.addEventListener("click", async () => {
+      try {
+        if (chapterMusic.paused) {
+          await chapterMusic.play();
+          updateMusicUI(true);
+        } else {
+          chapterMusic.pause();
+          updateMusicUI(false);
+        }
+      } catch (err) {
+        console.log("Music play blocked:", err);
+      }
+    });
+
+    chapterMusic.addEventListener("pause", () => updateMusicUI(false));
+    chapterMusic.addEventListener("play", () => updateMusicUI(true));
+
+    // Show a visible error if the mp3 fails to load, instead of failing silently
+    chapterMusic.addEventListener("error", () => {
+      const trackEl = document.querySelector(".music-track");
+      if (trackEl) {
+        trackEl.textContent = "Track not found — check music/ folder";
+        trackEl.style.color = "#e08585";
+      }
+      console.error("chapterMusic failed to load. Check that music/chapter4-theme.mp3 exists next to this HTML file.");
+    });
+
+    // ===== AUTOPLAY ON LOAD (with fallback) =====
+    // Browsers block audio-with-sound autoplay until the user has interacted
+    // with the page at least once. We try immediately; if blocked, we start
+    // playback on the very first click/tap/keypress anywhere on the page,
+    // so it starts as close to "automatically" as browsers allow.
+    let autoplayHandled = false;
+
+    async function tryAutoplay() {
+      if (autoplayHandled) return;
+      try {
+        await chapterMusic.play();
+        autoplayHandled = true;
+        updateMusicUI(true);
+      } catch (err) {
+        // Autoplay was blocked — wait for first user interaction instead
+        console.log("Autoplay blocked by browser, will start on first interaction.");
+      }
+    }
+
+    function startOnFirstInteraction() {
+      if (autoplayHandled) return;
+      chapterMusic.play().then(() => {
+        autoplayHandled = true;
+        updateMusicUI(true);
+      }).catch(() => {});
+    }
+
+    window.addEventListener("load", tryAutoplay);
+    ["click", "touchstart", "keydown", "scroll"].forEach((evt) => {
+      window.addEventListener(evt, startOnFirstInteraction, { once: true, passive: true });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,1345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chapter 5 — The Boy in Peter's House | The Boy From Last</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --text: #e8e0d5;
+      --muted: #a89f93;
+      --accent-soft: #8e7350;
+      --shadow: 0 18px 50px rgba(0,0,0,0.45);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top, rgba(120, 95, 55, 0.14), transparent 25%),
+        linear-gradient(180deg, #060606 0%, #0b0b0b 45%, #080808 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    .bg-overlay {
+      position: fixed;
+      inset: 0;
+      background:
+        linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+      background-size: 34px 34px;
+      opacity: 0.3;
+      z-index: -4;
+    }
+
+    .grain {
+      position: fixed;
+      inset: 0;
+      background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 4px 4px;
+      opacity: 0.06;
+      pointer-events: none;
+      z-index: -3;
+    }
+
+    /* Floating snowdrops */
+    .snowdrop {
+      position: fixed;
+      top: -30px;
+      color: rgba(255,255,255,0.65);
+      font-size: 14px;
+      pointer-events: none;
+      z-index: 0;
+      animation: snowFall linear forwards;
+      text-shadow: 0 0 8px rgba(255,255,255,0.18);
+      user-select: none;
+    }
+
+    @keyframes snowFall {
+      0% {
+        transform: translateY(-20px) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.7;
+      }
+      100% {
+        transform: translateY(110vh) translateX(40px) rotate(180deg);
+        opacity: 0;
+      }
+    }
+
+    /* NAV — back link, chapter label, AND music player all live here
+       as normal flex children, never floating over page content */
+    .topbar {
+      width: 100%;
+      padding: 18px 7%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+      position: relative;
+      z-index: 5;
+      background: rgba(9,9,9,0.5);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .topbar-left {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      order: 1;
+    }
+
+    .back-link {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 0.96rem;
+      transition: 0.25s ease;
+    }
+
+    .back-link:hover {
+      color: var(--accent-soft);
+    }
+
+    .chapter-label {
+      color: var(--muted);
+      letter-spacing: 2px;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+    }
+
+    /* HERO */
+    .chapter-hero {
+      width: min(1400px, 94%);
+      margin: 10px auto 40px;
+      padding: 40px 0 20px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+
+    .hero-kicker {
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      font-size: 0.82rem;
+      margin-bottom: 18px;
+    }
+
+    .chapter-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3.8rem, 8vw, 7rem);
+      line-height: 0.95;
+      font-weight: 700;
+      margin-bottom: 20px;
+      letter-spacing: -1px;
+    }
+
+    .chapter-title span {
+      color: #d4b483;
+      font-style: italic;
+    }
+
+    .chapter-line {
+      width: 100%;
+      max-width: 860px;
+      height: 1px;
+      background: linear-gradient(90deg, #d4b483, rgba(212,180,131,0.15), transparent);
+      position: relative;
+      margin: 18px 0 28px;
+    }
+
+    .chapter-line::before,
+    .chapter-line::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #d4b483;
+      box-shadow: 0 0 10px rgba(212,180,131,0.45);
+    }
+
+    .chapter-line::before {
+      left: 8%;
+    }
+
+    .chapter-line::after {
+      left: 0;
+    }
+
+    .chapter-quote {
+      max-width: 1000px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.5rem, 2.5vw, 2.3rem);
+      line-height: 1.65;
+      color: #f5efe3;
+      font-style: italic;
+      margin-bottom: 28px;
+    }
+
+    .chapter-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .chapter-meta p {
+      color: #f2ede4;
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+
+    .chapter-meta span {
+      color: #d4b483;
+      margin-right: 10px;
+      font-size: 1.05rem;
+    }
+
+    /* STORY SECTION */
+    .story-section {
+      width: min(1450px, 95%);
+      margin: 0 auto 90px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .story-box {
+      width: 100%;
+      padding: 42px 48px;
+      border-radius: 30px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(3px);
+    }
+
+    .story-box::before {
+      content: "";
+      position: absolute;
+      inset: 18px;
+      border-radius: 24px;
+      border: 1px solid rgba(255,255,255,0.05);
+      pointer-events: none;
+    }
+
+    .story-part {
+      margin-bottom: 38px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .part-number {
+      font-family: 'Cormorant Garamond', serif;
+      color: #efe6d6;
+      font-size: 2.2rem;
+      margin-bottom: 10px;
+      opacity: 0.95;
+    }
+
+    .story-text {
+      color: #f3efe7;
+      font-size: 1.18rem;
+      line-height: 2.08;
+      max-width: 100%;
+    }
+
+    .story-text p {
+      margin-bottom: 22px;
+      color: #efe9dc;
+    }
+
+    .story-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    .story-text p:first-child::first-letter {
+      float: left;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 5.2rem;
+      line-height: 0.85;
+      padding-right: 12px;
+      padding-top: 6px;
+      color: #f5e8d3;
+      font-weight: 700;
+    }
+
+    /* STAY TUNED */
+    .ending-box {
+      margin-top: 12px;
+      padding-top: 22px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      text-align: center;
+    }
+
+    .ending-box h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.1rem;
+      color: #d4b483;
+      margin-bottom: 8px;
+      letter-spacing: 1px;
+    }
+
+    .ending-box p {
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.8;
+    }
+
+    /* NEXT CHAPTER BUTTON */
+    .next-chapter-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 26px;
+      padding: 14px 30px;
+      border-radius: 999px;
+      border: 1px solid rgba(212,180,131,0.35);
+      background: linear-gradient(180deg, rgba(212,180,131,0.14), rgba(212,180,131,0.04));
+      color: #d4b483;
+      text-decoration: none;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.25rem;
+      letter-spacing: 0.5px;
+      transition: 0.3s ease;
+    }
+
+    .next-chapter-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(212,180,131,0.18);
+      border-color: rgba(212,180,131,0.6);
+      background: linear-gradient(180deg, rgba(212,180,131,0.22), rgba(212,180,131,0.06));
+    }
+
+    .next-chapter-link .arrow {
+      transition: transform 0.3s ease;
+    }
+
+    .next-chapter-link:hover .arrow {
+      transform: translateX(4px);
+    }
+
+    /* FOOTER */
+    .chapter-footer {
+      width: 100%;
+      padding: 28px 7% 40px;
+      text-align: center;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      position: relative;
+      z-index: 2;
+    }
+
+    .chapter-footer p {
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: 0.95rem;
+    }
+
+    .footer-next-link {
+      color: #d4b483;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(212,180,131,0.3);
+      transition: 0.25s ease;
+    }
+
+    .footer-next-link:hover {
+      border-color: #d4b483;
+    }
+
+    /* Reveal — visible by default so content never depends on JS firing;
+       only fades in from js-hidden if the observer explicitly adds it */
+    .reveal {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .reveal.js-hidden {
+      opacity: 0;
+      transform: translateY(28px);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* CHAPTER MUSIC PLAYER — flex child inside .topbar, not fixed,
+       so it never overlaps or hides page text on desktop or mobile */
+    .music-player {
+      order: 2;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 16px;
+
+      border-radius: 999px;
+      background: rgba(10, 10, 10, 0.78);
+      border: 1px solid rgba(255,255,255,0.10);
+      box-shadow: 0 12px 35px rgba(0,0,0,0.35);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+
+      max-width: 100%;
+    }
+
+    .music-btn {
+      flex-shrink: 0;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: radial-gradient(circle at top, rgba(212,180,131,0.25), rgba(255,255,255,0.04));
+      color: #f3efe7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: 0.3s ease;
+      font-size: 1rem;
+      box-shadow: 0 0 0 rgba(212,180,131,0);
+    }
+
+    .music-btn:hover {
+      transform: translateY(-2px) scale(1.03);
+      border-color: rgba(212,180,131,0.35);
+      box-shadow: 0 0 18px rgba(212,180,131,0.18);
+    }
+
+    .music-btn.playing {
+      box-shadow: 0 0 22px rgba(212,180,131,0.22);
+      border-color: rgba(212,180,131,0.4);
+    }
+
+    .music-meta {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+      min-width: 120px;
+    }
+
+    .music-label {
+      font-size: 0.7rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .music-track {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      color: var(--text);
+      white-space: nowrap;
+    }
+
+    .music-wave {
+      display: flex;
+      align-items: flex-end;
+      gap: 3px;
+      height: 18px;
+      margin-left: 4px;
+      flex-shrink: 0;
+    }
+
+    .music-wave span {
+      display: block;
+      width: 3px;
+      border-radius: 999px;
+      background: #d4b483;
+      opacity: 0.35;
+      height: 6px;
+      transform-origin: bottom;
+    }
+
+    .music-player.playing .music-wave span {
+      animation: waveDance 1s ease-in-out infinite;
+      opacity: 0.9;
+    }
+
+    .music-player.playing .music-wave span:nth-child(2) { animation-delay: 0.12s; }
+    .music-player.playing .music-wave span:nth-child(3) { animation-delay: 0.24s; }
+    .music-player.playing .music-wave span:nth-child(4) { animation-delay: 0.36s; }
+
+    @keyframes waveDance {
+      0%, 100% { height: 6px; }
+      50% { height: 18px; }
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .chapter-hero {
+        width: min(96%, 96%);
+      }
+
+      .story-section {
+        width: min(96%, 96%);
+      }
+
+      .story-box {
+        padding: 34px 28px;
+      }
+
+      .chapter-quote {
+        font-size: 1.5rem;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .topbar {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+      }
+
+      .music-player {
+        width: 100%;
+      }
+
+      .chapter-title {
+        font-size: 3rem;
+      }
+
+      .chapter-quote {
+        font-size: 1.28rem;
+        line-height: 1.7;
+      }
+
+      .story-box {
+        padding: 26px 18px;
+        border-radius: 22px;
+      }
+
+      .story-box::before {
+        inset: 10px;
+        border-radius: 16px;
+      }
+
+      .story-text {
+        font-size: 1.03rem;
+        line-height: 1.95;
+      }
+
+      .story-text p:first-child::first-letter {
+        font-size: 4.2rem;
+        padding-right: 10px;
+      }
+
+      .part-number {
+        font-size: 1.8rem;
+      }
+
+      .chapter-meta p {
+        font-size: 0.98rem;
+      }
+
+      .next-chapter-link {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .music-meta {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-overlay"></div>
+  <div class="grain"></div>
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <a href="chapter4.html" class="back-link">← Back to chapter 4</a>
+      <div class="chapter-label">Chapter 5 — The Boy in Peter's House</div>
+    </div>
+
+    <!-- CHAPTER 5 MUSIC PLAYER: normal flex item, not fixed/floating -->
+    <div class="music-player" id="musicPlayer">
+      <button class="music-btn" id="musicToggle" aria-label="Play chapter music">
+        <span id="musicIcon">▶</span>
+      </button>
+
+      <div class="music-meta">
+        <span class="music-label">Chapter Theme</span>
+        <span class="music-track">Welcome Home</span>
+      </div>
+
+      <div class="music-wave" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+
+    <audio id="chapterMusic" loop preload="auto">
+      <source src="music/chapter5-theme.mp3" type="audio/mpeg">
+    </audio>
+  </header>
+
+  <!-- HERO -->
+  <section class="chapter-hero reveal">
+    <div class="hero-inner">
+      <p class="hero-kicker">Chapter Five</p>
+
+      <h1 class="chapter-title">
+        The Boy in <span>Peter's House</span>
+      </h1>
+
+      <div class="chapter-line"></div>
+
+      <p class="chapter-quote">
+        "Sometimes, you have to look happy. Otherwise people ask questions you can't afford to answer."
+      </p>
+
+      <div class="chapter-meta">
+        <p><span>✦</span>Psychological Fiction</p>
+        <p><span>✦</span>Belonging / Deception / The Price of Kindness</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- STORY -->
+  <main class="story-section reveal">
+    <div class="story-box">
+
+      <section class="story-part">
+        <div class="part-number">I</div>
+        <div class="story-text">
+          <p>
+            The coding competition had ended, and by the next morning, the results were pinned to the school notice board. Students crowded around it in excited clusters, whispering names, comparing ranks, and arguing over scores.
+          </p>
+
+          <p>
+            Floyy stood second.
+          </p>
+
+          <p>
+            Peter stood fifth.
+          </p>
+
+          <p>
+            When Professor Jenn passed through the corridor on his way to class, he paused in front of the board and stared at the list for a moment longer than he should have. He had expected Floyy to come first. After all, Floyy had known every answer before the competition had even begun.
+          </p>
+
+          <p>
+            That afternoon, once the lecture ended and the classroom had emptied, Jenn called Floyy back.
+          </p>
+
+          <p>
+            "You had all the answers," he said quietly, folding his arms. "Then why are you only second?"
+          </p>
+
+          <p>
+            Floyy adjusted the strap of his bag and gave a small shrug, as if the answer were obvious.
+          </p>
+
+          <p>
+            "I did it intentionally."
+          </p>
+
+          <p>
+            Jenn frowned. "Intentionally?"
+          </p>
+
+          <p>
+            Floyy nodded. "I didn't want to take away someone's rightful first place. And besides… the student who comes first has to enter the next level of the competition. A much harder one. I don't want that kind of attention."
+          </p>
+
+          <p>
+            For a moment Jenn simply looked at him, caught between disbelief and reluctant admiration. There was something unnerving in how calmly Floyy said it — as if he had measured not only the questions, but the consequences of winning.
+          </p>
+
+          <p>
+            Jenn finally exhaled. "Fine," he said. "If that's how you wanted it."
+          </p>
+
+          <p>
+            Floyy only smiled.
+          </p>
+        </div>
+      </section>
+
+      <section class="story-part">
+        <div class="part-number">II</div>
+        <div class="story-text">
+          <p>
+            That evening, Peter took Floyy home with him.
+          </p>
+
+          <p>
+            Pedro and Merissa had arranged a dinner to celebrate the competition results — not because Peter had won, but because both boys had done well, and because Peter, for once, seemed genuinely proud of himself. The house smelled of roasted vegetables, butter, and spices; Merissa had spent the entire afternoon preparing special dishes, and the dining table was fuller than usual.
+          </p>
+
+          <p>
+            For Floyy, it felt unfamiliar in the most dangerous way possible: warm.
+          </p>
+
+          <p>
+            They all sat down together. Peter was still excitedly talking about the competition, replaying questions and mistakes, while Pedro listened with a tired smile and Merissa served everyone one dish after another, insisting Floyy take more.
+          </p>
+
+          <p>
+            Halfway through the meal, Pedro leaned back in his chair and looked at Floyy thoughtfully.
+          </p>
+
+          <p>
+            "You know," he said, "you've spent so much time here, but you've never really told us about yourself. Where is your home? What do your parents do?"
+          </p>
+
+          <p>
+            The table grew quieter.
+          </p>
+
+          <p>
+            Floyy lowered his eyes to his plate before answering.
+          </p>
+
+          <p>
+            "I live in a rented room," he said softly. "And I work part-time to manage my expenses."
+          </p>
+
+          <p>
+            Pedro's expression shifted. "And your family?"
+          </p>
+
+          <p>
+            Floyy hesitated just long enough for the silence to deepen.
+          </p>
+
+          <p>
+            "My mother is gone," he said. "And my father… his condition isn't very good. He's admitted in a private room at the hospital."
+          </p>
+
+          <p>
+            Merissa's hand stilled around the serving spoon.
+          </p>
+
+          <p>
+            "You're going through all that," she said gently, "and yet you still manage to look happy."
+          </p>
+
+          <p>
+            Floyy let out a faint smile, but it didn't quite reach his eyes.
+          </p>
+
+          <p>
+            "Sometimes," he said, "you have to look happy. Otherwise people start asking questions you don't know how to answer."
+          </p>
+
+          <p>
+            No one spoke.
+          </p>
+
+          <p>
+            Floyy glanced down for a moment, then added, almost as if he regretted saying it:
+          </p>
+
+          <p>
+            "I don't really know what it feels like to belong somewhere. But after becoming friends with Peter… and spending time with all of you… I think I've started to understand what that feels like."
+          </p>
+        </div>
+      </section>
+
+      <section class="story-part">
+        <div class="part-number">III</div>
+        <div class="story-text">
+          <p>
+            The effect of the sentence was immediate.
+          </p>
+
+          <p>
+            Peter looked up first, his face full of the sort of earnest affection only he could manage. Merissa's suspicion — whatever fragments of it had once remained — seemed to soften completely. Even Pedro's sternness faded.
+          </p>
+
+          <p>
+            Pedro set his glass down and said, with a surprising directness, "Then why don't you stay with us?"
+          </p>
+
+          <p>
+            Floyy blinked, almost too quickly. "What?"
+          </p>
+
+          <p>
+            "If you're alone, and if things are this difficult," Pedro said, "there's no reason you should keep struggling in that room by yourself."
+          </p>
+
+          <p>
+            Floyy shook his head at once. "No, I can't do that. I don't want to become a burden."
+          </p>
+
+          <p>
+            "You wouldn't be one," Peter cut in immediately. "In fact, I'd like it. I'm practically alone in this house half the time anyway."
+          </p>
+
+          <p>
+            Merissa gave Floyy a long look, then nodded.
+          </p>
+
+          <p>
+            "Peter's right," she said. "You've already become part of this house in your own way. If you need a place to stay… stay here."
+          </p>
+
+          <p>
+            Floyy stared at them as if he didn't know what to do with kindness when it arrived without warning.
+          </p>
+
+          <p>
+            Then, very quietly, he said, "Are you sure?"
+          </p>
+
+          <p>
+            Pedro answered before anyone else could. "Yes."
+          </p>
+
+          <p>
+            Peter grinned. "See? Problem solved."
+          </p>
+
+          <p>
+            Floyy lowered his head, and when he looked up again there was gratitude in his face — or something that resembled it so well that no one at the table thought to question it.
+          </p>
+
+          <p>
+            "Thank you," he said.
+          </p>
+        </div>
+      </section>
+
+      <section class="story-part">
+        <div class="part-number">IV</div>
+        <div class="story-text">
+          <p>
+            The next day, Floyy arrived with all of his belongings packed into two worn bags and a small cardboard box.
+          </p>
+
+          <p>
+            Peter's family did have an extra room — his sister's room, left empty ever since she had gone abroad for her studies — but Floyy refused to take it.
+          </p>
+
+          <p>
+            "I'll stay in the storeroom," he said.
+          </p>
+
+          <p>
+            Peter stared at him. "The storeroom?"
+          </p>
+
+          <p>
+            Floyy nodded. "It's enough for me. I don't want to take over your sister's room."
+          </p>
+
+          <p>
+            Peter laughed under his breath. "You really are impossible."
+          </p>
+
+          <p>
+            But Floyy wouldn't change his mind.
+          </p>
+
+          <p>
+            So the two of them spent the afternoon clearing the storeroom together: dragging out old cartons, dusting forgotten shelves, opening the window that hadn't been touched in months. By the time they were done, the room looked small but livable — a narrow bed against the wall, a lamp on an old side table, Floyy's books stacked neatly in one corner.
+          </p>
+
+          <p>
+            By evening, his things were already in place.
+          </p>
+
+          <p>
+            It was done so simply that the significance of it almost disappeared under the ordinariness of moving boxes and folding clothes.
+          </p>
+
+          <p>
+            But the truth remained the same:
+          </p>
+
+          <p>
+            Floyy no longer visited Peter's house.
+          </p>
+
+          <p>
+            He lived in it.
+          </p>
+        </div>
+      </section>
+
+      <section class="story-part">
+        <div class="part-number">V</div>
+        <div class="story-text">
+          <p>
+            That night, Floyy wrote everything down.
+          </p>
+
+          <p>
+            He described the results, the dinner, Pedro's questions, Merissa's softened voice, Peter's insistence, the storeroom, the boxes, the strange feeling of carrying his life into someone else's home and being told it could stay there.
+          </p>
+
+          <p>
+            As always, he turned it into an assignment and emailed it to Professor Jenn.
+          </p>
+
+          <p>
+            By now, Jenn had become addicted to those emails in a way he refused to admit aloud. Each new chapter of Floyy's life felt less like homework and more like the continuation of a novel he had somehow become trapped inside. He waited for them. Expected them. Opened them the moment they arrived.
+          </p>
+
+          <p>
+            But this time, he wasn't reading alone.
+          </p>
+
+          <p>
+            Selen sat beside him.
+          </p>
+
+          <p>
+            They were in her room, not his. That fact alone carried the quiet weight of years.
+          </p>
+
+          <p>
+            Jenn and Selen had not shared a bed in almost eight years. Somewhere along the way, their marriage had split into separate rooms, separate routines, separate silences. One of the wounds that never healed between them was the one neither of them named without pain: Selen could not become a mother. And although neither of them spoke of it often, the grief of that absence had settled into the marriage like dust — fine, invisible, and impossible to fully remove.
+          </p>
+
+          <p>
+            Still, there were nights when Jenn drifted into her room anyway, not out of romance but out of habit, loneliness, or the need to talk to someone who had known him long before he started making disastrous choices.
+          </p>
+
+          <p>
+            This was one of those nights.
+          </p>
+
+          <p>
+            Jenn lay back against the headboard while Selen sat with Floyy's printed assignment in her hands, reading every line carefully. She had already read several of them before, partly because Jenn left them lying around, partly because she was too perceptive not to notice how much those pages mattered to him.
+          </p>
+
+          <p>
+            For a while, they discussed the story the way two readers might discuss a novel.
+          </p>
+
+          <p>
+            "So now he's inside the house," Selen said at last, lowering the pages slightly. "That changes everything."
+          </p>
+
+          <p>
+            Jenn gave a faint hum in agreement.
+          </p>
+
+          <p>
+            "He's clever," she added. "Too clever."
+          </p>
+
+          <p>
+            Jenn smiled, but there was tension in it. "You sound like you don't trust him."
+          </p>
+
+          <p>
+            "I don't," Selen said plainly.
+          </p>
+
+          <p>
+            She looked back down at the last page and continued reading until she reached the final lines.
+          </p>
+
+          <p>
+            Then she went still.
+          </p>
+
+          <p>
+            Her eyes narrowed.
+          </p>
+
+          <p>
+            She read the ending once.
+          </p>
+
+          <p>
+            Then again.
+          </p>
+
+          <p>
+            Slowly, she lifted her gaze to Jenn.
+          </p>
+
+          <p>
+            On the last page, Floyy had written:
+          </p>
+
+          <p>
+            <em>Professor Jenn, thank you. I would not have made it this far without the questions you gave me. To be continued…</em>
+          </p>
+
+          <p>
+            Selen lowered the paper into her lap.
+          </p>
+
+          <p>
+            There was a dangerous calm in her voice when she spoke.
+          </p>
+
+          <p>
+            "What does this mean?"
+          </p>
+        </div>
+      </section>
+
+      <section class="story-part">
+        <div class="part-number">VI</div>
+        <div class="story-text">
+          <p>
+            Jenn's face changed at once, but not fast enough.
+          </p>
+
+          <p>
+            Selen held up the paper.
+          </p>
+
+          <p>
+            "This line," she said. "What exactly does he mean by 'the questions you gave him'?"
+          </p>
+
+          <p>
+            Jenn tried to look away, but she didn't let him.
+          </p>
+
+          <p>
+            "Jenn."
+          </p>
+
+          <p>
+            He stayed silent.
+          </p>
+
+          <p>
+            Her voice hardened. "Tell me the truth. Did you steal those competition questions for him?"
+          </p>
+
+          <p>
+            Jenn sat up. "It's not as simple as—"
+          </p>
+
+          <p>
+            "So that's a yes."
+          </p>
+
+          <p>
+            "Selen—"
+          </p>
+
+          <p>
+            "Did you?" she snapped.
+          </p>
+
+          <p>
+            Jenn ran a hand through his hair and stood from the bed, suddenly unable to remain still.
+          </p>
+
+          <p>
+            "It was necessary," he said. "You don't understand."
+          </p>
+
+          <p>
+            Selen stared at him in disbelief. "Necessary? To cheat? To steal?"
+          </p>
+
+          <p>
+            "It wasn't about cheating."
+          </p>
+
+          <p>
+            "Then what was it about?"
+          </p>
+
+          <p>
+            Jenn turned toward her, frustrated now, his voice rising with every word.
+          </p>
+
+          <p>
+            "My story," he said. "If I hadn't done it, the story would have ended there. Everything would have stopped."
+          </p>
+
+          <p>
+            For a second Selen simply looked at him, as if she were trying to decide whether he sounded more pathetic or more insane.
+          </p>
+
+          <p>
+            "Your story?" she repeated quietly. "That's your explanation?"
+          </p>
+
+          <p>
+            "You've read the assignments," Jenn said. "You know how it is. You know what this has become."
+          </p>
+
+          <p>
+            "What it has become," Selen said, "is a situation where a professor is letting a boy drag him into crimes for the sake of entertainment."
+          </p>
+
+          <p>
+            "It's not entertainment."
+          </p>
+
+          <p>
+            "No?" Her laugh was sharp and joyless. "Then what is it, Jenn? Research? Inspiration? Obsession?"
+          </p>
+
+          <p>
+            He flinched.
+          </p>
+
+          <p>
+            Selen rose from the bed and stepped closer, still holding the assignment.
+          </p>
+
+          <p>
+            "You stole for him," she said. "And now he writes it down in a school assignment like it's some romantic serial chapter — and you're standing here telling me it was necessary because otherwise your story would suffer?"
+          </p>
+
+          <p>
+            Jenn's jaw tightened. "You don't understand anything."
+          </p>
+
+          <p>
+            "Then explain it to me."
+          </p>
+
+          <p>
+            "I can't."
+          </p>
+
+          <p>
+            "Because there's nothing to explain," she shot back. "You crossed a line, and you know it."
+          </p>
+
+          <p>
+            The room fell silent.
+          </p>
+
+          <p>
+            Jenn looked away first.
+          </p>
+
+          <p>
+            Selen's voice dropped, quieter now, but far colder.
+          </p>
+
+          <p>
+            "This boy is not just telling you a story anymore," she said. "He's making you live inside it."
+          </p>
+
+          <p>
+            Jenn said nothing.
+          </p>
+
+          <p>
+            After a long moment, he turned and walked out of her room without another word.
+          </p>
+
+          <p>
+            He shut the door behind him harder than he meant to.
+          </p>
+
+          <p>
+            Back in his own room, he paced once, twice, then stopped beside the desk and stared at the copy of Floyy's assignment still lying there in his hands.
+          </p>
+
+          <p>
+            His face twisted with sudden anger.
+          </p>
+
+          <p>
+            "Idiot," he muttered under his breath.
+          </p>
+
+          <p>
+            Then louder:
+          </p>
+
+          <p>
+            "Stupid boy. Was it really necessary to write that?"
+          </p>
+
+          <p>
+            He crumpled the page in his fist, then immediately smoothed it back out — as if even in anger he couldn't bear to destroy the next piece of Floyy's story.
+          </p>
+
+          <p>
+            And somewhere else, in the storeroom of Peter's house, Floyy slept under a new roof.
+          </p>
+
+          <p>
+            Inside the house he had wanted to enter from the very beginning.
+          </p>
+        </div>
+      </section>
+
+      <div class="ending-box">
+        <h3>Stay Tuned</h3>
+        <p>
+          Floyy was home now.
+          <br>
+          But at what cost?
+          <br>
+          <br>
+          And for how long?
+        </p>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="chapter-footer">
+    <p>The Boy from Last — Chapter 5 Archive</p>
+  </footer>
+
+  <script>
+    // Reveal animation
+    document.addEventListener("DOMContentLoaded", () => {
+      const revealEls = document.querySelectorAll(".reveal");
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+          }
+        });
+      }, { threshold: 0.12 });
+
+      revealEls.forEach((el) => observer.observe(el));
+    });
+
+    // Snowdrop effect
+    function createSnowdrop() {
+      const drop = document.createElement("span");
+      drop.className = "snowdrop";
+      drop.textContent = "❄";
+
+      drop.style.left = Math.random() * window.innerWidth + "px";
+      drop.style.fontSize = (12 + Math.random() * 12) + "px";
+      drop.style.animationDuration = (7 + Math.random() * 6) + "s";
+      drop.style.opacity = (0.25 + Math.random() * 0.35).toFixed(2);
+
+      document.body.appendChild(drop);
+
+      setTimeout(() => {
+        drop.remove();
+      }, 14000);
+    }
+
+    setInterval(createSnowdrop, 900);
+
+    // ===== MUSIC PLAYER =====
+    const chapterMusic = document.getElementById("chapterMusic");
+    const musicToggle = document.getElementById("musicToggle");
+    const musicIcon = document.getElementById("musicIcon");
+    const musicPlayer = document.getElementById("musicPlayer");
+
+    if (chapterMusic) {
+      chapterMusic.volume = 0.22; // soft background volume
+    }
+
+    function updateMusicUI(isPlaying) {
+      if (isPlaying) {
+        musicIcon.textContent = "❚❚";
+        musicToggle.classList.add("playing");
+        musicPlayer.classList.add("playing");
+        musicToggle.setAttribute("aria-label", "Pause chapter music");
+      } else {
+        musicIcon.textContent = "▶";
+        musicToggle.classList.remove("playing");
+        musicPlayer.classList.remove("playing");
+        musicToggle.setAttribute("aria-label", "Play chapter music");
+      }
+    }
+
+    musicToggle.addEventListener("click", async () => {
+      try {
+        if (chapterMusic.paused) {
+          await chapterMusic.play();
+          updateMusicUI(true);
+        } else {
+          chapterMusic.pause();
+          updateMusicUI(false);
+        }
+      } catch (err) {
+        console.log("Music play blocked:", err);
+      }
+    });
+
+    chapterMusic.addEventListener("pause", () => updateMusicUI(false));
+    chapterMusic.addEventListener("play", () => updateMusicUI(true));
+
+    // Show a visible error if the mp3 fails to load, instead of failing silently
+    chapterMusic.addEventListener("error", () => {
+      const trackEl = document.querySelector(".music-track");
+      if (trackEl) {
+        trackEl.textContent = "Track not found — check music/ folder";
+        trackEl.style.color = "#e08585";
+      }
+      console.error("chapterMusic failed to load. Check that music/chapter5-theme.mp3 exists next to this HTML file.");
+    });
+
+    // ===== AUTOPLAY ON LOAD (with fallback) =====
+    // Browsers block audio-with-sound autoplay until the user has interacted
+    // with the page at least once. We try immediately; if blocked, we start
+    // playback on the very first click/tap/keypress anywhere on the page,
+    // so it starts as close to "automatically" as browsers allow.
+    let autoplayHandled = false;
+
+    async function tryAutoplay() {
+      if (autoplayHandled) return;
+      try {
+        await chapterMusic.play();
+        autoplayHandled = true;
+        updateMusicUI(true);
+      } catch (err) {
+        // Autoplay was blocked — wait for first user interaction instead
+        console.log("Autoplay blocked by browser, will start on first interaction.");
+      }
+    }
+
+    function startOnFirstInteraction() {
+      if (autoplayHandled) return;
+      chapterMusic.play().then(() => {
+        autoplayHandled = true;
+        updateMusicUI(true);
+      }).catch(() => {});
+    }
+
+    window.addEventListener("load", tryAutoplay);
+    ["click", "touchstart", "keydown", "scroll"].forEach((evt) => {
+      window.addEventListener(evt, startOnFirstInteraction, { once: true, passive: true });
+    });
+  </script>
+</body>
+</html>

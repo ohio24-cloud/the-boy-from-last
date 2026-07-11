@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Special Chapter — Under the Autumn Leaves</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #090705;
+      --bg-soft: #120d09;
+      --panel: rgba(255,255,255,0.04);
+      --panel-strong: rgba(255,255,255,0.055);
+      --border: rgba(255,255,255,0.09);
+      --text: #f5efe6;
+      --muted: #c4b7a8;
+      --accent: #d89a56;
+      --accent-2: #8c4f2f;
+      --accent-soft: #6f4328;
+      --gold-soft: #f0c58a;
+      --shadow: 0 22px 55px rgba(0,0,0,0.48);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+      background:
+        radial-gradient(circle at 18% 10%, rgba(216,154,86,0.18), transparent 22%),
+        radial-gradient(circle at 82% 16%, rgba(140,79,47,0.16), transparent 22%),
+        radial-gradient(circle at 50% 100%, rgba(120,65,35,0.12), transparent 28%),
+        linear-gradient(180deg, #070605 0%, #0d0907 40%, #0a0705 100%);
+    }
+
+    .bg-overlay {
+      position: fixed;
+      inset: 0;
+      background:
+        linear-gradient(rgba(255,255,255,0.014) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.014) 1px, transparent 1px);
+      background-size: 34px 34px;
+      opacity: 0.26;
+      z-index: -4;
+    }
+
+    .grain {
+      position: fixed;
+      inset: 0;
+      background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 4px 4px;
+      opacity: 0.05;
+      pointer-events: none;
+      z-index: -3;
+    }
+
+    .vignette {
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(circle at center, transparent 40%, rgba(0,0,0,0.18) 78%, rgba(0,0,0,0.38) 100%);
+      pointer-events: none;
+      z-index: -2;
+    }
+
+    /* Falling leaves */
+    .leaf {
+      position: fixed;
+      top: -40px;
+      left: 0;
+      pointer-events: none;
+      user-select: none;
+      z-index: 0;
+      opacity: 0.82;
+      filter: drop-shadow(0 0 8px rgba(216,154,86,0.15));
+      animation: driftLeaf linear forwards;
+      will-change: transform, opacity;
+    }
+
+    .leaf::before {
+      content: "🍂";
+      font-size: var(--size, 18px);
+      display: block;
+      transform: rotate(var(--rot, 0deg));
+    }
+
+    @keyframes driftLeaf {
+      0% {
+        transform: translate3d(105vw, -10vh, 0) rotate(0deg);
+        opacity: 0;
+      }
+      8% {
+        opacity: 0.88;
+      }
+      100% {
+        transform: translate3d(-18vw, 115vh, 0) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    .topbar {
+      width: 100%;
+      padding: 18px 7%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+      position: relative;
+      z-index: 5;
+      background: rgba(10,8,7,0.55);
+      backdrop-filter: blur(7px);
+      -webkit-backdrop-filter: blur(7px);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .topbar-left {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      order: 1;
+    }
+
+    .back-link {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 0.96rem;
+      transition: 0.25s ease;
+    }
+
+    .back-link:hover {
+      color: var(--accent);
+    }
+
+    .chapter-label {
+      color: var(--muted);
+      letter-spacing: 2px;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+    }
+
+    .theme-pill {
+      order: 2;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, rgba(216,154,86,0.16), rgba(140,79,47,0.12));
+      border: 1px solid rgba(216,154,86,0.25);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.25), inset 0 0 0 1px rgba(255,255,255,0.03);
+    }
+
+    .theme-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.16), rgba(216,154,86,0.16));
+      color: var(--gold-soft);
+      font-size: 1rem;
+      box-shadow: 0 0 18px rgba(216,154,86,0.18);
+      flex-shrink: 0;
+    }
+
+    .theme-copy {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .theme-label {
+      font-size: 0.7rem;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      color: rgba(245,239,230,0.65);
+    }
+
+    .theme-title {
+      font-size: 0.95rem;
+      color: #f6efe3;
+      font-weight: 600;
+      letter-spacing: 0.2px;
+      white-space: nowrap;
+    }
+
+    .chapter-hero {
+      width: min(1400px, 94%);
+      margin: 10px auto 38px;
+      padding: 42px 0 18px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .hero-kicker {
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      font-size: 0.82rem;
+      margin-bottom: 18px;
+    }
+
+    .chapter-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3.6rem, 8vw, 6.9rem);
+      line-height: 0.95;
+      font-weight: 700;
+      margin-bottom: 18px;
+      letter-spacing: -1px;
+      text-wrap: balance;
+    }
+
+    .chapter-title span {
+      color: var(--accent);
+      font-style: italic;
+    }
+
+    .chapter-line {
+      width: 100%;
+      max-width: 900px;
+      height: 1px;
+      background: linear-gradient(90deg, var(--accent), rgba(216,154,86,0.18), transparent);
+      position: relative;
+      margin: 24px 0 32px;
+    }
+
+    .chapter-line::before,
+    .chapter-line::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 12px rgba(216,154,86,0.4);
+    }
+
+    .chapter-line::before {
+      left: 8%;
+    }
+
+    .chapter-line::after {
+      left: 0;
+    }
+
+    .chapter-quote {
+      max-width: 1000px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.45rem, 2.5vw, 2.25rem);
+      line-height: 1.68;
+      color: #f6efe4;
+      font-style: italic;
+      margin-bottom: 26px;
+    }
+
+    .chapter-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .chapter-meta p {
+      color: #f2ede4;
+      font-size: 1.04rem;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+
+    .chapter-meta span {
+      color: var(--accent);
+      margin-right: 10px;
+      font-size: 1.04rem;
+    }
+
+    .story-section {
+      width: min(1450px, 95%);
+      margin: 0 auto 90px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .story-box {
+      width: 100%;
+      padding: 42px 48px;
+      border-radius: 30px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(3px);
+      -webkit-backdrop-filter: blur(3px);
+    }
+
+    .story-box::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at top right, rgba(216,154,86,0.12), transparent 24%),
+        radial-gradient(circle at bottom left, rgba(140,79,47,0.1), transparent 24%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .story-box::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 48px;
+      right: 48px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(216,154,86,0.25), transparent);
+      z-index: 0;
+    }
+
+    .story-content {
+      position: relative;
+      z-index: 1;
+      max-width: 1220px;
+      margin: 0 auto;
+      font-size: 1.05rem;
+      line-height: 2;
+      color: #f3eee5;
+    }
+
+    .story-content p {
+      margin-bottom: 1.35rem;
+      text-align: justify;
+    }
+
+    .story-content p:last-child {
+      margin-bottom: 0;
+    }
+
+    .dropcap {
+      float: left;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 4.2rem;
+      line-height: 0.85;
+      padding-right: 10px;
+      padding-top: 8px;
+      color: var(--accent);
+      text-shadow: 0 0 16px rgba(216,154,86,0.16);
+    }
+
+    .divider {
+      width: min(220px, 50%);
+      height: 1px;
+      margin: 34px auto 28px;
+      background: linear-gradient(90deg, transparent, rgba(216,154,86,0.35), transparent);
+      position: relative;
+    }
+
+    .divider::before {
+      content: "❦";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(10,8,7,0.95);
+      padding: 0 14px;
+      color: rgba(216,154,86,0.85);
+      font-size: 1rem;
+      letter-spacing: 1px;
+    }
+
+    .highlight-line {
+      margin-top: 18px;
+      padding-left: 16px;
+      border-left: 2px solid rgba(216,154,86,0.45);
+      color: #f5efe5;
+      font-style: italic;
+    }
+
+    .closing-note {
+      margin-top: 28px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.35rem;
+      line-height: 1.8;
+      color: #f5efe4;
+      font-style: italic;
+      text-align: center;
+    }
+
+    .bottom-nav {
+      width: min(1450px, 95%);
+      margin: 0 auto 70px;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 2;
+    }
+
+    .nav-card {
+      flex: 1 1 280px;
+      min-width: 240px;
+      padding: 20px 22px;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.035);
+      border: 1px solid rgba(255,255,255,0.07);
+      text-decoration: none;
+      color: var(--text);
+      transition: transform 0.28s ease, border-color 0.28s ease, background 0.28s ease;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.22);
+    }
+
+    .nav-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(216,154,86,0.28);
+      background: rgba(255,255,255,0.05);
+    }
+
+    .nav-card small {
+      display: block;
+      color: var(--muted);
+      letter-spacing: 1.6px;
+      text-transform: uppercase;
+      font-size: 0.72rem;
+      margin-bottom: 8px;
+    }
+
+    .nav-card strong {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      line-height: 1.1;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .nav-card span {
+      color: #e7ddd0;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .footer-note {
+      text-align: center;
+      color: rgba(245,239,230,0.52);
+      font-size: 0.9rem;
+      padding: 0 20px 40px;
+      letter-spacing: 0.3px;
+      position: relative;
+      z-index: 2;
+    }
+
+    @media (max-width: 980px) {
+      .topbar {
+        padding: 16px 5.5%;
+      }
+
+      .theme-pill {
+        width: 100%;
+        justify-content: flex-start;
+      }
+
+      .chapter-hero {
+        width: min(1400px, 92%);
+        padding-top: 34px;
+      }
+
+      .story-box {
+        padding: 34px 28px;
+        border-radius: 24px;
+      }
+
+      .story-content {
+        font-size: 1rem;
+        line-height: 1.9;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .chapter-title {
+        font-size: clamp(3rem, 13vw, 4.4rem);
+      }
+
+      .chapter-quote {
+        font-size: 1.28rem;
+      }
+
+      .story-box {
+        padding: 28px 20px;
+      }
+
+      .story-content p {
+        text-align: left;
+      }
+
+      .dropcap {
+        font-size: 3.4rem;
+        padding-top: 6px;
+      }
+
+      .bottom-nav {
+        margin-bottom: 56px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-overlay"></div>
+  <div class="grain"></div>
+  <div class="vignette"></div>
+
+  <header class="topbar">
+    <div class="topbar-left">
+      <a class="back-link" href="index.html">← Back to Archive</a>
+      <div class="chapter-label">Special Chapter</div>
+    </div>
+
+    <div class="theme-pill" aria-label="Special chapter theme">
+      <div class="theme-icon">🍂</div>
+      <div class="theme-copy">
+        <div class="theme-label">Chapter Theme</div>
+        <div class="theme-title">When the Leaves Fall</div>
+      </div>
+    </div>
+  </header>
+
+  <section class="chapter-hero">
+    <div class="hero-inner">
+      <div class="hero-kicker">Autumn Memory / Special Chapter</div>
+
+      <h1 class="chapter-title">
+        Under the <span>Autumn Leaves</span>
+      </h1>
+
+      <div class="chapter-line"></div>
+
+      <div class="chapter-quote">
+        “Some seasons do not end all at once. They linger in empty corridors, in old promises, and in the quiet places where two people once believed time would wait for them.”
+      </div>
+
+      <div class="chapter-meta">
+        <p><span>Theme:</span> When the Leaves Fall</p>
+        <p><span>Vibe:</span> First love / Distance / The season they could not keep</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="story-section">
+    <div class="story-box">
+      <div class="story-content">
+
+        <p><span class="dropcap">T</span>he school looked different in autumn.</p>
+
+        <p>
+          Not because the walls had changed, or because the corridors were any quieter than before, but because everything seemed to glow with a softness that only appeared when the year was beginning to fold into itself. The trees that lined the inner courtyard had turned a deep shade of amber and rust, and every afternoon the wind would scatter their leaves across the stone path like pieces of a letter no one had managed to finish.
+        </p>
+
+        <p>
+          It was during that season that he began waiting by the old staircase near the west wing — the one that overlooked the courtyard where the leaves gathered in little golden drifts. At first he told himself there was no reason for it. He was only there because the light was better in the evening, because the place was quieter than the library, because the world looked softer from that landing than it did from anywhere else in the school.
+        </p>
+
+        <p>
+          But after the third afternoon, even he stopped pretending.
+        </p>
+
+        <div class="divider"></div>
+
+        <p>
+          She always came down the same corridor at nearly the same hour, carrying more books than she needed and tucking loose strands of hair behind her ear whenever the wind reached the open windows. Sometimes she walked with friends, sometimes alone, but no matter who stood beside her, she always seemed to belong to a quieter world than the rest of them — a world made of careful smiles, half-finished thoughts, and the sort of warmth that made a person feel homesick for something they had never actually had.
+        </p>
+
+        <p>
+          He never called it love at first. Love sounded too certain, too bold, too impossible for something that began with nothing more than watching someone pause beneath a tree while the leaves gathered at her feet. So instead he called it habit. Then curiosity. Then coincidence. And when none of those names were enough, he stopped naming it at all.
+        </p>
+
+        <p class="highlight-line">
+          There are feelings that begin long before you are brave enough to admit they exist.
+        </p>
+
+        <p>
+          Their first real conversation happened because of the rain.
+        </p>
+
+        <p>
+          The sky had darkened too quickly that day, and by the time the last bell rang, the courtyard had turned silver with falling water. Students crowded beneath the awnings near the main entrance, laughing and complaining and trying not to ruin their notebooks. He had stayed back under the archway by the west hall, waiting for the rain to weaken. She was already there, hugging her books to her chest, staring out at the storm as if she had somewhere important to be and no way to get there.
+        </p>
+
+        <p>
+          “You can take it,” he said, before he had fully thought through the sentence.
+        </p>
+
+        <p>
+          She turned toward him, confused at first, until he held out the umbrella in his hand.
+        </p>
+
+        <p>
+          “What about you?” she asked.
+        </p>
+
+        <p>
+          “I don’t live far.”
+        </p>
+
+        <p>
+          It was a lie. He did live far, and by the time he reached home that evening, his sleeves were soaked and his shoes had taken in half the street. But he still remembered the way she looked at him before accepting it — not with suspicion, not with pity, but with a kind of careful gratitude that made the rain feel worth it.
+        </p>
+
+        <p>
+          “Then tomorrow,” she had said, her fingers curling around the handle, “you’ll let me return it.”
+        </p>
+
+        <p>
+          He smiled and told her there was no hurry.
+        </p>
+
+        <div class="divider"></div>
+
+        <p>
+          After that, autumn began arranging excuses for them.
+        </p>
+
+        <p>
+          A forgotten umbrella. A notebook returned with a pressed leaf tucked between the pages. Shared walks across the courtyard when the sky threatened rain. Small conversations that should have meant nothing and somehow began to mean everything. They learned each other in fragments — favorite authors, unfinished ambitions, the subjects they hated, the songs they listened to when no one else was around. Nothing about it felt dramatic at first. That was the dangerous part. It felt gentle. It felt ordinary. It felt like the kind of thing no one would notice until it had already changed both of them.
+        </p>
+
+        <p>
+          He learned that she loved the hour just before sunset, when the school grounds emptied and the orange light stretched across the stone path like something sacred. She learned that he always avoided talking about home unless someone insisted. He learned that she smiled differently when she was genuinely happy — smaller, quieter, as if the feeling embarrassed her. She learned that silence never made him uncomfortable when it came from her.
+        </p>
+
+        <p>
+          And somewhere between the leaves falling and the weather turning colder, they began to understand that there was no longer any point pretending this was friendship in its simplest form.
+        </p>
+
+        <p>
+          Still, neither of them said it.
+        </p>
+
+        <p>
+          Maybe because saying it would have made it real. And real things had a way of asking for a future.
+        </p>
+
+        <div class="divider"></div>
+
+        <p>
+          The first time she reached for his hand, it was almost by accident.
+        </p>
+
+        <p>
+          They had stayed late after class, longer than they were supposed to, sitting on the low stone wall beneath the tallest tree in the courtyard while the wind pushed leaves around their feet in restless circles. She had been telling him about something small — a letter from home, a professor she disliked, a memory from childhood — and at some point she laughed so suddenly that her hand moved without thought and brushed against his.
+        </p>
+
+        <p>
+          For one suspended second, neither of them moved.
+        </p>
+
+        <p>
+          Then she could have pulled away.
+        </p>
+
+        <p>
+          But she didn’t.
+        </p>
+
+        <p>
+          The world did not change in any visible way after that. No music swelled. No one in the courtyard stopped to notice. The leaves kept falling. The light kept fading. Somewhere near the science wing, a door slammed shut in the wind. And yet he would remember that silence for years afterward, because it was the moment everything shifted — not loudly, not dramatically, but with the terrible gentleness of a season deciding to end.
+        </p>
+
+        <p>
+          “What happens after this?” she asked, though she was not looking at him when she said it.
+        </p>
+
+        <p>
+          He knew what she meant. Not after the evening. Not after the walk back. After this — after the waiting, after the almost-confessions, after all the small things that had become too important to call accidental.
+        </p>
+
+        <p>
+          He should have had an answer. He should have said something brave, something certain, something that sounded like the kind of promise people write about in stories.
+        </p>
+
+        <p>
+          But autumn had already taught him one truth: some beautiful things arrive carrying their ending inside them.
+        </p>
+
+        <p>
+          So he looked at the leaves scattered at their feet and said the only honest thing he could.
+        </p>
+
+        <p>
+          “I don’t know.”
+        </p>
+
+        <div class="divider"></div>
+
+        <p>
+          The sadness of it did not begin all at once.
+        </p>
+
+        <p>
+          It began in rumors — quiet ones, uncertain ones, the sort people pass around carelessly because they do not realize how much damage a small sentence can do. There were whispers that she might leave before winter. That her family had already decided things for her. That there were obligations waiting beyond the school gates, and that whatever had been growing between them beneath the autumn trees had never really been allowed to become permanent.
+        </p>
+
+        <p>
+          He dismissed it at first. Then he avoided asking. Then he noticed the way she had begun looking at him with a kind of tenderness that was too heavy to be innocent.
+        </p>
+
+        <p>
+          By the time she finally told him, he had already known.
+        </p>
+
+        <p>
+          They met in the courtyard again, under the same tree where the leaves had once gathered around their shoes like a blessing. But now the branches were thinner, the air colder, the ground nearly bare. She stood with her hands clasped so tightly in front of her that her knuckles had gone pale.
+        </p>
+
+        <p>
+          “I’m leaving after the term ends,” she said.
+        </p>
+
+        <p>
+          The sentence was simple. Almost gentle. But it landed with the force of something much crueler because of how carefully she tried to say it.
+        </p>
+
+        <p>
+          He asked where. She told him. He asked for how long. She didn’t answer that one right away.
+        </p>
+
+        <p>
+          And in the silence that followed, both of them understood that the question had never really been about time.
+        </p>
+
+        <p class="highlight-line">
+          Some endings do not arrive like storms. They arrive quietly, and that is what makes them unbearable.
+        </p>
+
+        <p>
+          “I wanted to tell you earlier,” she whispered.
+        </p>
+
+        <p>
+          “I know.”
+        </p>
+
+        <p>
+          “I didn’t know how.”
+        </p>
+
+        <p>
+          He laughed once — softly, bitterly, not because anything was funny, but because there was something almost cruel about how often love and helplessness seemed to arrive holding hands.
+        </p>
+
+        <p>
+          “Neither did I,” he admitted.
+        </p>
+
+        <div class="divider"></div>
+
+        <p>
+          They did not become dramatic after that. That was the strange part. They did not run away together. They did not make impossible promises beneath the dying light. They did not swear they would wait forever. Instead, they spent the last days of autumn the way they had spent the first — walking through the school grounds after classes ended, sharing quiet conversations, pretending that if they moved carefully enough, the future might take longer to notice them.
+        </p>
+
+        <p>
+          Sometimes she would rest her head against his shoulder beneath the old tree and say nothing at all. Sometimes he would look at her profile in the fading light and try to memorize it with the desperation of someone already grieving a person who had not yet gone. They borrowed time from the edges of the day and called it enough because they had no other choice.
+        </p>
+
+        <p>
+          On the last evening they spent together, the wind was colder than it had been all season. The courtyard was nearly empty, and the final leaves clung to the branches with the same stubbornness he felt in his own chest. She handed him back the umbrella he had once given her in the rain — the same one that had started all of it.
+        </p>
+
+        <p>
+          “You kept it this whole time?” he asked.
+        </p>
+
+        <p>
+          “I think,” she said with a faint smile, “I was always looking for a reason to return.”
+        </p>
+
+        <p>
+          He should have said something unforgettable then. Something worthy of the season, of the ache, of the love that had never been named loudly enough to save itself. But when the moment came, all he could do was step closer and hold her as if the warmth of that single embrace might teach the world mercy.
+        </p>
+
+        <p>
+          It didn’t.
+        </p>
+
+        <p>
+          She left when winter was still a week away.
+        </p>
+
+        <p>
+          And for a long time afterward, whenever the year began turning gold again and the first leaves started falling through the school courtyard, he would find himself looking toward the old staircase by the west wing as if some part of him still believed autumn might bring her back.
+        </p>
+
+        <div class="divider"></div>
+
+        <p class="closing-note">
+          He never forgot the season.  
+          Not because it had given him love —  
+          but because it had taught him how quietly love could leave.
+        </p>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="bottom-nav">
+    <a class="nav-card" href="index.html">
+      <small>Return</small>
+      <strong>Back to Archive</strong>
+      <span>Return to the chapter archive and continue the story timeline.</span>
+    </a>
+
+    <a class="nav-card" href="#">
+      <small>Theme</small>
+      <strong>When the Leaves Fall</strong>
+      <span>An autumn memory of first love, distance, and the season they could not keep.</span>
+    </a>
+  </div>
+
+  <div class="footer-note">
+    Special Chapter — Under the Autumn Leaves
+  </div>
+
+  <script>
+    /* Falling autumn leaves */
+    const leafEmojis = ["🍂", "🍁"];
+
+    function createLeaf() {
+      const leaf = document.createElement("div");
+      leaf.className = "leaf";
+
+      const size = 14 + Math.random() * 18;
+      const duration = 10 + Math.random() * 10;
+      const delay = Math.random() * 2.5;
+      const topOffset = -10 - Math.random() * 20;
+      const rotation = (-40 + Math.random() * 80).toFixed(1);
+
+      leaf.style.setProperty("--size", `${size}px`);
+      leaf.style.setProperty("--rot", `${rotation}deg`);
+      leaf.style.animationDuration = `${duration}s`;
+      leaf.style.animationDelay = `${delay}s`;
+      leaf.style.top = `${topOffset}px`;
+      leaf.style.left = "0px";
+
+      // swap emoji occasionally
+      leaf.dataset.emoji = leafEmojis[Math.floor(Math.random() * leafEmojis.length)];
+      leaf.innerHTML = `<span style="font-size:${size}px; display:block; transform:rotate(${rotation}deg)">${leaf.dataset.emoji}</span>`;
+
+      document.body.appendChild(leaf);
+
+      setTimeout(() => {
+        leaf.remove();
+      }, (duration + delay) * 1000 + 500);
+    }
+
+    setInterval(createLeaf, 480);
+    for (let i = 0; i < 18; i++) {
+      setTimeout(createLeaf, i * 180);
+    }
+  </script>
+  <script>
+  const leavesContainer = document.getElementById("autumnLeaves");
+
+  function createLeaf() {
+    const leaf = document.createElement("span");
+    leaf.className = "leaf";
+
+    const symbols = ["🍂","🍁","❀"];
+    leaf.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+
+    // spawn across the width, not one single point
+    const startX = Math.random() * window.innerWidth;
+    const driftX = (Math.random() * 280 - 140) + "px"; // left/right drift
+    const duration = 10 + Math.random() * 10;
+    const delay = Math.random() * 8;
+    const size = 16 + Math.random() * 18;
+    const rotate = (Math.random() * 540 - 270) + "deg";
+    const scale = (0.75 + Math.random() * 0.9).toFixed(2);
+
+    leaf.style.left = startX + "px";
+    leaf.style.fontSize = size + "px";
+    leaf.style.animationDuration = duration + "s";
+    leaf.style.animationDelay = "-" + delay + "s";
+    leaf.style.setProperty("--driftX", driftX);
+    leaf.style.setProperty("--rotate", rotate);
+    leaf.style.setProperty("--scale", scale);
+
+    leavesContainer.appendChild(leaf);
+
+    // cleanup + respawn
+    setTimeout(() => {
+      leaf.remove();
+      createLeaf();
+    }, duration * 1000);
+  }
+
+  // create multiple leaves from random positions
+  for (let i = 0; i < 22; i++) {
+    createLeaf();
+  }
+
+  // audio player
+  const audio = document.getElementById("themeAudio");
+  const btn = document.getElementById("themeToggle");
+
+  let playing = false;
+
+  btn.addEventListener("click", async () => {
+    try {
+      if (!playing) {
+        await audio.play();
+        playing = true;
+        btn.textContent = "❚❚";
+      } else {
+        audio.pause();
+        playing = false;
+        btn.textContent = "▶";
+      }
+    } catch (err) {
+      console.log("Audio play blocked:", err);
+    }
+  });
+
+  audio.addEventListener("ended", () => {
+    playing = false;
+    btn.textContent = "▶";
+  });
+</script>
+</body>
+</html>
