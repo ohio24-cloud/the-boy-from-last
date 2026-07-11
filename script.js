@@ -62,3 +62,6 @@ function createSnowdrop() {
 }
 
 setInterval(createSnowdrop, 900)});
+function lockedChapter(){
+    alert("🔒 Chapter 6 — The Housemaid (Part I)\n\nComing Soon...");
+}

@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chapter 6 — The Housemaid (Part I) | The Boy From Last</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --text: #e8e0d5;
+      --muted: #a89f93;
+      --accent-soft: #8e7350;
+      --shadow: 0 18px 50px rgba(0,0,0,0.45);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top, rgba(120, 95, 55, 0.14), transparent 25%),
+        linear-gradient(180deg, #060606 0%, #0b0b0b 45%, #080808 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    .bg-overlay {
+      position: fixed;
+      inset: 0;
+      background:
+        linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+      background-size: 34px 34px;
+      opacity: 0.3;
+      z-index: -4;
+    }
+
+    .grain {
+      position: fixed;
+      inset: 0;
+      background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 4px 4px;
+      opacity: 0.06;
+      pointer-events: none;
+      z-index: -3;
+    }
+
+    /* Floating snowdrops */
+    .snowdrop {
+      position: fixed;
+      top: -30px;
+      color: rgba(255,255,255,0.65);
+      font-size: 14px;
+      pointer-events: none;
+      z-index: 0;
+      animation: snowFall linear forwards;
+      text-shadow: 0 0 8px rgba(255,255,255,0.18);
+      user-select: none;
+    }
+
+    @keyframes snowFall {
+      0% {
+        transform: translateY(-20px) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.7;
+      }
+      100% {
+        transform: translateY(110vh) translateX(40px) rotate(180deg);
+        opacity: 0;
+      }
+    }
+
+    /* NAV — back link, chapter label, AND music player all live here
+       as normal flex children, never floating over page content */
+    .topbar {
+      width: 100%;
+      padding: 18px 7%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+      position: relative;
+      z-index: 5;
+      background: rgba(9,9,9,0.5);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .topbar-left {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      order: 1;
+    }
+
+    .back-link {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 0.96rem;
+      transition: 0.25s ease;
+    }
+
+    .back-link:hover {
+      color: var(--accent-soft);
+    }
+
+    .chapter-label {
+      color: var(--muted);
+      letter-spacing: 2px;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+    }
+
+    /* HERO */
+    .chapter-hero {
+      width: min(1400px, 94%);
+      margin: 10px auto 40px;
+      padding: 40px 0 20px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+
+    .hero-kicker {
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      font-size: 0.82rem;
+      margin-bottom: 18px;
+    }
+
+    .chapter-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3.8rem, 8vw, 7rem);
+      line-height: 0.95;
+      font-weight: 700;
+      margin-bottom: 20px;
+      letter-spacing: -1px;
+    }
+
+    .chapter-title span {
+      color: #d4b483;
+      font-style: italic;
+    }
+
+    .chapter-line {
+      width: 100%;
+      max-width: 860px;
+      height: 1px;
+      background: linear-gradient(90deg, #d4b483, rgba(212,180,131,0.15), transparent);
+      position: relative;
+      margin: 18px 0 28px;
+    }
+
+    .chapter-line::before,
+    .chapter-line::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #d4b483;
+      box-shadow: 0 0 10px rgba(212,180,131,0.45);
+    }
+
+    .chapter-line::before {
+      left: 8%;
+    }
+
+    .chapter-line::after {
+      left: 0;
+    }
+
+    .chapter-quote {
+      max-width: 1000px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.5rem, 2.5vw, 2.3rem);
+      line-height: 1.65;
+      color: #f5efe3;
+      font-style: italic;
+      margin-bottom: 28px;
+    }
+
+    .chapter-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .chapter-meta p {
+      color: #f2ede4;
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+
+    .chapter-meta span {
+      color: #d4b483;
+      margin-right: 10px;
+      font-size: 1.05rem;
+    }
+
+    /* STORY SECTION */
+    .story-section {
+      width: min(1450px, 95%);
+      margin: 0 auto 90px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .story-box {
+      width: 100%;
+      padding: 42px 48px;
+      border-radius: 30px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(3px);
+    }
+
+    .story-box::before {
+      content: "";
+      position: absolute;
+      inset: 18px;
+      border-radius: 24px;
+      border: 1px solid rgba(255,255,255,0.05);
+      pointer-events: none;
+    }
+
+    .story-part {
+      margin-bottom: 38px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .part-number {
+      font-family: 'Cormorant Garamond', serif;
+      color: #efe6d6;
+      font-size: 2.2rem;
+      margin-bottom: 10px;
+      opacity: 0.95;
+    }
+
+    .story-text {
+      color: #f3efe7;
+      font-size: 1.18rem;
+      line-height: 2.08;
+      max-width: 100%;
+    }
+
+    .story-text p {
+      margin-bottom: 22px;
+      color: #efe9dc;
+    }
+
+    .story-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    .story-text p:first-child::first-letter {
+      float: left;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 5.2rem;
+      line-height: 0.85;
+      padding-right: 12px;
+      padding-top: 6px;
+      color: #f5e8d3;
+      font-weight: 700;
+    }
+
+    /* STAY TUNED */
+    .ending-box {
+      margin-top: 12px;
+      padding-top: 22px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      text-align: center;
+    }
+
+    .ending-box h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.1rem;
+      color: #d4b483;
+      margin-bottom: 8px;
+      letter-spacing: 1px;
+    }
+
+    .ending-box p {
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.8;
+    }
+
+    /* NEXT CHAPTER BUTTON */
+    .next-chapter-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 26px;
+      padding: 14px 30px;
+      border-radius: 999px;
+      border: 1px solid rgba(212,180,131,0.35);
+      background: linear-gradient(180deg, rgba(212,180,131,0.14), rgba(212,180,131,0.04));
+      color: #d4b483;
+      text-decoration: none;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.25rem;
+      letter-spacing: 0.5px;
+      transition: 0.3s ease;
+    }
+
+    .next-chapter-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(212,180,131,0.18);
+      border-color: rgba(212,180,131,0.6);
+      background: linear-gradient(180deg, rgba(212,180,131,0.22), rgba(212,180,131,0.06));
+    }
+
+    .next-chapter-link .arrow {
+      transition: transform 0.3s ease;
+    }
+
+    .next-chapter-link:hover .arrow {
+      transform: translateX(4px);
+    }
+
+    /* FOOTER */
+    .chapter-footer {
+      width: 100%;
+      padding: 28px 7% 40px;
+      text-align: center;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      position: relative;
+      z-index: 2;
+    }
+
+    .chapter-footer p {
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: 0.95rem;
+    }
+
+    .footer-next-link {
+      color: #d4b483;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(212,180,131,0.3);
+      transition: 0.25s ease;
+    }
+
+    .footer-next-link:hover {
+      border-color: #d4b483;
+    }
+
+    /* Reveal — visible by default so content never depends on JS firing;
+       only fades in from js-hidden if the observer explicitly adds it */
+    .reveal {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .reveal.js-hidden {
+      opacity: 0;
+      transform: translateY(28px);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* CHAPTER MUSIC PLAYER — flex child inside .topbar, not fixed,
+       so it never overlaps or hides page text on desktop or mobile */
+    .music-player {
+      order: 2;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 16px;
+
+      border-radius: 999px;
+      background: rgba(10, 10, 10, 0.78);
+      border: 1px solid rgba(255,255,255,0.10);
+      box-shadow: 0 12px 35px rgba(0,0,0,0.35);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+
+      max-width: 100%;
+    }
+
+    .music-btn {
+      flex-shrink: 0;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: radial-gradient(circle at top, rgba(212,180,131,0.25), rgba(255,255,255,0.04));
+      color: #f3efe7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: 0.3s ease;
+      font-size: 1rem;
+      box-shadow: 0 0 0 rgba(212,180,131,0);
+    }
+
+    .music-btn:hover {
+      transform: translateY(-2px) scale(1.03);
+      border-color: rgba(212,180,131,0.35);
+      box-shadow: 0 0 18px rgba(212,180,131,0.18);
+    }
+
+    .music-btn.playing {
+      box-shadow: 0 0 22px rgba(212,180,131,0.22);
+      border-color: rgba(212,180,131,0.4);
+    }
+
+    .music-meta {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+      min-width: 120px;
+    }
+
+    .music-label {
+      font-size: 0.7rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .music-track {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      color: var(--text);
+      white-space: nowrap;
+    }
+
+    .music-wave {
+      display: flex;
+      align-items: flex-end;
+      gap: 3px;
+      height: 18px;
+      margin-left: 4px;
+      flex-shrink: 0;
+    }
+
+    .music-wave span {
+      display: block;
+      width: 3px;
+      border-radius: 999px;
+      background: #d4b483;
+      opacity: 0.35;
+      height: 6px;
+      transform-origin: bottom;
+    }
+
+    .music-player.playing .music-wave span {
+      animation: waveDance 1s ease-in-out infinite;
+      opacity: 0.9;
+    }
+
+    .music-player.playing .music-wave span:nth-child(2) { animation-delay: 0.12s; }
+    .music-player.playing .music-wave span:nth-child(3) { animation-delay: 0.24s; }
+    .music-player.playing .music-wave span:nth-child(4) { animation-delay: 0.36s; }
+
+    @keyframes waveDance {
+      0%, 100% { height: 6px; }
+      50% { height: 18px; }
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .chapter-hero {
+        width: min(96%, 96%);
+      }
+
+      .story-section {
+        width: min(96%, 96%);
+      }
+
+      .story-box {
+        padding: 34px 28px;
+      }
+
+      .chapter-quote {
+        font-size: 1.5rem;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .topbar {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+      }
+
+      .music-player {
+        width: 100%;
+      }
+
+      .chapter-title {
+        font-size: 3rem;
+      }
+
+      .chapter-quote {
+        font-size: 1.28rem;
+        line-height: 1.7;
+      }
+
+      .story-box {
+        padding: 26px 18px;
+        border-radius: 22px;
+      }
+
+      .story-box::before {
+        inset: 10px;
+        border-radius: 16px;
+      }
+
+      .story-text {
+        font-size: 1.03rem;
+        line-height: 1.95;
+      }
+
+      .story-text p:first-child::first-letter {
+        font-size: 4.2rem;
+        padding-right: 10px;
+      }
+
+      .part-number {
+        font-size: 1.8rem;
+      }
+
+      .chapter-meta p {
+        font-size: 0.98rem;
+      }
+
+      .next-chapter-link {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .music-meta {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-overlay"></div>
+  <div class="grain"></div>
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <a href="chapter5.html" class="back-link">← Back to chapter 5</a>
+      <div class="chapter-label">Chapter 6 — The Housemaid (Part I)</div>
+    </div>
+
+    <!-- CHAPTER 6 MUSIC PLAYER: normal flex item, not fixed/floating -->
+    <div class="music-player" id="musicPlayer">
+      <button class="music-btn" id="musicToggle" aria-label="Play chapter music">
+        <span id="musicIcon">▶</span>
+      </button>
+
+      <div class="music-meta">
+        <span class="music-label">Chapter Theme</span>
+        <span class="music-track">Whispers Before the Storm</span>
+      </div>
+
+      <div class="music-wave" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+
+    <audio id="chapterMusic" loop preload="auto">
+      <source src="music/chapter6-theme.mp3" type="audio/mpeg">
+    </audio>
+  </header>
+
+  <!-- HERO -->
+  <section class="chapter-hero reveal">
+    <div class="hero-inner">
+      <p class="hero-kicker">Chapter Six · Part One</p>
+
+      <h1 class="chapter-title">
+        The <span>Housemaid</span>
+      </h1>
+
+      <div class="chapter-line"></div>
+
+      <p class="chapter-quote">
+        "It felt like the entire novel was actually written about... only one woman."
+      </p>
+
+      <div class="chapter-meta">
+        <p><span>✦</span>Psychological Fiction</p>
+        <p><span>✦</span>Secrets / Old Wounds / Buried Confessions</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- STORY -->
+  <main class="story-section reveal">
+    <div class="story-box">
+
+      <section class="story-part">
+        <div class="part-number">I</div>
+        <div class="story-text">
+          <p>
+            Professor Jenn once again invited Floyy to his house to read his latest assignment together. Like every week, Jenn sat on the sofa with a printed copy of Floyy's story while Floyy quietly waited beside him.
+          </p>
+
+          <p>
+            Jenn adjusted the papers in his hands.
+          </p>
+
+          <p>
+            "Let's see what you've written this time."
+          </p>
+
+          <p>
+            He began reading.
+          </p>
+
+          <p>
+            <em>Life inside Peter's house had become peaceful... most of the time.</em>
+          </p>
+
+          <p>
+            <em>There was also a housemaid named Florence, around twenty-eight years old. She only came four days a week — and even then, only whenever she felt like showing up.</em>
+          </p>
+
+          <p>
+            <em>For some reason... she loved making my life difficult. She never kept my clothes where they belonged. Whenever she entered my room, she would tease me — "You used to live in a tiny rented room... now look at you, living in a mansion."</em>
+          </p>
+
+          <p>
+            <em>One afternoon, while Peter and I were studying together, she accidentally spilled juice all over me.</em>
+          </p>
+
+          <p>
+            <em>She constantly got scolded by Marissa because she would smoke cigarettes and throw the cigarette butts into her flower garden. Marissa would always complain, "You're ruining my flowers!"</em>
+          </p>
+
+          <p>
+            <em>But despite all that... Florence was actually a very good cook.</em>
+          </p>
+
+          <p>
+            <em>That evening, Mr. Pedro returned home from work. As usual, he and Marissa started talking downstairs. I happened to be standing near the staircase and overheard their conversation.</em>
+          </p>
+
+          <p>
+            <em>Marissa sighed. "Florence was impossible today. She threw another cigarette into my flower garden." Pedro smiled. "You scolded her, didn't you?" "Of course I did." Pedro laughed softly. "Then she'll probably remember it next time."</em>
+          </p>
+
+          <p>
+            <em>The two of them smiled at each other before walking into their bedroom.</em>
+          </p>
+        </div>
+      </section>
+
+      <section class="story-part">
+        <div class="part-number">II</div>
+        <div class="story-text">
+          <p>
+            Professor Jenn suddenly stopped reading.
+          </p>
+
+          <p>
+            He slowly lowered the papers and looked at Floyy.
+          </p>
+
+          <p>
+            "Wait... were you seriously standing outside their room listening to their conversation?"
+          </p>
+
+          <p>
+            Floyy simply looked at him... and gave him a faint mischievous smile.
+          </p>
+
+          <p>
+            Jenn shook his head. "Don't you have any shame?"
+          </p>
+
+          <p>
+            Floyy only smiled wider.
+          </p>
+
+          <p>
+            Jenn sighed before continuing.
+          </p>
+
+          <p>
+            A little later, Selen called both of them to the dining table. She had ordered dinner from outside. The three of them quietly started eating together.
+          </p>
+
+          <p>
+            During dinner, Floyy suddenly spoke.
+          </p>
+
+          <p>
+            "Professor... I recently read your very first novel..."
+          </p>
+
+          <p>
+            Jenn smiled proudly. "'12 Women'?"
+          </p>
+
+          <p>
+            Floyy nodded. "Yes."
+          </p>
+
+          <p>
+            Jenn leaned back confidently. "So... what did you think?"
+          </p>
+
+          <p>
+            Floyy replied calmly, "It was interesting." He paused for a moment. Then continued, "But while reading it... I noticed something."
+          </p>
+
+          <p>
+            Jenn looked at him curiously.
+          </p>
+
+          <p>
+            "The book wasn't really about twelve different women."
+          </p>
+
+          <p>
+            A brief silence filled the dining table.
+          </p>
+
+          <p>
+            Floyy continued. "It felt like the entire novel was actually written about... only one woman."
+          </p>
+
+          <p>
+            Jenn's smile disappeared instantly. "Don't talk nonsense."
+          </p>
+
+          <p>
+            Across the table, Selen slowly turned toward Jenn. She didn't say a single word. But the expression in her eyes was enough to make Jenn uncomfortable.
+          </p>
+        </div>
+      </section>
+
+      <section class="story-part">
+        <div class="part-number">III</div>
+        <div class="story-text">
+          <p>
+            A few moments later, Jenn quietly stood up and walked into his room. Floyy and Selen continued eating together.
+          </p>
+
+          <p>
+            Unknown to them, Professor Jenn had quietly stopped behind his bedroom door. He remained there... listening.
+          </p>
+
+          <p>
+            Of course, both Floyy and Selen already knew he was standing there.
+          </p>
+
+          <p>
+            Floyy smiled softly. Then looked toward Selen.
+          </p>
+
+          <p>
+            "You're very beautiful."
+          </p>
+
+          <p>
+            Selen laughed awkwardly.
+          </p>
+
+          <p>
+            Floyy continued, "Professor Jenn never compliments you, does he?"
+          </p>
+
+          <p>
+            Selen smiled. But there was sadness hidden inside that smile.
+          </p>
+
+          <p>
+            "He's always been like that."
+          </p>
+
+          <p>
+            A little while later, Floyy left Jenn's house and returned to Peter's home.
+          </p>
+
+          <p>
+            That night, Jenn and Selen stepped outside together to throw away the household garbage. After returning, the two of them sat down on the living room sofa.
+          </p>
+
+          <p>
+            The silence lasted for a while.
+          </p>
+
+          <p>
+            Jenn finally spoke. "Are you free tomorrow?"
+          </p>
+
+          <p>
+            Selen looked at him. "Why?"
+          </p>
+
+          <p>
+            Jenn smiled faintly. "I was thinking... maybe we could go somewhere together." "Or perhaps watch a movie."
+          </p>
+
+          <p>
+            For the first time that evening, a gentle smile appeared on Selen's face. "Why not?"
+          </p>
+
+          <p>
+            Jenn smiled back.
+          </p>
+        </div>
+      </section>
+
+      <section class="story-part">
+        <div class="part-number">IV</div>
+        <div class="story-text">
+          <p>
+            The Next Day.
+          </p>
+
+          <p>
+            That afternoon, the school welcomed a special guest. A renowned novelist... Pedro.
+          </p>
+
+          <p>
+            Before the event began, Professor Steve approached Jenn.
+          </p>
+
+          <p>
+            "Professor Jenn, today's questionnaire session will be conducted by you."
+          </p>
+
+          <p>
+            Jenn looked surprised. "Me? Why me?"
+          </p>
+
+          <p>
+            Steve smiled. "Because you've known him for years." "Who could interview him better than you?"
+          </p>
+
+          <p>
+            Jenn hesitated. "I'll... try."
+          </p>
+
+          <p>
+            The program concluded successfully. Later, Professor Steve, his wife, Selen, Jenn and Pedro gathered together for lunch. The conversation remained light.
+          </p>
+
+          <p>
+            Until Steve suddenly smiled. "Pedro... congratulations once again."
+          </p>
+
+          <p>
+            Pedro looked at him. "For what?"
+          </p>
+
+          <p>
+            Steve laughed. "Your daughter's novel." "I heard it has already been nominated for a literary award."
+          </p>
+
+          <p>
+            Pedro smiled proudly. "She's worked very hard for it."
+          </p>
+
+          <p>
+            Jenn quietly listened. He had never heard Pedro speak about his family before.
+          </p>
+
+          <p>
+            Across the table, Selen noticed Jenn had suddenly become unusually quiet. She looked at him with sympathy.
+          </p>
+
+          <p>
+            Jenn slowly stood up. "Excuse me..."
+          </p>
+
+          <p>
+            Without saying another word, he quietly walked toward the washroom.
+          </p>
+        </div>
+      </section>
+
+      <section class="story-part">
+        <div class="part-number">V</div>
+        <div class="story-text">
+          <p>
+            That evening, Jenn and Selen returned home.
+          </p>
+
+          <p>
+            As they entered the house, Selen gently closed the door behind them. The silence between them returned once again.
+          </p>
+
+          <p>
+            Then, without looking at him, she quietly asked, "So..."
+          </p>
+
+          <p>
+            "Was your first novel..."
+          </p>
+
+          <p>
+            She finally turned toward Jenn.
+          </p>
+
+          <p>
+            "...really written about the woman who was your first love?"
+          </p>
+
+          <p>
+            Jenn froze.
+          </p>
+        </div>
+      </section>
+
+      <div class="ending-box">
+        <h3>To Be Continued...</h3>
+        <p>
+          A question, finally asked.
+          <br>
+          But some answers take longer to arrive than others.
+        </p>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="chapter-footer">
+    <p>The Boy from Last — Chapter 6 Archive</p>
+  </footer>
+
+  <script>
+    // Reveal animation
+    document.addEventListener("DOMContentLoaded", () => {
+      const revealEls = document.querySelectorAll(".reveal");
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+          }
+        });
+      }, { threshold: 0.12 });
+
+      revealEls.forEach((el) => observer.observe(el));
+    });
+
+    // Snowdrop effect
+    function createSnowdrop() {
+      const drop = document.createElement("span");
+      drop.className = "snowdrop";
+      drop.textContent = "❄";
+
+      drop.style.left = Math.random() * window.innerWidth + "px";
+      drop.style.fontSize = (12 + Math.random() * 12) + "px";
+      drop.style.animationDuration = (7 + Math.random() * 6) + "s";
+      drop.style.opacity = (0.25 + Math.random() * 0.35).toFixed(2);
+
+      document.body.appendChild(drop);
+
+      setTimeout(() => {
+        drop.remove();
+      }, 14000);
+    }
+
+    setInterval(createSnowdrop, 900);
+
+    // ===== MUSIC PLAYER =====
+    const chapterMusic = document.getElementById("chapterMusic");
+    const musicToggle = document.getElementById("musicToggle");
+    const musicIcon = document.getElementById("musicIcon");
+    const musicPlayer = document.getElementById("musicPlayer");
+
+    if (chapterMusic) {
+      chapterMusic.volume = 0.22; // soft background volume
+    }
+
+    function updateMusicUI(isPlaying) {
+      if (isPlaying) {
+        musicIcon.textContent = "❚❚";
+        musicToggle.classList.add("playing");
+        musicPlayer.classList.add("playing");
+        musicToggle.setAttribute("aria-label", "Pause chapter music");
+      } else {
+        musicIcon.textContent = "▶";
+        musicToggle.classList.remove("playing");
+        musicPlayer.classList.remove("playing");
+        musicToggle.setAttribute("aria-label", "Play chapter music");
+      }
+    }
+
+    musicToggle.addEventListener("click", async () => {
+      try {
+        if (chapterMusic.paused) {
+          await chapterMusic.play();
+          updateMusicUI(true);
+        } else {
+          chapterMusic.pause();
+          updateMusicUI(false);
+        }
+      } catch (err) {
+        console.log("Music play blocked:", err);
+      }
+    });
+
+    chapterMusic.addEventListener("pause", () => updateMusicUI(false));
+    chapterMusic.addEventListener("play", () => updateMusicUI(true));
+
+    // Show a visible error if the mp3 fails to load, instead of failing silently
+    chapterMusic.addEventListener("error", () => {
+      const trackEl = document.querySelector(".music-track");
+      if (trackEl) {
+        trackEl.textContent = "Track not found — check music/ folder";
+        trackEl.style.color = "#e08585";
+      }
+      console.error("chapterMusic failed to load. Check that music/chapter6-theme.mp3 exists next to this HTML file.");
+    });
+
+    // ===== AUTOPLAY ON LOAD (with fallback) =====
+    // Browsers block audio-with-sound autoplay until the user has interacted
+    // with the page at least once. We try immediately; if blocked, we start
+    // playback on the very first click/tap/keypress anywhere on the page,
+    // so it starts as close to "automatically" as browsers allow.
+    let autoplayHandled = false;
+
+    async function tryAutoplay() {
+      if (autoplayHandled) return;
+      try {
+        await chapterMusic.play();
+        autoplayHandled = true;
+        updateMusicUI(true);
+      } catch (err) {
+        // Autoplay was blocked — wait for first user interaction instead
+        console.log("Autoplay blocked by browser, will start on first interaction.");
+      }
+    }
+
+    function startOnFirstInteraction() {
+      if (autoplayHandled) return;
+      chapterMusic.play().then(() => {
+        autoplayHandled = true;
+        updateMusicUI(true);
+      }).catch(() => {});
+    }
+
+    window.addEventListener("load", tryAutoplay);
+    ["click", "touchstart", "keydown", "scroll"].forEach((evt) => {
+      window.addEventListener(evt, startOnFirstInteraction, { once: true, passive: true });
+    });
+  </script>
+</body>
+</html>
