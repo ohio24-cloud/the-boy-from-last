@@ -13,6 +13,10 @@
       --muted: #a89f93;
       --accent-soft: #8e7350;
       --shadow: 0 18px 50px rgba(0,0,0,0.45);
+      --storm-deep: #0d1116;
+      --storm-mid: #171e26;
+      --storm-cloud: #2a3541;
+      --storm-glow: rgba(150, 170, 190, 0.10);
     }
 
     * {
@@ -29,8 +33,9 @@
       font-family: 'Inter', sans-serif;
       color: var(--text);
       background:
-        radial-gradient(circle at top, rgba(120, 95, 55, 0.14), transparent 25%),
-        linear-gradient(180deg, #060606 0%, #0b0b0b 45%, #080808 100%);
+        radial-gradient(ellipse at 20% -10%, rgba(140, 155, 170, 0.12), transparent 40%),
+        radial-gradient(ellipse at 90% 10%, rgba(90, 105, 125, 0.10), transparent 45%),
+        linear-gradient(180deg, var(--storm-deep) 0%, var(--storm-mid) 45%, #0a0d11 100%);
       min-height: 100vh;
       overflow-x: hidden;
       position: relative;
@@ -40,8 +45,8 @@
       position: fixed;
       inset: 0;
       background:
-        linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+        linear-gradient(rgba(180,195,210,0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(180,195,210,0.015) 1px, transparent 1px);
       background-size: 34px 34px;
       opacity: 0.3;
       z-index: -4;
@@ -50,36 +55,108 @@
     .grain {
       position: fixed;
       inset: 0;
-      background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-image: radial-gradient(rgba(200,210,220,0.03) 1px, transparent 1px);
       background-size: 4px 4px;
       opacity: 0.06;
       pointer-events: none;
       z-index: -3;
     }
 
-    /* Floating snowdrops */
-    .snowdrop {
+    /* Slow-drifting overcast cloud layer — heavy, low, rainless sky */
+    .storm-clouds {
       position: fixed;
-      top: -30px;
-      color: rgba(255,255,255,0.65);
-      font-size: 14px;
+      inset: -10% -20%;
+      z-index: -6;
       pointer-events: none;
-      z-index: 0;
-      animation: snowFall linear forwards;
-      text-shadow: 0 0 8px rgba(255,255,255,0.18);
-      user-select: none;
+      background:
+        radial-gradient(ellipse 60% 30% at 15% 20%, rgba(58, 70, 84, 0.55), transparent 60%),
+        radial-gradient(ellipse 50% 25% at 70% 10%, rgba(42, 53, 65, 0.5), transparent 65%),
+        radial-gradient(ellipse 70% 35% at 45% 35%, rgba(30, 38, 48, 0.45), transparent 65%);
+      filter: blur(6px);
+      animation: cloudDrift 90s linear infinite alternate;
+      opacity: 0.85;
     }
 
-    @keyframes snowFall {
+    .storm-clouds.layer-2 {
+      background:
+        radial-gradient(ellipse 55% 28% at 80% 25%, rgba(50, 62, 75, 0.4), transparent 60%),
+        radial-gradient(ellipse 65% 30% at 25% 15%, rgba(35, 44, 55, 0.4), transparent 65%);
+      animation-duration: 130s;
+      animation-direction: alternate-reverse;
+      opacity: 0.6;
+    }
+
+    @keyframes cloudDrift {
+      0% { transform: translateX(-3%) translateY(0); }
+      100% { transform: translateX(3%) translateY(1.5%); }
+    }
+
+    /* Low ground mist — the "about to rain" feeling without any rain */
+    .fog-layer {
+      position: fixed;
+      left: -10%;
+      right: -10%;
+      bottom: 0;
+      height: 40vh;
+      z-index: -5;
+      pointer-events: none;
+      background: linear-gradient(180deg, transparent, rgba(160, 172, 185, 0.05) 55%, rgba(160, 172, 185, 0.09) 100%);
+      animation: fogDrift 26s ease-in-out infinite alternate;
+    }
+
+    @keyframes fogDrift {
+      0% { transform: translateX(-2%); opacity: 0.7; }
+      100% { transform: translateX(2%); opacity: 1; }
+    }
+
+    /* Distant heat lightning — brews, never breaks into rain */
+    .lightning-flash {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      background: rgba(210, 220, 235, 1);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .lightning-flash.flash {
+      animation: lightningFlicker 1.1s ease-out;
+    }
+
+    @keyframes lightningFlicker {
+      0% { opacity: 0; }
+      6% { opacity: 0.16; }
+      12% { opacity: 0.02; }
+      18% { opacity: 0.10; }
+      26% { opacity: 0; }
+      100% { opacity: 0; }
+    }
+
+    /* Wind-blown particles — dust and dead leaves dragged sideways
+       by the gusts that arrive ahead of a storm, not falling snow */
+    .windwisp {
+      position: fixed;
+      top: -5vh;
+      pointer-events: none;
+      z-index: 0;
+      background: linear-gradient(90deg, transparent, rgba(200, 190, 170, 0.55), transparent);
+      border-radius: 999px;
+      will-change: transform, opacity;
+    }
+
+    @keyframes windGust {
       0% {
-        transform: translateY(-20px) rotate(0deg);
+        transform: translate(-6vw, -5vh) rotate(0deg);
         opacity: 0;
       }
-      10% {
-        opacity: 0.7;
+      8% {
+        opacity: 0.55;
+      }
+      50% {
+        transform: translate(48vw, 42vh) rotate(35deg);
       }
       100% {
-        transform: translateY(110vh) translateX(40px) rotate(180deg);
+        transform: translate(112vw, 78vh) rotate(70deg);
         opacity: 0;
       }
     }
@@ -577,8 +654,12 @@
 </head>
 <body>
 
+  <div class="storm-clouds"></div>
+  <div class="storm-clouds layer-2"></div>
+  <div class="fog-layer"></div>
   <div class="bg-overlay"></div>
   <div class="grain"></div>
+  <div class="lightning-flash" id="lightningFlash"></div>
 
   <!-- TOP BAR -->
   <header class="topbar">
@@ -986,25 +1067,77 @@
       revealEls.forEach((el) => observer.observe(el));
     });
 
-    // Snowdrop effect
-    function createSnowdrop() {
-      const drop = document.createElement("span");
-      drop.className = "snowdrop";
-      drop.textContent = "❄";
+    // ===== WIND GUSTS (storm approaching, no rain yet) =====
+    // Particles are dragged diagonally across the screen in bursts —
+    // calm stretches followed by stronger gusts, like a storm building.
+    let gustStrength = 0.3; // 0 (calm) .. 1 (full gust)
+    let gustTarget = 0.3;
 
-      drop.style.left = Math.random() * window.innerWidth + "px";
-      drop.style.fontSize = (12 + Math.random() * 12) + "px";
-      drop.style.animationDuration = (7 + Math.random() * 6) + "s";
-      drop.style.opacity = (0.25 + Math.random() * 0.35).toFixed(2);
+    function createWindWisp() {
+      const wisp = document.createElement("span");
+      wisp.className = "windwisp";
 
-      document.body.appendChild(drop);
+      const size = 2 + Math.random() * 2.4;
+      const length = 14 + Math.random() * 26 * (0.5 + gustStrength);
+      wisp.style.height = size + "px";
+      wisp.style.width = length + "px";
+      wisp.style.left = (Math.random() * 40 - 20) + "vw";
+      wisp.style.top = (Math.random() * 30 - 20) + "vh";
+
+      const duration = (5.5 - gustStrength * 3.2) + Math.random() * 2;
+      wisp.style.animation = `windGust ${duration.toFixed(2)}s cubic-bezier(0.3, 0, 0.7, 1) forwards`;
+      wisp.style.opacity = (0.2 + Math.random() * 0.3 + gustStrength * 0.2).toFixed(2);
+
+      document.body.appendChild(wisp);
 
       setTimeout(() => {
-        drop.remove();
-      }, 14000);
+        wisp.remove();
+      }, (duration + 0.5) * 1000);
     }
 
-    setInterval(createSnowdrop, 900);
+    function windLoop() {
+      // ease current gust strength toward its target
+      gustStrength += (gustTarget - gustStrength) * 0.02;
+
+      // occasionally pick a new target: sometimes calm, sometimes a real gust
+      if (Math.random() < 0.004) {
+        gustTarget = Math.random() < 0.6 ? (0.15 + Math.random() * 0.25) : (0.6 + Math.random() * 0.4);
+      }
+
+      // spawn rate scales with gust strength
+      if (Math.random() < 0.15 + gustStrength * 0.5) {
+        createWindWisp();
+      }
+
+      requestAnimationFrame(windLoop);
+    }
+
+    windLoop();
+
+    // ===== DISTANT LIGHTNING (brewing storm, still no rain) =====
+    const lightningEl = document.getElementById("lightningFlash");
+
+    function scheduleLightning() {
+      const delay = 14000 + Math.random() * 26000;
+      setTimeout(() => {
+        lightningEl.classList.remove("flash");
+        void lightningEl.offsetWidth; // restart animation
+        lightningEl.classList.add("flash");
+
+        // occasional quick double-flash for realism
+        if (Math.random() < 0.35) {
+          setTimeout(() => {
+            lightningEl.classList.remove("flash");
+            void lightningEl.offsetWidth;
+            lightningEl.classList.add("flash");
+          }, 260);
+        }
+
+        scheduleLightning();
+      }, delay);
+    }
+
+    scheduleLightning();
 
     // ===== MUSIC PLAYER =====
     const chapterMusic = document.getElementById("chapterMusic");
