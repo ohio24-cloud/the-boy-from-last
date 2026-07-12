@@ -49,17 +49,18 @@
       background:
         linear-gradient(rgba(230,190,140,0.02) 1px, transparent 1px),
         linear-gradient(90deg, rgba(230,190,140,0.02) 1px, transparent 1px);
-      background-size: 34px 34px;
-      opacity: 0.3;
+      background-size: 68px 68px;
+      opacity: 0.15;
       z-index: -4;
+      pointer-events: none;
     }
 
     .grain {
       position: fixed;
       inset: 0;
-      background-image: radial-gradient(rgba(230,200,160,0.03) 1px, transparent 1px);
-      background-size: 4px 4px;
-      opacity: 0.06;
+      background-image: radial-gradient(rgba(230,200,160,0.02) 1px, transparent 1px);
+      background-size: 8px 8px;
+      opacity: 0.03;
       pointer-events: none;
       z-index: -3;
     }
@@ -77,6 +78,7 @@
       filter: blur(8px);
       animation: hazeDrift 100s ease-in-out infinite alternate;
       opacity: 1;
+      will-change: transform;
     }
 
     @keyframes hazeDrift {
@@ -95,6 +97,7 @@
       pointer-events: none;
       background: linear-gradient(180deg, transparent, rgba(150, 96, 58, 0.09) 55%, rgba(150, 96, 58, 0.14) 100%);
       animation: fogDrift 30s ease-in-out infinite alternate;
+      will-change: transform;
     }
 
     @keyframes fogDrift {
@@ -102,8 +105,7 @@
       100% { transform: translateX(2%); opacity: 0.9; }
     }
 
-    /* Soft light flicker — like sun breaking briefly through bare branches,
-       never sharp like lightning, just a slow warm pulse */
+    /* Soft light flicker — like sun breaking briefly through bare branches */
     .light-flicker {
       position: fixed;
       inset: 0;
@@ -124,16 +126,16 @@
       100% { opacity: 0; }
     }
 
-    /* FALLING LEAVES — drifting down with a gentle sideways sway,
-       replacing rain/wind for the autumn interlude mood */
+    /* FALLING LEAVES — optimized */
     .leaf {
       position: fixed;
       top: -6vh;
       pointer-events: none;
       z-index: 0;
-      will-change: transform, opacity;
+      will-change: transform;
       line-height: 1;
       filter: drop-shadow(0 2px 4px rgba(0,0,0,0.25));
+      contain: layout style paint;
     }
 
     @keyframes leafFall {
@@ -174,6 +176,7 @@
       backdrop-filter: blur(6px);
       -webkit-backdrop-filter: blur(6px);
       border-bottom: 1px solid rgba(242,197,129,0.10);
+      will-change: transform;
     }
 
     .topbar-left {
@@ -310,6 +313,7 @@
       position: relative;
       overflow: hidden;
       backdrop-filter: blur(3px);
+      -webkit-backdrop-filter: blur(3px);
     }
 
     .story-box::before {
@@ -444,6 +448,7 @@
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
       max-width: 100%;
+      will-change: transform;
     }
 
     .music-btn {
@@ -512,6 +517,7 @@
       opacity: 0.35;
       height: 6px;
       transform-origin: bottom;
+      will-change: height;
     }
 
     .music-player.playing .music-wave span {
@@ -1070,10 +1076,15 @@
       revealEls.forEach((el) => observer.observe(el));
     });
 
-    // ===== FALLING LEAVES (emoji) =====
+    // ===== OPTIMIZED FALLING LEAVES =====
     const leafEmojis = ["🍂", "🍁"];
+    const MAX_LEAVES = 6; // Max leaves at once (limited pool)
+    let activeLeaves = 0;
 
     function createLeaf() {
+      // Limit concurrent leaves
+      if (activeLeaves >= MAX_LEAVES) return;
+
       const leaf = document.createElement("span");
       leaf.className = "leaf";
       leaf.textContent = leafEmojis[Math.floor(Math.random() * leafEmojis.length)];
@@ -1086,26 +1097,46 @@
       leaf.style.animation = `leafFall ${duration.toFixed(2)}s ease-in-out forwards`;
       leaf.style.opacity = (0.6 + Math.random() * 0.35).toFixed(2);
 
+      activeLeaves++;
       document.body.appendChild(leaf);
 
-      setTimeout(() => leaf.remove(), (duration + 0.5) * 1000);
+      setTimeout(() => {
+        leaf.remove();
+        activeLeaves--;
+      }, duration * 1000);
     }
 
-    function leafLoop() {
-      if (Math.random() < 0.35) createLeaf();
-      requestAnimationFrame(leafLoop);
+    let leafIntervalId = null;
+
+    function startLeafLoop() {
+      leafIntervalId = setInterval(() => {
+        if (Math.random() < 0.3) createLeaf();
+      }, 800);
     }
 
-    leafLoop();
+    // Only start leaves if not on low-end device
+    if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      startLeafLoop();
+    }
 
-    // ===== SOFT LIGHT FLICKER (occasional, slow, warm — not lightning) =====
+    // Clean up on visibility change
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden && leafIntervalId) {
+        clearInterval(leafIntervalId);
+        leafIntervalId = null;
+      } else if (!document.hidden && !leafIntervalId) {
+        startLeafLoop();
+      }
+    });
+
+    // ===== SOFT LIGHT FLICKER =====
     const lightEl = document.getElementById("lightFlicker");
 
     function scheduleLight() {
-      const delay = 20000 + Math.random() * 30000;
+      const delay = 25000 + Math.random() * 40000;
       setTimeout(() => {
         lightEl.classList.remove("flash");
-        void lightEl.offsetWidth;
+        void lightEl.offsetWidth; // Reflow trigger
         lightEl.classList.add("flash");
         scheduleLight();
       }, delay);
@@ -1158,7 +1189,7 @@
         trackEl.textContent = "Track not found — check music/ folder";
         trackEl.style.color = "#e08585";
       }
-      console.error("chapterMusic failed to load. Check that music/interlude-theme.mp3 exists next to this HTML file.");
+      console.error("chapterMusic failed to load. Check that music/interlude-theme.mp3 exists.");
     });
 
     let autoplayHandled = false;
@@ -1170,7 +1201,7 @@
         autoplayHandled = true;
         updateMusicUI(true);
       } catch (err) {
-        console.log("Autoplay blocked by browser, will start on first interaction.");
+        console.log("Autoplay blocked by browser.");
       }
     }
 
@@ -1183,7 +1214,7 @@
     }
 
     window.addEventListener("load", tryAutoplay);
-    ["click", "touchstart", "keydown", "scroll"].forEach((evt) => {
+    ["click", "touchstart", "keydown"].forEach((evt) => {
       window.addEventListener(evt, startOnFirstInteraction, { once: true, passive: true });
     });
   </script>
