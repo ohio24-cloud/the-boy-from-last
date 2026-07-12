@@ -1,0 +1,1436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chapter 6 — The Housemaid (Part II) | The Boy From Last</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --text: #e8e0d5;
+      --muted: #a89f93;
+      --accent-soft: #8e7350;
+      --shadow: 0 18px 50px rgba(0,0,0,0.45);
+      --storm-deep: #050607;
+      --storm-mid: #0b0e12;
+      --storm-cloud: #171c22;
+      --storm-glow: rgba(150, 170, 190, 0.10);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(ellipse at 20% -10%, rgba(90, 100, 112, 0.08), transparent 40%),
+        radial-gradient(ellipse at 90% 10%, rgba(60, 70, 84, 0.07), transparent 45%),
+        linear-gradient(180deg, var(--storm-deep) 0%, var(--storm-mid) 45%, #030405 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    .bg-overlay {
+      position: fixed;
+      inset: 0;
+      background:
+        linear-gradient(rgba(180,195,210,0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(180,195,210,0.015) 1px, transparent 1px);
+      background-size: 34px 34px;
+      opacity: 0.3;
+      z-index: -4;
+    }
+
+    .grain {
+      position: fixed;
+      inset: 0;
+      background-image: radial-gradient(rgba(200,210,220,0.03) 1px, transparent 1px);
+      background-size: 4px 4px;
+      opacity: 0.06;
+      pointer-events: none;
+      z-index: -3;
+    }
+
+    /* Heavier, faster-moving cloud layer — the storm has now broken */
+    .storm-clouds {
+      position: fixed;
+      inset: -10% -20%;
+      z-index: -6;
+      pointer-events: none;
+      background:
+        radial-gradient(ellipse 65% 32% at 15% 20%, rgba(14, 17, 21, 0.85), transparent 60%),
+        radial-gradient(ellipse 55% 28% at 70% 10%, rgba(10, 13, 16, 0.8), transparent 65%),
+        radial-gradient(ellipse 75% 38% at 45% 35%, rgba(6, 8, 10, 0.78), transparent 65%);
+      filter: blur(6px);
+      animation: cloudDrift 55s linear infinite alternate;
+      opacity: 0.9;
+    }
+
+    .storm-clouds.layer-2 {
+      background:
+        radial-gradient(ellipse 55% 28% at 80% 25%, rgba(12, 15, 19, 0.7), transparent 60%),
+        radial-gradient(ellipse 65% 30% at 25% 15%, rgba(8, 10, 13, 0.7), transparent 65%);
+      animation-duration: 80s;
+      animation-direction: alternate-reverse;
+      opacity: 0.7;
+    }
+
+    @keyframes cloudDrift {
+      0% { transform: translateX(-3%) translateY(0); }
+      100% { transform: translateX(3%) translateY(1.5%); }
+    }
+
+    /* Ground mist thickened by heavy rainfall */
+    .fog-layer {
+      position: fixed;
+      left: -10%;
+      right: -10%;
+      bottom: 0;
+      height: 42vh;
+      z-index: -5;
+      pointer-events: none;
+      background: linear-gradient(180deg, transparent, rgba(20, 24, 28, 0.10) 55%, rgba(15, 18, 22, 0.22) 100%);
+      animation: fogDrift 22s ease-in-out infinite alternate;
+    }
+
+    @keyframes fogDrift {
+      0% { transform: translateX(-2%); opacity: 0.75; }
+      100% { transform: translateX(2%); opacity: 1; }
+    }
+
+    /* Lightning — the storm has arrived, flashes come sharper and closer together */
+    .lightning-flash {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      background: rgba(210, 220, 235, 1);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .lightning-flash.flash {
+      animation: lightningFlicker 1s ease-out;
+    }
+
+    @keyframes lightningFlicker {
+      0% { opacity: 0; }
+      6% { opacity: 0.22; }
+      12% { opacity: 0.03; }
+      18% { opacity: 0.14; }
+      26% { opacity: 0; }
+      100% { opacity: 0; }
+    }
+
+    /* RAIN — the storm has broken, so straight falling rain replaces the wind wisps */
+    .rain-drop {
+      position: fixed;
+      top: -5vh;
+      width: 1.5px;
+      pointer-events: none;
+      z-index: 0;
+      background: linear-gradient(180deg, transparent, rgba(190, 205, 220, 0.55));
+      border-radius: 999px;
+      will-change: transform, opacity;
+    }
+
+    @keyframes rainFall {
+      0% {
+        transform: translate(0, -5vh);
+        opacity: 0;
+      }
+      6% {
+        opacity: 0.6;
+      }
+      100% {
+        transform: translate(-6vw, 110vh);
+        opacity: 0.15;
+      }
+    }
+
+    /* NAV — back link, chapter label, AND music player all live here
+       as normal flex children, never floating over page content */
+    .topbar {
+      width: 100%;
+      padding: 18px 7%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+      position: relative;
+      z-index: 5;
+      background: rgba(9,9,9,0.5);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .topbar-left {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      order: 1;
+    }
+
+    .back-link {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 0.96rem;
+      transition: 0.25s ease;
+    }
+
+    .back-link:hover {
+      color: var(--accent-soft);
+    }
+
+    .chapter-label {
+      color: var(--muted);
+      letter-spacing: 2px;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+    }
+
+    /* HERO */
+    .chapter-hero {
+      width: min(1400px, 94%);
+      margin: 10px auto 40px;
+      padding: 40px 0 20px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+
+    .hero-kicker {
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      font-size: 0.82rem;
+      margin-bottom: 18px;
+    }
+
+    .chapter-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3.8rem, 8vw, 7rem);
+      line-height: 0.95;
+      font-weight: 700;
+      margin-bottom: 20px;
+      letter-spacing: -1px;
+    }
+
+    .chapter-title span {
+      color: #d4b483;
+      font-style: italic;
+    }
+
+    .chapter-line {
+      width: 100%;
+      max-width: 860px;
+      height: 1px;
+      background: linear-gradient(90deg, #d4b483, rgba(212,180,131,0.15), transparent);
+      position: relative;
+      margin: 18px 0 28px;
+    }
+
+    .chapter-line::before,
+    .chapter-line::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #d4b483;
+      box-shadow: 0 0 10px rgba(212,180,131,0.45);
+    }
+
+    .chapter-line::before {
+      left: 8%;
+    }
+
+    .chapter-line::after {
+      left: 0;
+    }
+
+    .chapter-quote {
+      max-width: 1000px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.5rem, 2.5vw, 2.3rem);
+      line-height: 1.65;
+      color: #f5efe3;
+      font-style: italic;
+      margin-bottom: 28px;
+    }
+
+    .chapter-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .chapter-meta p {
+      color: #f2ede4;
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+
+    .chapter-meta span {
+      color: #d4b483;
+      margin-right: 10px;
+      font-size: 1.05rem;
+    }
+
+    /* STORY SECTION */
+    .story-section {
+      width: min(1450px, 95%);
+      margin: 0 auto 90px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .story-box {
+      width: 100%;
+      padding: 42px 48px;
+      border-radius: 30px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(3px);
+    }
+
+    .story-box::before {
+      content: "";
+      position: absolute;
+      inset: 18px;
+      border-radius: 24px;
+      border: 1px solid rgba(255,255,255,0.05);
+      pointer-events: none;
+    }
+
+    .story-part {
+      margin-bottom: 38px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .part-number {
+      font-family: 'Cormorant Garamond', serif;
+      color: #efe6d6;
+      font-size: 2.2rem;
+      margin-bottom: 10px;
+      opacity: 0.95;
+    }
+
+    .scene-marker {
+      text-align: center;
+      color: #d4b483;
+      opacity: 0.55;
+      letter-spacing: 6px;
+      font-size: 0.9rem;
+      margin: 6px 0 30px !important;
+    }
+
+    .scene-tag {
+      display: block;
+      color: #d4b483;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.35rem;
+      letter-spacing: 1px;
+      opacity: 0.85;
+      margin: 8px 0 4px;
+    }
+
+    .story-text {
+      color: #f3efe7;
+      font-size: 1.18rem;
+      line-height: 2.08;
+      max-width: 100%;
+    }
+
+    .story-text p {
+      margin-bottom: 22px;
+      color: #efe9dc;
+    }
+
+    .story-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    .story-text p:first-child::first-letter {
+      float: left;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 5.2rem;
+      line-height: 0.85;
+      padding-right: 12px;
+      padding-top: 6px;
+      color: #f5e8d3;
+      font-weight: 700;
+    }
+
+    /* STAY TUNED */
+    .ending-box {
+      margin-top: 12px;
+      padding-top: 22px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      text-align: center;
+    }
+
+    .ending-box h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.1rem;
+      color: #d4b483;
+      margin-bottom: 8px;
+      letter-spacing: 1px;
+    }
+
+    .ending-box p {
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.8;
+    }
+
+    /* NEXT CHAPTER BUTTON */
+    .next-chapter-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 26px;
+      padding: 14px 30px;
+      border-radius: 999px;
+      border: 1px solid rgba(212,180,131,0.35);
+      background: linear-gradient(180deg, rgba(212,180,131,0.14), rgba(212,180,131,0.04));
+      color: #d4b483;
+      text-decoration: none;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.25rem;
+      letter-spacing: 0.5px;
+      transition: 0.3s ease;
+    }
+
+    .next-chapter-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(212,180,131,0.18);
+      border-color: rgba(212,180,131,0.6);
+      background: linear-gradient(180deg, rgba(212,180,131,0.22), rgba(212,180,131,0.06));
+    }
+
+    .next-chapter-link .arrow {
+      transition: transform 0.3s ease;
+    }
+
+    .next-chapter-link:hover .arrow {
+      transform: translateX(4px);
+    }
+
+    /* FOOTER */
+    .chapter-footer {
+      width: 100%;
+      padding: 28px 7% 40px;
+      text-align: center;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      position: relative;
+      z-index: 2;
+    }
+
+    .chapter-footer p {
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: 0.95rem;
+    }
+
+    .footer-next-link {
+      color: #d4b483;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(212,180,131,0.3);
+      transition: 0.25s ease;
+    }
+
+    .footer-next-link:hover {
+      border-color: #d4b483;
+    }
+
+    /* Reveal — visible by default so content never depends on JS firing;
+       only fades in from js-hidden if the observer explicitly adds it */
+    .reveal {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .reveal.js-hidden {
+      opacity: 0;
+      transform: translateY(28px);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* CHAPTER MUSIC PLAYER — flex child inside .topbar, not fixed,
+       so it never overlaps or hides page text on desktop or mobile */
+    .music-player {
+      order: 2;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 16px;
+
+      border-radius: 999px;
+      background: rgba(10, 10, 10, 0.78);
+      border: 1px solid rgba(255,255,255,0.10);
+      box-shadow: 0 12px 35px rgba(0,0,0,0.35);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+
+      max-width: 100%;
+    }
+
+    .music-btn {
+      flex-shrink: 0;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: radial-gradient(circle at top, rgba(212,180,131,0.25), rgba(255,255,255,0.04));
+      color: #f3efe7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: 0.3s ease;
+      font-size: 1rem;
+      box-shadow: 0 0 0 rgba(212,180,131,0);
+    }
+
+    .music-btn:hover {
+      transform: translateY(-2px) scale(1.03);
+      border-color: rgba(212,180,131,0.35);
+      box-shadow: 0 0 18px rgba(212,180,131,0.18);
+    }
+
+    .music-btn.playing {
+      box-shadow: 0 0 22px rgba(212,180,131,0.22);
+      border-color: rgba(212,180,131,0.4);
+    }
+
+    .music-meta {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+      min-width: 120px;
+    }
+
+    .music-label {
+      font-size: 0.7rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .music-track {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      color: var(--text);
+      white-space: nowrap;
+    }
+
+    .music-wave {
+      display: flex;
+      align-items: flex-end;
+      gap: 3px;
+      height: 18px;
+      margin-left: 4px;
+      flex-shrink: 0;
+    }
+
+    .music-wave span {
+      display: block;
+      width: 3px;
+      border-radius: 999px;
+      background: #d4b483;
+      opacity: 0.35;
+      height: 6px;
+      transform-origin: bottom;
+    }
+
+    .music-player.playing .music-wave span {
+      animation: waveDance 1s ease-in-out infinite;
+      opacity: 0.9;
+    }
+
+    .music-player.playing .music-wave span:nth-child(2) { animation-delay: 0.12s; }
+    .music-player.playing .music-wave span:nth-child(3) { animation-delay: 0.24s; }
+    .music-player.playing .music-wave span:nth-child(4) { animation-delay: 0.36s; }
+
+    @keyframes waveDance {
+      0%, 100% { height: 6px; }
+      50% { height: 18px; }
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .chapter-hero {
+        width: min(96%, 96%);
+      }
+
+      .story-section {
+        width: min(96%, 96%);
+      }
+
+      .story-box {
+        padding: 34px 28px;
+      }
+
+      .chapter-quote {
+        font-size: 1.5rem;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .topbar {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+      }
+
+      .music-player {
+        width: 100%;
+      }
+
+      .chapter-title {
+        font-size: 3rem;
+      }
+
+      .chapter-quote {
+        font-size: 1.28rem;
+        line-height: 1.7;
+      }
+
+      .story-box {
+        padding: 26px 18px;
+        border-radius: 22px;
+      }
+
+      .story-box::before {
+        inset: 10px;
+        border-radius: 16px;
+      }
+
+      .story-text {
+        font-size: 1.03rem;
+        line-height: 1.95;
+      }
+
+      .story-text p:first-child::first-letter {
+        font-size: 4.2rem;
+        padding-right: 10px;
+      }
+
+      .part-number {
+        font-size: 1.8rem;
+      }
+
+      .chapter-meta p {
+        font-size: 0.98rem;
+      }
+
+      .next-chapter-link {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .music-meta {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="storm-clouds"></div>
+  <div class="storm-clouds layer-2"></div>
+  <div class="fog-layer"></div>
+  <div class="bg-overlay"></div>
+  <div class="grain"></div>
+  <div class="lightning-flash" id="lightningFlash"></div>
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <a href="chapter6.html" class="back-link">← Back to chapter 6 - Part 1</a>
+      <div class="chapter-label">Chapter 6 — The Housemaid (Part II)</div>
+    </div>
+
+    <!-- CHAPTER 7 MUSIC PLAYER: normal flex item, not fixed/floating -->
+    <div class="music-player" id="musicPlayer">
+      <button class="music-btn" id="musicToggle" aria-label="Play chapter music">
+        <span id="musicIcon">▶</span>
+      </button>
+
+      <div class="music-meta">
+        <span class="music-label">Chapter Theme</span>
+        <span class="music-track">When the Storm Breaks</span>
+      </div>
+
+      <div class="music-wave" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+
+    <audio id="chapterMusic" loop preload="auto">
+      <source src="music/chapter6-part2-theme.mp3" type="audio/mpeg">
+    </audio>
+  </header>
+
+  <!-- HERO -->
+  <section class="chapter-hero reveal">
+    <div class="hero-inner">
+      <p class="hero-kicker">Chapter Six · Part Two</p>
+
+      <h1 class="chapter-title">
+        The <span>Housemaid</span>
+      </h1>
+
+      <div class="chapter-line"></div>
+
+      <p class="chapter-quote">
+        "A tree doesn't always need a storm to fall... sometimes a gentle breeze is enough to loosen its roots."
+      </p>
+
+      <div class="chapter-meta">
+        <p><span>✦</span>Psychological Fiction</p>
+        <p><span>✦</span>Betrayal / Storms / Buried Secrets</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- STORY -->
+  <main class="story-section reveal">
+    <div class="story-box">
+
+      <section class="story-part">
+        <div class="part-number">First Half</div>
+        <div class="story-text">
+          <p>
+            <em>Rain wasn't falling. It was swallowing the city. Dark clouds had erased the morning sky, and every raindrop that struck the windows sounded like impatient fingers knocking from the other side.</em>
+          </p>
+
+          <p>
+            <em>I woke to the sound of shouting. Not ordinary shouting... the kind that makes your heart race before your feet even touch the floor.</em>
+          </p>
+
+          <p>
+            <em>I rushed downstairs.</em>
+          </p>
+
+          <p>
+            <em>Marissa stood in the middle of the living room. Her hands trembled with anger. In front of her... Florence. Between them... an expensive silk scarf.</em>
+          </p>
+
+          <p>
+            <em>Marissa's voice echoed through the house. "How could you betray us?"</em>
+          </p>
+
+          <p>
+            <em>Florence stared at the scarf in disbelief. "I didn't steal it." "Someone put it in my bag."</em>
+          </p>
+
+          <p>
+            <em>Marissa stepped forward. "Then explain why it was inside your purse."</em>
+          </p>
+
+          <p>
+            <em>Florence clenched her fists. Rain continued pounding outside. "Before that..." "Tell me who gave you permission to search my belongings?"</em>
+          </p>
+
+          <p>
+            <em>Silence. Not a single person moved.</em>
+          </p>
+
+          <p>
+            <em>Florence slowly picked up her purse. Her eyes had already accepted the verdict. Without saying another word... she walked into the rain. The front door slammed shut behind her.</em>
+          </p>
+        </div>
+      </section>
+
+      <section class="story-part">
+        <div class="story-text">
+          <p class="scene-marker">✦</p>
+
+          <p>
+            Professor Jenn lowered the assignment.
+          </p>
+
+          <p>
+            His face had become expressionless.
+          </p>
+
+          <p>
+            He looked directly at Floyy.
+          </p>
+
+          <p>
+            "You're crossing your limits."
+          </p>
+
+          <p>
+            Floyy stayed quiet.
+          </p>
+
+          <p>
+            Jenn leaned forward.
+          </p>
+
+          <p>
+            "That scarf..." "...you planted it in Florence's purse, didn't you?"
+          </p>
+
+          <p>
+            A tiny smile appeared on Floyy's face.
+          </p>
+
+          <p>
+            "She was bothering me."
+          </p>
+
+          <p>
+            Jenn stood up.
+          </p>
+
+          <p>
+            "Everywhere you go..." "...chaos follows."
+          </p>
+
+          <p>
+            Floyy shrugged.
+          </p>
+
+          <p>
+            "Chaos?"
+          </p>
+
+          <p>
+            Jenn's voice became colder.
+          </p>
+
+          <p>
+            "From today..." "...our classes will only happen in my office." "You're never coming to my house again."
+          </p>
+
+          <p>
+            Floyy nodded. Then smiled.
+          </p>
+
+          <p>
+            "You're right, Professor." "People shouldn't trust others so easily."
+          </p>
+
+          <p>
+            Jenn frowned.
+          </p>
+
+          <p>
+            "What does that mean?"
+          </p>
+
+          <p>
+            Floyy slowly raised his eyes.
+          </p>
+
+          <p>
+            That familiar... unsettling smile returned.
+          </p>
+
+          <p>
+            "Florence..." "...and Mr. Pedro..." "...they're closer than everyone thinks."
+          </p>
+        </div>
+      </section>
+
+      <section class="story-part">
+        <div class="part-number">Second Half</div>
+        <div class="story-text">
+          <p>
+            The lesson ended in complete silence.
+          </p>
+
+          <p>
+            Floyy quietly collected his notebook. Without looking back, he walked out of Professor Jenn's office.
+          </p>
+
+          <p>
+            Jenn remained seated.
+          </p>
+
+          <p>
+            For some reason... Floyy's words refused to leave his mind.
+          </p>
+
+          <p class="scene-tag">That Evening</p>
+
+          <p>
+            Jenn slowly entered Selen's room. She was sitting beside the window, quietly reading a book. Jenn sat down beside her.
+          </p>
+
+          <p>
+            After a long silence... he finally spoke.
+          </p>
+
+          <p>
+            "Maybe... you were right."
+          </p>
+
+          <p>
+            Selen closed the book. Jenn looked exhausted.
+          </p>
+
+          <p>
+            "I made a mistake." "Floyy isn't the boy I thought he was." "I don't think these classes should continue anymore."
+          </p>
+
+          <p>
+            Selen looked at him calmly. Then smiled.
+          </p>
+
+          <p>
+            "I was afraid for a little while..." "...but that fear is gone now." "To me..." "...he's just an ordinary boy."
+          </p>
+
+          <p>
+            Jenn nodded quietly. Without another word... he walked back to his room.
+          </p>
+
+          <p class="scene-tag">Midnight</p>
+
+          <p>
+            That night... sleep came... but peace didn't.
+          </p>
+
+          <p>
+            Jenn found himself standing inside Peter's house. Everything... was silent. Too silent. Blood covered the floor.
+          </p>
+
+          <p>
+            Peter... Marissa... Pedro... every one of them... lifeless.
+          </p>
+
+          <p>
+            Standing in the middle of the room... Floyy. His white school uniform had turned crimson. In his hands... a heavy hammer. Fresh blood slowly dripped from its iron head.
+          </p>
+
+          <p>
+            Then... Floyy calmly lay down on Peter's bed... as if nothing had happened.
+          </p>
+
+          <p>
+            Jenn tried to scream... but no voice came out.
+          </p>
+
+          <p>
+            RING...
+          </p>
+
+          <p>
+            Jenn suddenly woke up. His breathing was heavy. His entire body was covered in sweat. The phone was ringing. He answered immediately.
+          </p>
+
+          <p>
+            "Hello...?"
+          </p>
+
+          <p>
+            A familiar voice replied.
+          </p>
+
+          <p>
+            "Professor..." "...were you sleeping?"
+          </p>
+
+          <p>
+            Floyy.
+          </p>
+
+          <p>
+            Jenn immediately sat upright.
+          </p>
+
+          <p>
+            "Floyy?" "What happened?"
+          </p>
+
+          <p>
+            For the first time... Floyy sounded frightened.
+          </p>
+
+          <p>
+            "Professor..." "...something terrible has happened." "I don't have anyone else..." "Please come."
+          </p>
+
+          <p>
+            Jenn stood up immediately.
+          </p>
+
+          <p>
+            "Where are you?"
+          </p>
+
+          <p>
+            Floyy replied.
+          </p>
+
+          <p>
+            "Hotel Bellavista." "Everything will make sense once you get here."
+          </p>
+
+          <p>
+            The call disconnected.
+          </p>
+
+          <p>
+            Rain continued pouring as Jenn drove through the empty streets. The nightmare still haunted him.
+          </p>
+
+          <p>
+            Twenty minutes later... he reached Hotel Bellavista. Outside the entrance... Floyy sat alone on the roadside. Completely drenched.
+          </p>
+
+          <p>
+            Jenn rushed toward him.
+          </p>
+
+          <p>
+            "Floyy!" "You said something terrible happened!" "You're perfectly fine!"
+          </p>
+
+          <p>
+            Floyy slowly stood up. His eyes remained fixed on the hotel building.
+          </p>
+
+          <p>
+            "Professor..." "...I called you here because I wanted you to see something with your own eyes."
+          </p>
+
+          <p>
+            Jenn frowned.
+          </p>
+
+          <p>
+            "What do you mean?"
+          </p>
+
+          <p>
+            Floyy took a deep breath.
+          </p>
+
+          <p>
+            "A few minutes ago..." "...I saw Mr. Pedro and Florence enter this hotel together."
+          </p>
+
+          <p>
+            Jenn's expression immediately changed.
+          </p>
+
+          <p>
+            "What?"
+          </p>
+
+          <p>
+            Floyy nodded.
+          </p>
+
+          <p>
+            "I knew..." "...you never believed anything I told you."
+          </p>
+
+          <p>
+            "So I thought..." "...if you saw it yourself..." "...maybe then you'd finally believe me."
+          </p>
+
+          <p>
+            Jenn stared at the hotel entrance. His mind refused to accept it.
+          </p>
+
+          <p>
+            Pedro... and Florence... together?
+          </p>
+
+          <p>
+            Before he could say another word...
+          </p>
+
+          <p>
+            THUD!!
+          </p>
+
+          <p>
+            A horrifying sound echoed through the rainy night.
+          </p>
+
+          <p>
+            For a brief second... everything fell silent.
+          </p>
+
+          <p>
+            Then... people began screaming.
+          </p>
+
+          <p>
+            Some rushed toward the road. Others stood frozen in shock.
+          </p>
+
+          <p>
+            Jenn instinctively turned toward the crowd.
+          </p>
+
+          <p>
+            There... lying on the rain-soaked road... was a badly injured woman.
+          </p>
+
+          <p>
+            Blood slowly mixed with the rainwater flowing across the street.
+          </p>
+
+          <p>
+            Before Jenn could recognize her... Floyy grabbed his arm. His trembling voice whispered—
+          </p>
+
+          <p>
+            "Professor..." "...that's Florence."
+          </p>
+
+          <p>
+            Jenn's eyes widened.
+          </p>
+
+          <p>
+            "What...?"
+          </p>
+
+          <p>
+            He looked again.
+          </p>
+
+          <p>
+            The woman lying on the road... was Florence.
+          </p>
+
+          <p>
+            Before Jenn could recover from the shock... Floyy slowly raised his hand once again. This time... pointing toward a man standing a few meters away. The man looked completely frozen. Unable to move.
+          </p>
+
+          <p>
+            Floyy whispered, "Sir..." "...there..." "...that's Mr. Pedro."
+          </p>
+
+          <p>
+            Jenn followed Floyy's finger. The moment he saw the man's face... his own face turned pale. His lips trembled.
+          </p>
+
+          <p>
+            "...What?"
+          </p>
+
+          <p>
+            He took one slow step forward. His heartbeat became deafening.
+          </p>
+
+          <p>
+            "...That's..." "...Mr. Pedro?"
+          </p>
+
+          <p>
+            The same man... the famous novelist. The same man... who had been sitting beside him during lunch only a few hours ago.
+          </p>
+
+          <p>
+            Jenn's breathing became uneven. Peter... Pedro... Floyy... the assignments... everything... connected in a single instant.
+          </p>
+
+          <p>
+            Floyy suddenly grabbed Jenn's arm.
+          </p>
+
+          <p>
+            "Professor!" "We have to leave... now!"
+          </p>
+
+          <p>
+            Jenn couldn't move. Floyy pulled him toward the car.
+          </p>
+
+          <p>
+            Only after they were safely inside... Jenn exploded. He slammed both hands against the steering wheel.
+          </p>
+
+          <p>
+            "WHY?!"
+          </p>
+
+          <p>
+            He turned toward Floyy. His eyes burned with anger.
+          </p>
+
+          <p>
+            "Why didn't you tell me?"
+          </p>
+
+          <p>
+            Floyy remained silent.
+          </p>
+
+          <p>
+            Jenn shouted again.
+          </p>
+
+          <p>
+            "You knew all along!" "You knew novelist Pedro was Peter's father!" "You knew everything!" "...and yet you never told me!"
+          </p>
+
+          <p>
+            His breathing became heavier.
+          </p>
+
+          <p>
+            "Tell me..." "Why did you hide all of this from me?"
+          </p>
+
+          <p>
+            Floyy lowered his head. For the first time... he had no answer.
+          </p>
+
+          <p>
+            Jenn dropped Floyy off without saying another word. He drove home alone. His hands were still shaking.
+          </p>
+
+          <p>
+            The moment he entered his house... he walked straight into his study. He opened the drawer.
+          </p>
+
+          <p>
+            Inside... every assignment Floyy had ever submitted. One by one... he began reading them again.
+          </p>
+
+          <p>
+            Not as a professor. Not as a mentor. But as a man desperately searching for the truth.
+          </p>
+
+          <p>
+            His fingers suddenly stopped. One assignment. One name. Marissa.
+          </p>
+
+          <p>
+            Jenn slowly picked it up. Outside... thunder shook the sky.
+          </p>
+
+          <p>
+            He whispered to himself... "...What have I failed to see?"
+          </p>
+        </div>
+      </section>
+
+      <div class="ending-box">
+        <h3>To Be Continued...</h3>
+        <p>
+          A hammer, a nightmare, and a name that won't let the professor sleep.
+          <br>
+          Marissa's assignment is still in his hands.
+        </p>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="chapter-footer">
+    <p>The Boy from Last — Chapter 6 Archive</p>
+  </footer>
+
+  <script>
+    // Reveal animation
+    document.addEventListener("DOMContentLoaded", () => {
+      const revealEls = document.querySelectorAll(".reveal");
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+          }
+        });
+      }, { threshold: 0.12 });
+
+      revealEls.forEach((el) => observer.observe(el));
+    });
+
+    // ===== RAIN (the storm has broken) =====
+    let rainIntensity = 0.5; // 0 (light) .. 1 (heavy downpour)
+    let rainTarget = 0.6;
+
+    function createRainDrop() {
+      const drop = document.createElement("span");
+      drop.className = "rain-drop";
+
+      const length = 40 + Math.random() * 70 * (0.5 + rainIntensity);
+      drop.style.height = length + "px";
+      drop.style.left = (Math.random() * 100) + "vw";
+
+      const duration = (1.6 - rainIntensity * 0.7) + Math.random() * 0.6;
+      drop.style.animation = `rainFall ${duration.toFixed(2)}s linear forwards`;
+      drop.style.opacity = (0.25 + Math.random() * 0.35 + rainIntensity * 0.2).toFixed(2);
+
+      document.body.appendChild(drop);
+
+      setTimeout(() => {
+        drop.remove();
+      }, (duration + 0.3) * 1000);
+    }
+
+    function rainLoop() {
+      rainIntensity += (rainTarget - rainIntensity) * 0.02;
+
+      if (Math.random() < 0.004) {
+        rainTarget = 0.4 + Math.random() * 0.6;
+      }
+
+      const dropsThisFrame = 1 + Math.floor(rainIntensity * 3);
+      for (let i = 0; i < dropsThisFrame; i++) {
+        if (Math.random() < 0.6 + rainIntensity * 0.3) {
+          createRainDrop();
+        }
+      }
+
+      requestAnimationFrame(rainLoop);
+    }
+
+    rainLoop();
+
+    // ===== LIGHTNING (storm has arrived, flashes come more often) =====
+    const lightningEl = document.getElementById("lightningFlash");
+
+    function scheduleLightning() {
+      const delay = 8000 + Math.random() * 18000;
+      setTimeout(() => {
+        lightningEl.classList.remove("flash");
+        void lightningEl.offsetWidth; // restart animation
+        lightningEl.classList.add("flash");
+
+        // occasional quick double-flash for realism
+        if (Math.random() < 0.45) {
+          setTimeout(() => {
+            lightningEl.classList.remove("flash");
+            void lightningEl.offsetWidth;
+            lightningEl.classList.add("flash");
+          }, 220);
+        }
+
+        scheduleLightning();
+      }, delay);
+    }
+
+    scheduleLightning();
+
+    // ===== MUSIC PLAYER =====
+    const chapterMusic = document.getElementById("chapterMusic");
+    const musicToggle = document.getElementById("musicToggle");
+    const musicIcon = document.getElementById("musicIcon");
+    const musicPlayer = document.getElementById("musicPlayer");
+
+    if (chapterMusic) {
+      chapterMusic.volume = 0.22; // soft background volume
+    }
+
+    function updateMusicUI(isPlaying) {
+      if (isPlaying) {
+        musicIcon.textContent = "❚❚";
+        musicToggle.classList.add("playing");
+        musicPlayer.classList.add("playing");
+        musicToggle.setAttribute("aria-label", "Pause chapter music");
+      } else {
+        musicIcon.textContent = "▶";
+        musicToggle.classList.remove("playing");
+        musicPlayer.classList.remove("playing");
+        musicToggle.setAttribute("aria-label", "Play chapter music");
+      }
+    }
+
+    musicToggle.addEventListener("click", async () => {
+      try {
+        if (chapterMusic.paused) {
+          await chapterMusic.play();
+          updateMusicUI(true);
+        } else {
+          chapterMusic.pause();
+          updateMusicUI(false);
+        }
+      } catch (err) {
+        console.log("Music play blocked:", err);
+      }
+    });
+
+    chapterMusic.addEventListener("pause", () => updateMusicUI(false));
+    chapterMusic.addEventListener("play", () => updateMusicUI(true));
+
+    // Show a visible error if the mp3 fails to load, instead of failing silently
+    chapterMusic.addEventListener("error", () => {
+      const trackEl = document.querySelector(".music-track");
+      if (trackEl) {
+        trackEl.textContent = "Track not found — check music/ folder";
+        trackEl.style.color = "#e08585";
+      }
+      console.error("chapterMusic failed to load. Check that music/chapter6-part2-theme.mp3 exists next to this HTML file.");
+    });
+
+    // ===== AUTOPLAY ON LOAD (with fallback) =====
+    let autoplayHandled = false;
+
+    async function tryAutoplay() {
+      if (autoplayHandled) return;
+      try {
+        await chapterMusic.play();
+        autoplayHandled = true;
+        updateMusicUI(true);
+      } catch (err) {
+        console.log("Autoplay blocked by browser, will start on first interaction.");
+      }
+    }
+
+    function startOnFirstInteraction() {
+      if (autoplayHandled) return;
+      chapterMusic.play().then(() => {
+        autoplayHandled = true;
+        updateMusicUI(true);
+      }).catch(() => {});
+    }
+
+    window.addEventListener("load", tryAutoplay);
+    ["click", "touchstart", "keydown", "scroll"].forEach((evt) => {
+      window.addEventListener(evt, startOnFirstInteraction, { once: true, passive: true });
+    });
+  </script>
+</body>
+</html>
