@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chapter 7 — The Hidden Truth (Part I) | The Boy From Last</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Crimson+Text:ital,wght@0,400;0,600;1,400;1,600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper: #e9dfc7;
+      --paper-dim: #b3a688;
+      --ink: #0f0d0a;
+      --desk: #1c1712;
+      --desk-mid: #241d16;
+      --brass: #c9a227;
+      --brass-soft: rgba(201,162,39,0.5);
+      --red-tape: #9c3b3b;
+      --red-tape-bright: #c24b4b;
+      --shadow: 0 18px 50px rgba(0,0,0,0.55);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Crimson Text', serif;
+      color: var(--paper);
+      background:
+        radial-gradient(circle at 8% 4%, rgba(201,162,39,0.10), transparent 32%),
+        radial-gradient(ellipse at 85% 0%, rgba(120,90,40,0.05), transparent 45%),
+        linear-gradient(180deg, var(--ink) 0%, var(--desk) 45%, #0a0806 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* faint corkboard weave */
+    .bg-overlay {
+      position: fixed;
+      inset: 0;
+      background:
+        repeating-linear-gradient(0deg, rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 24px),
+        repeating-linear-gradient(90deg, rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 24px);
+      opacity: 0.5;
+      z-index: -4;
+    }
+
+    .grain {
+      position: fixed;
+      inset: 0;
+      background-image: radial-gradient(rgba(230,215,180,0.035) 1px, transparent 1px);
+      background-size: 4px 4px;
+      opacity: 0.08;
+      pointer-events: none;
+      z-index: -3;
+    }
+
+    /* Desk-lamp glow, drifting very slowly like a hanging bulb over a case board */
+    .lamp-glow {
+      position: fixed;
+      top: -12%;
+      left: -8%;
+      width: 60vw;
+      height: 60vw;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(201,162,39,0.10), transparent 65%);
+      z-index: -5;
+      filter: blur(10px);
+      animation: lampDrift 26s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+
+    @keyframes lampDrift {
+      0% { transform: translate(0,0); opacity: 0.85; }
+      100% { transform: translate(2%, 3%); opacity: 1; }
+    }
+
+    /* Bulb flicker — replaces the lightning: a bare hanging bulb over the case file */
+    .bulb-flicker {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      background: rgba(255, 236, 190, 0.9);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .bulb-flicker.flash {
+      animation: bulbFlicker 0.7s steps(6, end);
+    }
+
+    @keyframes bulbFlicker {
+      0% { opacity: 0; }
+      15% { opacity: 0.05; }
+      25% { opacity: 0; }
+      40% { opacity: 0.09; }
+      55% { opacity: 0.01; }
+      70% { opacity: 0.04; }
+      100% { opacity: 0; }
+    }
+
+    /* Drifting dust / smoke motes, replacing rain */
+    .dust-mote {
+      position: fixed;
+      bottom: -4vh;
+      border-radius: 50%;
+      background: rgba(201,162,39,0.35);
+      pointer-events: none;
+      z-index: 0;
+      will-change: transform, opacity;
+    }
+
+    @keyframes moteRise {
+      0% { transform: translate(0, 0); opacity: 0; }
+      10% { opacity: 0.5; }
+      90% { opacity: 0.25; }
+      100% { transform: translate(-4vw, -108vh); opacity: 0; }
+    }
+
+    /* TOP BAR — case folder tab strip */
+    .topbar {
+      width: 100%;
+      padding: 16px 7%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+      position: relative;
+      z-index: 5;
+      background: rgba(10,8,6,0.6);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      border-bottom: 1px solid rgba(201,162,39,0.16);
+    }
+
+    .topbar-left {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      order: 1;
+    }
+
+    .back-link {
+      text-decoration: none;
+      color: var(--paper-dim);
+      font-size: 0.95rem;
+      font-family: 'JetBrains Mono', monospace;
+      transition: 0.25s ease;
+    }
+
+    .back-link:hover { color: var(--brass); }
+
+    .chapter-label {
+      color: var(--paper-dim);
+      letter-spacing: 2px;
+      font-size: 0.78rem;
+      font-family: 'JetBrains Mono', monospace;
+      text-transform: uppercase;
+    }
+
+    /* HERO — case file cover */
+    .chapter-hero {
+      width: min(1400px, 94%);
+      margin: 26px auto 40px;
+      padding: 34px 0 20px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    /* Evidence-board signature: a red thread linking three tags above the title */
+    .evidence-thread {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin-bottom: 26px;
+      flex-wrap: wrap;
+    }
+
+    .evidence-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 1px;
+      color: var(--ink);
+      background: var(--paper);
+      padding: 5px 12px;
+      border-radius: 2px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+      transform: rotate(-2deg);
+      position: relative;
+    }
+
+    .evidence-tag::before {
+      content: "";
+      position: absolute;
+      top: -4px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--red-tape-bright);
+      box-shadow: 0 0 6px rgba(194,75,75,0.7);
+    }
+
+    .evidence-tag:nth-child(3) { transform: rotate(1.5deg); }
+    .evidence-tag:nth-child(5) { transform: rotate(-1deg); }
+
+    .evidence-string {
+      width: 46px;
+      height: 1px;
+      background: var(--red-tape-bright);
+      opacity: 0.6;
+      margin: 0 2px;
+    }
+
+    .hero-kicker {
+      color: var(--brass);
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      font-size: 0.8rem;
+      font-family: 'JetBrains Mono', monospace;
+      margin-bottom: 16px;
+    }
+
+    .chapter-title {
+      font-family: 'Special Elite', cursive;
+      font-size: clamp(2.6rem, 6.4vw, 5.2rem);
+      line-height: 1.05;
+      font-weight: 400;
+      margin-bottom: 20px;
+      letter-spacing: -0.5px;
+      text-shadow: 2px 2px 0 rgba(0,0,0,0.5);
+    }
+
+    .chapter-title span {
+      color: var(--red-tape-bright);
+    }
+
+    /* stamped case-number, tilted like a rubber stamp */
+    .case-stamp {
+      display: inline-block;
+      font-family: 'Special Elite', cursive;
+      font-size: 0.95rem;
+      letter-spacing: 3px;
+      color: var(--red-tape-bright);
+      border: 2px solid var(--red-tape-bright);
+      padding: 6px 16px;
+      border-radius: 4px;
+      transform: rotate(-4deg);
+      opacity: 0.85;
+      margin-bottom: 22px;
+    }
+
+    .chapter-line {
+      width: 100%;
+      max-width: 860px;
+      height: 1px;
+      background: linear-gradient(90deg, var(--brass), rgba(201,162,39,0.15), transparent);
+      position: relative;
+      margin: 18px 0 28px;
+    }
+
+    .chapter-line::before,
+    .chapter-line::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--brass);
+      box-shadow: 0 0 10px rgba(201,162,39,0.5);
+    }
+
+    .chapter-line::before { left: 8%; }
+    .chapter-line::after { left: 0; }
+
+    .chapter-quote {
+      max-width: 1000px;
+      font-family: 'Crimson Text', serif;
+      font-style: italic;
+      font-size: clamp(1.35rem, 2.2vw, 2rem);
+      line-height: 1.65;
+      color: #f4ecd8;
+      margin-bottom: 28px;
+    }
+
+    .chapter-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .chapter-meta p {
+      color: var(--paper);
+      font-size: 1.02rem;
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 0.3px;
+    }
+
+    .chapter-meta span {
+      color: var(--red-tape-bright);
+      margin-right: 10px;
+      font-size: 1rem;
+    }
+
+    /* STORY SECTION — a typed case report */
+    .story-section {
+      width: min(1350px, 95%);
+      margin: 0 auto 90px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .story-box {
+      width: 100%;
+      padding: 44px 50px;
+      border-radius: 6px;
+      background: rgba(233,223,199,0.045);
+      border: 1px solid rgba(201,162,39,0.16);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(3px);
+    }
+
+    /* torn-paper edge + pinned corner feel */
+    .story-box::before {
+      content: "";
+      position: absolute;
+      inset: 14px;
+      border-radius: 3px;
+      border: 1px dashed rgba(201,162,39,0.12);
+      pointer-events: none;
+    }
+
+    .story-box::after {
+      content: "◆";
+      position: absolute;
+      top: 22px;
+      right: 30px;
+      color: var(--red-tape-bright);
+      opacity: 0.5;
+      font-size: 0.8rem;
+    }
+
+    .story-part {
+      margin-bottom: 38px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .part-number {
+      font-family: 'Special Elite', cursive;
+      color: var(--brass);
+      font-size: 1.5rem;
+      margin-bottom: 14px;
+      opacity: 0.95;
+      letter-spacing: 1px;
+    }
+
+    .scene-marker {
+      text-align: center;
+      color: var(--red-tape-bright);
+      opacity: 0.6;
+      letter-spacing: 5px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      margin: 10px 0 30px !important;
+      text-transform: uppercase;
+    }
+
+    .scene-tag {
+      display: block;
+      color: var(--brass);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      opacity: 0.9;
+      margin: 26px 0 12px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid rgba(201,162,39,0.25);
+    }
+
+    /* witness-account styling for Floyy's retelling */
+    .witness-account {
+      border-left: 2px solid var(--red-tape-bright);
+      padding: 4px 0 4px 22px;
+      margin: 18px 0;
+      background: linear-gradient(90deg, rgba(156,59,59,0.06), transparent 60%);
+    }
+
+    .witness-label {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--red-tape-bright);
+      opacity: 0.85;
+      margin-bottom: 10px;
+    }
+
+    .story-text {
+      color: #f0e8d4;
+      font-size: 1.16rem;
+      line-height: 2.05;
+      max-width: 100%;
+    }
+
+    .story-text p { margin-bottom: 20px; color: #ece2cb; }
+    .story-text p:last-child { margin-bottom: 0; }
+    .witness-account .story-text p { margin-bottom: 14px; font-style: italic; color: #e8dcc0; }
+
+    .story-text p:first-of-type::first-letter {
+      float: left;
+      font-family: 'Special Elite', cursive;
+      font-size: 4.6rem;
+      line-height: 0.8;
+      padding-right: 12px;
+      padding-top: 8px;
+      color: var(--brass);
+    }
+
+    /* ENDING */
+    .ending-box {
+      margin-top: 12px;
+      padding-top: 22px;
+      border-top: 1px solid rgba(201,162,39,0.18);
+      text-align: center;
+    }
+
+    .ending-box h3 {
+      font-family: 'Special Elite', cursive;
+      font-size: 1.7rem;
+      color: var(--red-tape-bright);
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+    }
+
+    .ending-box p {
+      color: var(--paper-dim);
+      font-size: 1rem;
+      line-height: 1.8;
+      font-family: 'Crimson Text', serif;
+      font-style: italic;
+    }
+
+    .next-chapter-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 26px;
+      padding: 13px 28px;
+      border-radius: 3px;
+      border: 1px solid rgba(201,162,39,0.4);
+      background: linear-gradient(180deg, rgba(201,162,39,0.14), rgba(201,162,39,0.03));
+      color: var(--brass);
+      text-decoration: none;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: 0.3s ease;
+    }
+
+    .next-chapter-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px rgba(201,162,39,0.18);
+      border-color: rgba(201,162,39,0.65);
+    }
+
+    .next-chapter-link .arrow { transition: transform 0.3s ease; }
+    .next-chapter-link:hover .arrow { transform: translateX(4px); }
+
+    /* FOOTER */
+    .chapter-footer {
+      width: 100%;
+      padding: 26px 7% 40px;
+      text-align: center;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      position: relative;
+      z-index: 2;
+    }
+
+    .chapter-footer p {
+      color: var(--paper-dim);
+      line-height: 1.8;
+      font-size: 0.9rem;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .reveal {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .reveal.js-hidden { opacity: 0; transform: translateY(24px); }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* CASE AUDIO LOG PLAYER */
+    .music-player {
+      order: 2;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 9px 16px;
+      border-radius: 3px;
+      background: rgba(8,7,5,0.8);
+      border: 1px solid rgba(201,162,39,0.2);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      max-width: 100%;
+    }
+
+    .music-btn {
+      flex-shrink: 0;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid rgba(201,162,39,0.25);
+      background: radial-gradient(circle at top, rgba(201,162,39,0.22), rgba(255,255,255,0.03));
+      color: var(--paper);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: 0.3s ease;
+      font-size: 0.95rem;
+    }
+
+    .music-btn:hover {
+      transform: translateY(-2px) scale(1.03);
+      border-color: rgba(201,162,39,0.5);
+      box-shadow: 0 0 16px rgba(201,162,39,0.2);
+    }
+
+    .music-btn.playing {
+      box-shadow: 0 0 20px rgba(201,162,39,0.25);
+      border-color: rgba(201,162,39,0.5);
+    }
+
+    .music-meta {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+      min-width: 130px;
+    }
+
+    .music-label {
+      font-size: 0.66rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--paper-dim);
+      font-family: 'JetBrains Mono', monospace;
+      margin-bottom: 4px;
+    }
+
+    .music-track {
+      font-family: 'Special Elite', cursive;
+      font-size: 0.92rem;
+      color: var(--paper);
+      white-space: nowrap;
+    }
+
+    .music-wave {
+      display: flex;
+      align-items: flex-end;
+      gap: 3px;
+      height: 16px;
+      margin-left: 4px;
+      flex-shrink: 0;
+    }
+
+    .music-wave span {
+      display: block;
+      width: 3px;
+      border-radius: 999px;
+      background: var(--red-tape-bright);
+      opacity: 0.35;
+      height: 5px;
+      transform-origin: bottom;
+    }
+
+    .music-player.playing .music-wave span {
+      animation: waveDance 1s ease-in-out infinite;
+      opacity: 0.9;
+    }
+
+    .music-player.playing .music-wave span:nth-child(2) { animation-delay: 0.12s; }
+    .music-player.playing .music-wave span:nth-child(3) { animation-delay: 0.24s; }
+    .music-player.playing .music-wave span:nth-child(4) { animation-delay: 0.36s; }
+
+    @keyframes waveDance {
+      0%, 100% { height: 5px; }
+      50% { height: 16px; }
+    }
+
+    @media (max-width: 900px) {
+      .chapter-hero { width: min(96%, 96%); }
+      .story-section { width: min(96%, 96%); }
+      .story-box { padding: 34px 26px; }
+      .chapter-quote { font-size: 1.35rem; }
+    }
+
+    @media (max-width: 640px) {
+      .topbar { flex-direction: column; gap: 12px; align-items: flex-start; }
+      .music-player { width: 100%; }
+      .chapter-title { font-size: 2.3rem; }
+      .chapter-quote { font-size: 1.15rem; line-height: 1.7; }
+      .story-box { padding: 24px 16px; border-radius: 5px; }
+      .story-box::before { inset: 8px; }
+      .story-text { font-size: 1.02rem; line-height: 1.9; }
+      .story-text p:first-of-type::first-letter { font-size: 3.6rem; padding-right: 8px; }
+      .part-number { font-size: 1.3rem; }
+      .chapter-meta p { font-size: 0.9rem; }
+      .next-chapter-link { width: 100%; justify-content: center; }
+      .evidence-tag { font-size: 0.62rem; padding: 4px 8px; }
+      .evidence-string { width: 24px; }
+    }
+
+    @media (max-width: 380px) {
+      .music-meta { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="lamp-glow"></div>
+  <div class="bg-overlay"></div>
+  <div class="grain"></div>
+  <div class="bulb-flicker" id="bulbFlicker"></div>
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <a href="chapter6-part2.html" class="back-link">&larr; Back to chapter 6 — Part 2</a>
+      <div class="chapter-label">Chapter 7 — The Hidden Truth (Part I)</div>
+    </div>
+
+    <div class="music-player" id="musicPlayer">
+      <button class="music-btn" id="musicToggle" aria-label="Play case audio log">
+        <span id="musicIcon">&#9654;</span>
+      </button>
+
+      <div class="music-meta">
+        <span class="music-label">Case Audio Log</span>
+        <span class="music-track">The Hidden Truth</span>
+      </div>
+
+      <div class="music-wave" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+
+    <audio id="chapterMusic" loop preload="auto">
+      <source src="music/chapter7-theme.mp3" type="audio/mpeg">
+    </audio>
+  </header>
+
+  <!-- HERO -->
+  <section class="chapter-hero reveal">
+    <div class="hero-inner">
+
+      <div class="evidence-thread">
+        <span class="evidence-tag">HOTEL BELLAVISTA</span>
+        <span class="evidence-string"></span>
+        <span class="evidence-tag">FLOYY'S NOTEBOOK</span>
+        <span class="evidence-string"></span>
+        <span class="evidence-tag">JESSIC</span>
+      </div>
+
+      <p class="hero-kicker">Chapter Seven &middot; Part One</p>
+
+      <h1 class="chapter-title">
+        Hidden <span>Malice</span>
+      </h1>
+
+      <div class="case-stamp">CASE FILE NO. 07 — OPEN</div>
+
+      <div class="chapter-line"></div>
+
+      <p class="chapter-quote">
+        "When the line between kindness and cruelty begins to fade... every smile becomes a question."
+      </p>
+
+      <div class="chapter-meta">
+        <p><span>&#9670;</span>Psychological Fiction / Investigation</p>
+        <p><span>&#9670;</span>Betrayal / Suspicion / Buried Malice</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- STORY -->
+  <main class="story-section reveal">
+    <div class="story-box">
+
+      <section class="story-part">
+        <div class="part-number">Entry One — The Assignment Resumes</div>
+        <div class="story-text">
+          <p>
+            The next morning... everything appeared normal.
+          </p>
+
+          <p>
+            Professor Jenn continued teaching his literature class. Students quietly filled their seats. As always... Floyy sat beside the window. The same seat. The same notebook. The same expression.
+          </p>
+
+          <p>
+            Only... Jenn wasn't the same anymore.
+          </p>
+
+          <p>
+            The lecture ended. Students slowly walked out of the classroom. Before Floyy could leave— Jenn called him.
+          </p>
+
+          <p>
+            "Floyy." He stopped. Jenn looked directly into his eyes.
+          </p>
+
+          <p>
+            "...Your extra classes." "We're starting them again."
+          </p>
+
+          <p>
+            Floyy looked completely confused. "Sir...?" "But yesterday..." "...you said there wouldn't be any more classes."
+          </p>
+
+          <p>
+            Jenn picked up his files without looking at him. "Forget yesterday." "My cabin." "This evening." Without waiting for a reply... he walked away.
+          </p>
+
+          <p class="scene-tag">Evening</p>
+
+          <p>
+            A soft knock echoed through Professor Jenn's cabin. "Come in." Floyy entered. The room smelled of old books and fresh coffee.
+          </p>
+
+          <p>
+            Jenn remained silent for a few seconds. Then finally asked—
+          </p>
+
+          <p>
+            "So..." "Tell me." "What happened inside Peter's house after Florence's accident?" "And..." "...how is Mr. Pedro?"
+          </p>
+
+          <p>
+            Floyy looked at him carefully. A strange smile appeared. "Professor..." "Why are you suddenly so interested?" "...especially in Mr. Pedro?" He paused. "...Did you already know him?"
+          </p>
+
+          <p>
+            Jenn had just taken a sip of coffee. The question caught him completely off guard. He suddenly began coughing violently. Coffee almost spilled across the table.
+          </p>
+
+          <p>
+            Floyy quietly waited. Jenn finally calmed himself. "...Just answer."
+          </p>
+
+          <p>
+            Floyy slowly opened his notebook.
+          </p>
+        </div>
+      </section>
+
+      <section class="story-part">
+        <div class="witness-account">
+          <span class="witness-label">Witness Account — Floyy's Notebook, transcribed</span>
+          <div class="story-text">
+            <p>
+              It happened this morning. We were having breakfast. Suddenly... the phone rang. Mrs. Marissa answered it. Her face slowly changed.
+            </p>
+
+            <p>
+              "Hello...?" "Yes..." "This is Mr. Pedro's residence."
+            </p>
+
+            <p>
+              A voice from the other side replied— "This is the police station." "We're sorry to inform you..." "...Florence passed away this morning."
+            </p>
+
+            <p>
+              Marissa froze. "...What?" The phone slipped from her hands.
+            </p>
+
+            <p>
+              Pedro immediately picked it up. "This is Pedro speaking." The officer repeated the news. "We couldn't find any of Florence's relatives." "So we contacted the last registered address."
+            </p>
+
+            <p>
+              Before Pedro could answer— Peter... who had been quietly eating breakfast... suddenly collapsed onto the floor. He couldn't breathe. His entire body began shaking.
+            </p>
+
+            <p>
+              "P-Peter!" Marissa rushed toward him. Floyy immediately helped lift him. Together... Pedro and Marissa carried Peter into his bedroom. Floyy remained standing outside. The bedroom door wasn't fully closed. He could hear everything.
+            </p>
+
+            <p>
+              Marissa's voice trembled. "He's having another panic attack..." Pedro calmly replied— "Don't worry." "It'll pass."
+            </p>
+
+            <p>
+              Then... silence. A few moments later... both of them stepped outside. Marissa's eyes were filled with tears. She whispered— "I shouldn't have let Florence leave like that..." "...If only I had stopped her..." She couldn't finish the sentence.
+            </p>
+
+            <p>
+              Floyy slowly looked toward Pedro. For just a second... he saw it. A smile. Not relief. Not sadness. A smile that didn't belong there. A smile that made no sense. A smile... that frightened him.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="story-part">
+        <div class="story-text">
+          <p>
+            Floyy quietly closed the notebook. Jenn remained completely still. His fists slowly tightened.
+          </p>
+
+          <p>
+            "...Florence..." "...is dead." "And Pedro..." "...didn't even look afraid?"
+          </p>
+
+          <p>
+            His voice had become colder than ever. Floyy slid another page across the table.
+          </p>
+
+          <p>
+            "I wrote one more thing."
+          </p>
+
+          <p>
+            Jenn began reading.
+          </p>
+
+          <p class="scene-marker">— FROM THE NOTEBOOK —</p>
+
+          <p>
+            <em>From today... I will never go back to Peter's house. Because every kindness hides something... Every silence hides something... And behind every smile... There is always... Hidden Malice.</em>
+          </p>
+
+          <p>
+            Jenn stopped reading. His eyes remained fixed on those two words. Hidden Malice. He whispered— "...What are you trying to tell me..." "...Floyy?"
+          </p>
+
+          <p class="scene-tag">Later That Night</p>
+
+          <p>
+            Rain had finally stopped. Jenn walked toward a small convenience store. Not because he needed groceries. Only cigarettes.
+          </p>
+
+          <p>
+            He stepped inside. Then stopped. Behind the counter... Floyy. The boy quietly worked there after college.
+          </p>
+
+          <p>
+            Floyy smiled. "The usual brand, Professor?" Jenn nodded. After paying... he looked at him. "...Do you have a few minutes?"
+          </p>
+
+          <p>
+            Both of them sat outside the shop. An old wooden bench overlooked the empty street. Jenn finally broke the silence.
+          </p>
+
+          <p>
+            "That phrase..." "'Hidden Malice.'" "What does it really mean?" "You ended your assignment there." "...Doesn't that bother you?"
+          </p>
+
+          <p>
+            Floyy looked toward the road. "I came here to learn writing." "I want to continue."
+          </p>
+
+          <p>
+            Jenn slowly lit his cigarette. "This isn't about literature anymore." He inhaled deeply. "No matter how close Pedro once was to me..." "...he isn't a stranger." "If something is wrong..." "...I have to know."
+          </p>
+
+          <p>
+            Floyy quietly looked at him. "It doesn't matter to me whether Mr. Pedro is a good man..." "...or a bad one." "I'm only here..." "...because I'm learning from you."
+          </p>
+
+          <p>
+            Jenn suddenly straightened himself. The hesitation... was gone. His voice became firm.
+          </p>
+
+          <p>
+            "Then we'll find the truth." He looked directly at Floyy. "But listen carefully." "If you tell Pedro..." "...anything we've discussed..." "Everything ends." "Our classes." "Our investigation." "Everything."
+          </p>
+
+          <p>
+            Floyy nodded slowly. "Tell me what I have to do."
+          </p>
+
+          <p>
+            Jenn extinguished the cigarette beneath his shoe. "The first thing..." "...is to find out." "What really happened inside Hotel Bellavista that night."
+          </p>
+
+          <p>
+            Floyy frowned. "...You mean..." "I have to go back there?"
+          </p>
+
+          <p>
+            Jenn finally smiled. Now... "You understand." He picked up Floyy's notebook. And handed it back.
+          </p>
+
+          <p>
+            "This..." "...is your next assignment." He paused. Then quietly said—
+          </p>
+
+          <p>
+            "Your first investigation begins now."
+          </p>
+        </div>
+      </section>
+
+      <div class="ending-box">
+        <h3>Case File Suspended...</h3>
+        <p>
+          A dead woman's name on the phone, a smile that didn't fit, and a notebook<br>
+          that just became evidence. Floyy's investigation begins tomorrow.
+        </p>
+
+        <a href="chapter7-part2.html" class="next-chapter-link">
+          Continue to Part II <span class="arrow">&rarr;</span>
+        </a>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="chapter-footer">
+    <p>The Boy from Last — Chapter 7 Archive · <a href="chapter7-part2.html" class="footer-next-link" style="color: var(--brass); text-decoration:none; border-bottom:1px solid rgba(201,162,39,0.3);">Next: Part II</a></p>
+  </footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const revealEls = document.querySelectorAll(".reveal");
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) entry.target.classList.add("visible");
+        });
+      }, { threshold: 0.12 });
+      revealEls.forEach((el) => observer.observe(el));
+    });
+
+    // ===== DUST MOTES (replacing rain) =====
+    function createDustMote() {
+      const mote = document.createElement("span");
+      mote.className = "dust-mote";
+      const size = 2 + Math.random() * 3;
+      mote.style.width = size + "px";
+      mote.style.height = size + "px";
+      mote.style.left = (Math.random() * 100) + "vw";
+      const duration = 9 + Math.random() * 8;
+      mote.style.animation = `moteRise ${duration.toFixed(2)}s linear forwards`;
+      document.body.appendChild(mote);
+      setTimeout(() => mote.remove(), (duration + 0.5) * 1000);
+    }
+
+    function moteLoop() {
+      if (Math.random() < 0.5) createDustMote();
+      setTimeout(moteLoop, 400 + Math.random() * 500);
+    }
+    moteLoop();
+
+    // ===== BULB FLICKER (replacing lightning) =====
+    const bulbEl = document.getElementById("bulbFlicker");
+
+    function scheduleFlicker() {
+      const delay = 10000 + Math.random() * 20000;
+      setTimeout(() => {
+        bulbEl.classList.remove("flash");
+        void bulbEl.offsetWidth;
+        bulbEl.classList.add("flash");
+        scheduleFlicker();
+      }, delay);
+    }
+    scheduleFlicker();
+
+    // ===== MUSIC PLAYER =====
+    const chapterMusic = document.getElementById("chapterMusic");
+    const musicToggle = document.getElementById("musicToggle");
+    const musicIcon = document.getElementById("musicIcon");
+    const musicPlayer = document.getElementById("musicPlayer");
+
+    if (chapterMusic) chapterMusic.volume = 0.2;
+
+    function updateMusicUI(isPlaying) {
+      if (isPlaying) {
+        musicIcon.innerHTML = "&#10074;&#10074;";
+        musicToggle.classList.add("playing");
+        musicPlayer.classList.add("playing");
+        musicToggle.setAttribute("aria-label", "Pause case audio log");
+      } else {
+        musicIcon.innerHTML = "&#9654;";
+        musicToggle.classList.remove("playing");
+        musicPlayer.classList.remove("playing");
+        musicToggle.setAttribute("aria-label", "Play case audio log");
+      }
+    }
+
+    musicToggle.addEventListener("click", async () => {
+      try {
+        if (chapterMusic.paused) {
+          await chapterMusic.play();
+          updateMusicUI(true);
+        } else {
+          chapterMusic.pause();
+          updateMusicUI(false);
+        }
+      } catch (err) {
+        console.log("Music play blocked:", err);
+      }
+    });
+
+    chapterMusic.addEventListener("pause", () => updateMusicUI(false));
+    chapterMusic.addEventListener("play", () => updateMusicUI(true));
+
+    chapterMusic.addEventListener("error", () => {
+      const trackEl = document.querySelector(".music-track");
+      if (trackEl) {
+        trackEl.textContent = "Track not found — check music/ folder";
+        trackEl.style.color = "#c24b4b";
+      }
+      console.error("chapterMusic failed to load. Check that music/chapter7-part1-theme.mp3 exists next to this HTML file.");
+    });
+
+    let autoplayHandled = false;
+
+    async function tryAutoplay() {
+      if (autoplayHandled) return;
+      try {
+        await chapterMusic.play();
+        autoplayHandled = true;
+        updateMusicUI(true);
+      } catch (err) {
+        console.log("Autoplay blocked by browser, will start on first interaction.");
+      }
+    }
+
+    function startOnFirstInteraction() {
+      if (autoplayHandled) return;
+      chapterMusic.play().then(() => {
+        autoplayHandled = true;
+        updateMusicUI(true);
+      }).catch(() => {});
+    }
+
+    window.addEventListener("load", tryAutoplay);
+    ["click", "touchstart", "keydown", "scroll"].forEach((evt) => {
+      window.addEventListener(evt, startOnFirstInteraction, { once: true, passive: true });
+    });
+  </script>
+</body>
+</html>
