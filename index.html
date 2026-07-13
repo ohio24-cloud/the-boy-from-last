@@ -8,8 +8,102 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Floating Earphone Banner - Theme Matched */
+    .earphone-banner {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: linear-gradient(135deg, rgba(30, 25, 35, 0.92) 0%, rgba(45, 35, 45, 0.92) 100%);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(200, 180, 160, 0.2);
+      border-radius: 50px;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 999;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      font-family: 'Inter', sans-serif;
+      animation: slideUp 0.6s ease-out;
+      max-width: 320px;
+    }
+
+    .earphone-banner:hover {
+      background: linear-gradient(135deg, rgba(40, 35, 45, 0.95) 0%, rgba(50, 40, 50, 0.95) 100%);
+      border-color: rgba(200, 180, 160, 0.35);
+      transform: translateY(-5px);
+      transition: all 0.3s ease;
+    }
+
+    .earphone-icon {
+      font-size: 20px;
+      min-width: 20px;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    .earphone-text {
+      font-size: 13px;
+      color: #d4c5b9;
+      font-weight: 400;
+      line-height: 1.4;
+      letter-spacing: 0.3px;
+    }
+
+    .close-banner {
+      background: none;
+      border: none;
+      color: #8b7f77;
+      font-size: 18px;
+      cursor: pointer;
+      padding: 0;
+      margin-left: auto;
+      transition: color 0.3s ease;
+    }
+
+    .close-banner:hover {
+      color: #d4c5b9;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.6;
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .earphone-banner {
+        bottom: 20px;
+        right: 20px;
+        left: 20px;
+        max-width: none;
+      }
+    }
+  </style>
 </head>
 <body>
+
+  <!-- Floating Earphone Banner -->
+  <div class="earphone-banner" id="earphoneBanner">
+    <span class="earphone-icon">🎧</span>
+    <span class="earphone-text">Best experienced with headphones — let the piano guide you</span>
+    <button class="close-banner" onclick="closeBanner()">&times;</button>
+  </div>
 
   <div class="bg-overlay"></div>
   <div class="grain"></div>
@@ -69,18 +163,17 @@
       <div class="section-inner featured-grid">
         <div class="featured-left">
           <p class="section-tag">LATEST ENTRY</p>
-          <h2>Chapter 6 Part I— <span>The Housemade</span></h2>
+          <h2>Chapter 6 Part II— <span>The Housemade</span></h2>
           <p class="featured-desc">
-            "Every secret begins with a single lie."
+            "Tonight,the truth took its first breath."
           </p>
-          <a href="chapter6-part1.html" class="read-btn">Read Chapter 6 Part I</a>
+          <a href="chapter6-part2.html" class="read-btn">Read Chapter 6 Part II</a>
         </div>
 
         <div class="featured-card">
           <div class="card-line"></div>
           <p class="quote">
-            "The rain had already started...
-             but no one knew what it would wash away."
+            "Truth doesn't hide.People do."
           </p>
         </div>
       </div>
@@ -109,7 +202,7 @@
             <h3>Prof. Jenn</h3>
             <p class="character-role">*The One Who Notices</p>
             <p>
-               A 55-year-old frustrated literature teacher who acts as Claudio’s mentor and eager reader. His initial desire to improve Floyy's writing evolves into a dangerous, addictive obsession with Floyy's voyeuristic narratives.
+               A 55-year-old frustrated literature teacher who acts as Claudio's mentor and eager reader. His initial desire to improve Floyy's writing evolves into a dangerous, addictive obsession with Floyy's voyeuristic narratives.
             </p>
           </div>
           
@@ -129,7 +222,7 @@
             <h3>Peter</h3>
             <p class="character-role">*Floyy's Friend</p>
             <p>
-                Floyy’s classmate, an average, sports-loving teenager who befriends Floyy, completely unaware that he and his family are characters in Floyy's unfolding drama.
+                Floyy's classmate, an average, sports-loving teenager who befriends Floyy, completely unaware that he and his family are characters in Floyy's unfolding drama.
             </p>
           </div>
           <div class="character-card">
@@ -198,8 +291,17 @@
     <div class="chapter-number">06</div>
 
     <div class="chapter-info">
-        <h3>The Housemaid — Part I </h3>
+        <h3>The Housemaid — Part I</h3>
         <p>Some doors remain locked...until the truth is ready to enter.</p>
+    </div>
+    
+</a>
+ <a href="chapter6-part2.html"class="chapter-card">
+    <div class="chapter-number">06</div>
+
+    <div class="chapter-info">
+        <h3>The Housemaid — Part II</h3>
+        <p>Some deaths ask questions the living cannot answer.</p>
     </div>
     
 </a>
@@ -232,5 +334,15 @@
   </footer>
 
   <script src="script.js"></script>
+  <script>
+    function closeBanner() {
+      const banner = document.getElementById('earphoneBanner');
+      banner.style.opacity = '0';
+      banner.style.transform = 'translateY(30px)';
+      setTimeout(() => {
+        banner.style.display = 'none';
+      }, 300);
+    }
+  </script>
 </body>
 </html>
