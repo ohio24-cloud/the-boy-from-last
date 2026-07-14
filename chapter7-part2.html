@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chapter 7 — The Hidden Truth (Part I) | The Boy From Last</title>
+  <title>Chapter 7 — The Hidden Truth (Part II) | The Boy From Last</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Crimson+Text:ital,wght@0,400;0,600;1,400;1,600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -57,7 +57,7 @@
       z-index: -3;
     }
 
-    /* Desk-lamp glow, drifting very slowly like a hanging bulb over a case board */
+    /* Desk-lamp glow */
     .lamp-glow {
       position: fixed;
       top: -12%;
@@ -77,7 +77,7 @@
       100% { transform: translate(2%, 3%); opacity: 1; }
     }
 
-    /* Bulb flicker — replaces the lightning: a bare hanging bulb over the case file */
+    /* Bulb flicker */
     .bulb-flicker {
       position: fixed;
       inset: 0;
@@ -101,7 +101,7 @@
       100% { opacity: 0; }
     }
 
-    /* Drifting dust / smoke motes, replacing rain */
+    /* Drifting dust motes */
     .dust-mote {
       position: fixed;
       bottom: -4vh;
@@ -119,7 +119,7 @@
       100% { transform: translate(-4vw, -108vh); opacity: 0; }
     }
 
-    /* TOP BAR — case folder tab strip */
+    /* TOP BAR */
     .topbar {
       width: 100%;
       padding: 16px 7%;
@@ -161,7 +161,7 @@
       text-transform: uppercase;
     }
 
-    /* HERO — case file cover */
+    /* HERO */
     .chapter-hero {
       width: min(1400px, 94%);
       margin: 26px auto 40px;
@@ -176,7 +176,6 @@
       position: relative;
     }
 
-    /* Evidence-board signature: a red thread linking three tags above the title */
     .evidence-thread {
       display: flex;
       align-items: center;
@@ -245,7 +244,6 @@
       color: var(--red-tape-bright);
     }
 
-    /* stamped case-number, tilted like a rubber stamp */
     .case-stamp {
       display: inline-block;
       font-family: 'Special Elite', cursive;
@@ -315,7 +313,7 @@
       font-size: 1rem;
     }
 
-    /* STORY SECTION — a typed case report */
+    /* STORY SECTION */
     .story-section {
       width: min(1350px, 95%);
       margin: 0 auto 90px;
@@ -335,7 +333,6 @@
       backdrop-filter: blur(3px);
     }
 
-    /* torn-paper edge + pinned corner feel */
     .story-box::before {
       content: "";
       position: absolute;
@@ -394,25 +391,6 @@
       border-bottom: 1px solid rgba(201,162,39,0.25);
     }
 
-    /* witness-account styling for Floyy's retelling */
-    .witness-account {
-      border-left: 2px solid var(--red-tape-bright);
-      padding: 4px 0 4px 22px;
-      margin: 18px 0;
-      background: linear-gradient(90deg, rgba(156,59,59,0.06), transparent 60%);
-    }
-
-    .witness-label {
-      display: inline-block;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.7rem;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--red-tape-bright);
-      opacity: 0.85;
-      margin-bottom: 10px;
-    }
-
     .story-text {
       color: #f0e8d4;
       font-size: 1.16rem;
@@ -422,7 +400,6 @@
 
     .story-text p { margin-bottom: 20px; color: #ece2cb; }
     .story-text p:last-child { margin-bottom: 0; }
-    .witness-account .story-text p { margin-bottom: 14px; font-style: italic; color: #e8dcc0; }
 
     .story-text p:first-of-type::first-letter {
       float: left;
@@ -510,7 +487,7 @@
     .reveal.js-hidden { opacity: 0; transform: translateY(24px); }
     .reveal.visible { opacity: 1; transform: translateY(0); }
 
-    /* CASE AUDIO LOG PLAYER */
+    /* MUSIC PLAYER */
     .music-player {
       order: 2;
       display: flex;
@@ -647,8 +624,8 @@
   <!-- TOP BAR -->
   <header class="topbar">
     <div class="topbar-left">
-      <a href="chapter6-part2.html" class="back-link">&larr; Back to chapter 6 — Part 2</a>
-      <div class="chapter-label">Chapter 7 — The Hidden Truth (Part I)</div>
+      <a href="chapter7-part1.html" class="back-link">&larr; Back to chapter 7 — Part 1</a>
+      <div class="chapter-label">Chapter 7 — The Hidden Truth (Part II)</div>
     </div>
 
     <div class="music-player" id="musicPlayer">
@@ -658,7 +635,7 @@
 
       <div class="music-meta">
         <span class="music-label">Case Audio Log</span>
-        <span class="music-track">The Hidden Truth</span>
+        <span class="music-track">Witness</span>
       </div>
 
       <div class="music-wave" aria-hidden="true">
@@ -679,30 +656,30 @@
     <div class="hero-inner">
 
       <div class="evidence-thread">
-        <span class="evidence-tag">FLOYY'S NOTEBOOK</span>
+        <span class="evidence-tag">JESSIC</span>
         <span class="evidence-string"></span>
-        <span class="evidence-tag">TEAM-UP</span>
+        <span class="evidence-tag">ROOFTOP CONFESSION</span>
         <span class="evidence-string"></span>
-        <span class="evidence-tag">THE HOTEL BELLAVISTA</span>
+        <span class="evidence-tag">THE TRUTH EMERGES</span>
       </div>
 
-      <p class="hero-kicker">Chapter Seven &middot; Part One</p>
+      <p class="hero-kicker">Chapter Seven &middot; Part Two</p>
 
       <h1 class="chapter-title">
-        Hidden <span>Malice</span>
+        Hotel<span> Bellavista</span>
       </h1>
 
-      <div class="case-stamp">CASE FILE NO. 07 — OPEN</div>
+      <div class="case-stamp">CASE FILE NO. 07 — WITNESS TESTIMONY</div>
 
       <div class="chapter-line"></div>
 
       <p class="chapter-quote">
-        "When the line between kindness and cruelty begins to fade... every smile becomes a question."
+        "Sometimes, places remember the truth better than people."
       </p>
 
       <div class="chapter-meta">
         <p><span>&#9670;</span>Psychological Fiction / Investigation</p>
-        <p><span>&#9670;</span>Betrayal / Suspicion / Buried Malice</p>
+        <p><span>&#9670;</span>Revelation / Hidden Evidence / Dangerous Confession</p>
       </div>
     </div>
   </section>
@@ -712,236 +689,259 @@
     <div class="story-box">
 
       <section class="story-part">
-        <div class="part-number">Entry One — The Assignment Resumes</div>
+        <div class="part-number">Entry One — Hotel Bellavista</div>
         <div class="story-text">
           <p>
-            The next morning... everything appeared normal.
+            Floyy stood outside Hotel Bellavista.
           </p>
 
           <p>
-            Professor Jenn continued teaching his literature class. Students quietly filled their seats. As always... Floyy sat beside the window. The same seat. The same notebook. The same expression.
+            Professor Jenn's final words echoed inside his head.
           </p>
 
           <p>
-            Only... Jenn wasn't the same anymore.
+            "Find out what really happened that night."
           </p>
 
           <p>
-            The lecture ended. Students slowly walked out of the classroom. Before Floyy could leave— Jenn called him.
+            He took a deep breath... and walked inside.
           </p>
 
           <p>
-            "Floyy." He stopped. Jenn looked directly into his eyes.
+            The hotel looked exactly as it had on the night of Florence's accident.
           </p>
 
           <p>
-            "...Your extra classes." "We're starting them again."
+            Luxurious. Beautiful. Silent. Almost... Too silent.
           </p>
 
           <p>
-            Floyy looked completely confused. "Sir...?" "But yesterday..." "...you said there wouldn't be any more classes."
+            Floyy walked toward the reception desk. Taking Pedro's photograph from his pocket... He gently placed it on the counter.
           </p>
 
           <p>
-            Jenn picked up his files without looking at him. "Forget yesterday." "My cabin." "This evening." Without waiting for a reply... he walked away.
-          </p>
-
-          <p class="scene-tag">Evening</p>
-
-          <p>
-            A soft knock echoed through Professor Jenn's cabin. "Come in." Floyy entered. The room smelled of old books and fresh coffee.
+            "Excuse me..." "Can you tell me anything about this man?"
           </p>
 
           <p>
-            Jenn remained silent for a few seconds. Then finally asked—
+            The receptionist looked down. For just a second... Her expression froze. Then... As if nothing had happened... She slid the photograph back.
           </p>
 
           <p>
-            "So..." "Tell me." "What happened inside Peter's house after Florence's accident?" "And..." "...how is Mr. Pedro?"
+            "I'm sorry, sir." "We're not allowed to share any information regarding our guests."
           </p>
 
           <p>
-            Floyy looked at him carefully. A strange smile appeared. "Professor..." "Why are you suddenly so interested?" "...especially in Mr. Pedro?" He paused. "...Did you already know him?"
+            Her voice sounded professional. But... Floyy had already noticed something. She recognized him. Yet... She deliberately chose to stay silent.
           </p>
 
           <p>
-            Jenn had just taken a sip of coffee. The question caught him completely off guard. He suddenly began coughing violently. Coffee almost spilled across the table.
+            Floyy quietly nodded. "I understand." He left the reception. But one question remained inside his mind. Why was she afraid?
+          </p>
+
+          <p class="scene-tag">The Search</p>
+
+          <p>
+            He searched almost every floor. Restaurant. Lobby. Conference Hall. No one seemed willing to talk.
           </p>
 
           <p>
-            Floyy quietly waited. Jenn finally calmed himself. "...Just answer."
+            Eventually... He reached the hotel's laundry department. Workers remained busy folding towels and bedsheets.
           </p>
 
           <p>
-            Floyy slowly opened his notebook.
+            Floyy once again showed Pedro's photograph. "Have you ever seen this man?" Everyone shook their heads. "No." "I don't know him." Some didn't even bother looking at the picture.
+          </p>
+
+          <p>
+            Disappointed... Floyy turned around. Just then—
+          </p>
+
+          <p>
+            "Sir." "You aren't allowed to enter this area."
+          </p>
+
+          <p>
+            A security guard approached him. Floyy immediately apologized. "I'm sorry." "I'll leave." The guard pointed toward another corridor. "The exit is that way."
+          </p>
+
+          <p>
+            Floyy nodded and began walking. Then... The guard suddenly looked at him again.
+          </p>
+
+          <p>
+            "...Floyy?"
+          </p>
+
+          <p>
+            Floyy stopped. Slowly... He turned around. "...How do you know my name?"
+          </p>
+
+          <p>
+            The guard smiled. The moment Floyy saw his face... His eyes widened.
+          </p>
+
+          <p>
+            "...Jessic?!"
+          </p>
+
+          <p>
+            Jessic laughed. "Took you long enough."
+          </p>
+
+          <p>
+            The two shook hands. "What are you doing here?" Floyy asked.
+          </p>
+
+          <p>
+            Jessic scratched the back of his head. "What else?" "I couldn't clear the Civil Service exam." "So..." "I became a security guard." He laughed. "But forget me." "You look different." "What are you doing now?"
+          </p>
+
+          <p>
+            Floyy smiled. "I'm studying Electrical Engineering at Madrid High School."
+          </p>
+
+          <p>
+            Jessic gently punched his shoulder. "Not bad." "You finally escaped construction work." Both of them laughed. For a brief moment... It felt like old times.
+          </p>
+
+          <p>
+            Jessic suddenly noticed the photograph still in Floyy's hand. He frowned. "Who's that?"
+          </p>
+
+          <p>
+            Floyy handed him the picture. "I'm looking for information about this man."
+          </p>
+
+          <p>
+            Jessic looked carefully. Then nodded. "Oh..." "I know him." "He comes here quite often." "He's a famous novelist." "But..." "What do you want with him?"
+          </p>
+
+          <p>
+            Floyy sighed. "It's a long story." "And nobody inside this hotel wants to answer my questions."
+          </p>
+
+          <p>
+            Jessic smiled. "Then..." "You found the right person." "I know more about him than most people working here."
+          </p>
+
+          <p>
+            Floyy looked surprised. "Seriously?"
+          </p>
+
+          <p>
+            Jessic nodded. "Come with me."
           </p>
         </div>
       </section>
 
       <section class="story-part">
-        <div class="witness-account">
-          <span class="witness-label">Witness Account — Floyy's Notebook, transcribed</span>
-          <div class="story-text">
-            <p>
-              It happened this morning. We were having breakfast. Suddenly... the phone rang. Mrs. Marissa answered it. Her face slowly changed.
-            </p>
-
-            <p>
-              "Hello...?" "Yes..." "This is Mr. Pedro's residence."
-            </p>
-
-            <p>
-              A voice from the other side replied— "This is the police station." "We're sorry to inform you..." "...Florence passed away this morning."
-            </p>
-
-            <p>
-              Marissa froze. "...What?" The phone slipped from her hands.
-            </p>
-
-            <p>
-              Pedro immediately picked it up. "This is Pedro speaking." The officer repeated the news. "We couldn't find any of Florence's relatives." "So we contacted the last registered address."
-            </p>
-
-            <p>
-              Before Pedro could answer— Peter... who had been quietly eating breakfast... suddenly collapsed onto the floor. He couldn't breathe. His entire body began shaking.
-            </p>
-
-            <p>
-              "P-Peter!" Marissa rushed toward him. Floyy immediately helped lift him. Together... Pedro and Marissa carried Peter into his bedroom. Floyy remained standing outside. The bedroom door wasn't fully closed. He could hear everything.
-            </p>
-
-            <p>
-              Marissa's voice trembled. "He's having another panic attack..." Pedro calmly replied— "Don't worry." "It'll pass."
-            </p>
-
-            <p>
-              Then... silence. A few moments later... both of them stepped outside. Marissa's eyes were filled with tears. She whispered— "I shouldn't have let Florence leave like that..." "...If only I had stopped her..." She couldn't finish the sentence.
-            </p>
-
-            <p>
-              Floyy slowly looked toward Pedro. For just a second... he saw it. A smile. Not relief. Not sadness. A smile that didn't belong there. A smile that made no sense. A smile... that frightened him.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section class="story-part">
+        <div class="part-number">Entry Two — The Rooftop Revelation</div>
         <div class="story-text">
           <p>
-            Floyy quietly closed the notebook. Jenn remained completely still. His fists slowly tightened.
+            The two climbed onto the rooftop. The city lights stretched endlessly beneath them.
           </p>
 
           <p>
-            "...Florence..." "...is dead." "And Pedro..." "...didn't even look afraid?"
+            Jessic lit a cigarette. The silence lasted a few moments. Then... He finally spoke.
           </p>
 
           <p>
-            His voice had become colder than ever. Floyy slid another page across the table.
+            "You know..." "I witnessed yesterday's accident."
           </p>
 
           <p>
-            "I wrote one more thing."
+            Floyy immediately looked at him. "...What?"
           </p>
 
           <p>
-            Jenn began reading.
-          </p>
-
-          <p class="scene-marker">— FROM THE NOTEBOOK —</p>
-
-          <p>
-            <em>From today... I will never go back to Peter's house. Because every kindness hides something... Every silence hides something... And behind every smile... There is always... Hidden Malice.</em>
+            Jessic nodded slowly. "My shift had just ended." "I came up here to smoke." "And then..." "I saw them." "Pedro..." "...and Florence." "They were arguing."
           </p>
 
           <p>
-            Jenn stopped reading. His eyes remained fixed on those two words. Hidden Malice. He whispered— "...What are you trying to tell me..." "...Floyy?"
-          </p>
-
-          <p class="scene-tag">Later That Night</p>
-
-          <p>
-            Rain had finally stopped. Jenn walked toward a small convenience store. Not because he needed groceries. Only cigarettes.
+            Floyy frowned. "What kind of argument?"
           </p>
 
           <p>
-            He stepped inside. Then stopped. Behind the counter... Floyy. The boy quietly worked there after college.
+            Jessic looked toward the rooftop floor. "I couldn't hear everything." "But..." "I knew something wasn't right."
           </p>
 
           <p>
-            Floyy smiled. "The usual brand, Professor?" Jenn nodded. After paying... he looked at him. "...Do you have a few minutes?"
+            Floyy remained silent. Jessic continued.
           </p>
 
           <p>
-            Both of them sat outside the shop. An old wooden bench overlooked the empty street. Jenn finally broke the silence.
+            "You asked who Pedro is?" "Every month..." "He books the hotel's most expensive suite." "But here's the strange part..." "He always orders..." "...the most expensive wine..." "...and the cheapest ice cream."
           </p>
 
           <p>
-            "That phrase..." "'Hidden Malice.'" "What does it really mean?" "You ended your assignment there." "...Doesn't that bother you?"
+            Floyy looked confused. "...Ice cream?"
           </p>
 
           <p>
-            Floyy looked toward the road. "I came here to learn writing." "I want to continue."
+            Jessic laughed. "Yeah." "And every time I delivered room service..." "I'd find different women's clothes inside." He shrugged. "Maybe he thought nobody noticed."
           </p>
 
           <p>
-            Jenn slowly lit his cigarette. "This isn't about literature anymore." He inhaled deeply. "No matter how close Pedro once was to me..." "...he isn't a stranger." "If something is wrong..." "...I have to know."
+            Floyy looked disturbed. "But..." "He's married."
           </p>
 
           <p>
-            Floyy quietly looked at him. "It doesn't matter to me whether Mr. Pedro is a good man..." "...or a bad one." "I'm only here..." "...because I'm learning from you."
+            Jessic smiled bitterly. "People like him..." "Look respectable." "But appearances..." "...are the easiest lies to believe."
           </p>
 
           <p>
-            Jenn suddenly straightened himself. The hesitation... was gone. His voice became firm.
+            Both of them laughed quietly. The laughter disappeared almost immediately.
           </p>
 
           <p>
-            "Then we'll find the truth." He looked directly at Floyy. "But listen carefully." "If you tell Pedro..." "...anything we've discussed..." "Everything ends." "Our classes." "Our investigation." "Everything."
+            Floyy looked toward Jessic once again. "So..." "Were they doing the same thing yesterday?"
           </p>
 
           <p>
-            Floyy nodded slowly. "Tell me what I have to do."
+            Jessic slowly shook his head. "No." "Yesterday..." "Was different." "Very different."
           </p>
 
           <p>
-            Jenn extinguished the cigarette beneath his shoe. "The first thing..." "...is to find out." "What really happened inside Hotel Bellavista that night."
+            He threw the cigarette onto the rooftop. Crushed it beneath his shoe. Then... Looked straight into Floyy's eyes.
           </p>
 
           <p>
-            Floyy frowned. "...You mean..." "I have to go back there?"
+            "I wasn't trying to listen..." "But..." "The voices coming from that room..." "...weren't normal."
           </p>
 
           <p>
-            Jenn finally smiled. Now... "You understand." He picked up Floyy's notebook. And handed it back.
+            Floyy's heartbeat suddenly became louder. "...What kind of voices?"
           </p>
 
           <p>
-            "This..." "...is your next assignment." He paused. Then quietly said—
+            Jessic remained silent for several seconds. The wind grew stronger. Finally... He whispered...
           </p>
 
           <p>
-            "Your first investigation begins now."
+            "...The kind..." "...that no one should ever have to hear."
           </p>
         </div>
       </section>
 
       <div class="ending-box">
-        <h3>Case File Suspended...</h3>
+        <h3>The Truth Deepens...</h3>
         <p>
-          A dead woman's name on the phone, a smile that didn't fit, and a notebook<br>
-          that just became evidence. Floyy's investigation begins tomorrow.
+          A witness to the silence. A confession beneath city lights. And a secret<br>
+          that ties a literary master to the night Florence fell.
         </p>
 
-        <a href="chapter7-part2.html" class="next-chapter-link">
-          Continue to Part II <span class="arrow">&rarr;</span>
-        </a>
+        <p style="margin-top: 16px; font-size: 0.9rem; color: var(--paper-dim);">
+          What happened in that room?<br>
+          And what did Jessic truly hear?
+        </p>
       </div>
 
     </div>
   </main>
 
   <footer class="chapter-footer">
-    <p>The Boy from Last — Chapter 7 Archive · <a href="chapter7-part2.html" class="footer-next-link" style="color: var(--brass); text-decoration:none; border-bottom:1px solid rgba(201,162,39,0.3);">Next: Part II</a></p>
+    <p>The Boy from Last — Chapter 7 Archive · Witness Testimony Recorded</p>
   </footer>
 
   <script>
@@ -955,7 +955,7 @@
       revealEls.forEach((el) => observer.observe(el));
     });
 
-    // ===== DUST MOTES (replacing rain) =====
+    // ===== DUST MOTES =====
     function createDustMote() {
       const mote = document.createElement("span");
       mote.className = "dust-mote";
@@ -975,7 +975,7 @@
     }
     moteLoop();
 
-    // ===== BULB FLICKER (replacing lightning) =====
+    // ===== BULB FLICKER =====
     const bulbEl = document.getElementById("bulbFlicker");
 
     function scheduleFlicker() {
@@ -1034,7 +1034,7 @@
         trackEl.textContent = "Track not found — check music/ folder";
         trackEl.style.color = "#c24b4b";
       }
-      console.error("chapterMusic failed to load. Check that music/chapter7-part1-theme.mp3 exists next to this HTML file.");
+      console.error("chapterMusic failed to load. Check that music/chapter7-theme.mp3 exists next to this HTML file.");
     });
 
     let autoplayHandled = false;
